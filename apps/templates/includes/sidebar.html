@@ -1,0 +1,51 @@
+<!-- [ navigation menu ] start -->
+<nav class="pcoded-navbar">
+    <div class="navbar-wrapper">
+        <div class="navbar-brand header-logo">
+            <a href="/" class="b-brand">
+                <div class="b-bg">
+<!--                    <i class="feather icon-trending-up"></i>-->
+                    <img src="{{ ASSETS_ROOT }}/images/logo-thumb.png">
+                </div>
+                <span class="b-title">Manual</span>
+            </a>
+            <a class="mobile-menu" id="mobile-collapse" href="javascript:"><span></span></a>
+        </div>
+        <div class="navbar-content scroll-div">
+            <ul class="nav pcoded-inner-navbar">
+                <li class="nav-item pcoded-menu-caption">
+                    <label>User</label>
+                </li>
+                <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project"
+                    class="nav-item {% if 'index' in segment %} active {% endif %}">
+                    <a href="/" class="nav-link "><span class="pcoded-micon"><i class="feather icon-home"></i></span><span
+                            class="pcoded-mtext">個人資訊</span></a>
+                </li>
+
+                <li data-username="user_management"
+                    class="nav-item pcoded-hasmenu" >
+                    <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-user"></i></span><span
+                            class="pcoded-mtext">使用者管理</span></a>
+                    <ul class="pcoded-submenu">
+                        <li class=""><a href="{% url 'view_all_users' %}">全部</a></li>
+                        <li class=""><a href="{% url 'register_user' %}">創建使用者</a></li>
+                    </ul>
+                </li>
+
+
+                <li class="nav-item pcoded-menu-caption">
+                    <label>App Api</label>
+                </li>
+                <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project"
+                    class="nav-item">
+                    <a href="{% url 'schema-swagger-ui' %}" class="nav-link" target="_blank"><span class="pcoded-micon"><i class="feather icon-command"></i></span><span
+                            class="pcoded-mtext">API</span></a>
+                </li>
+
+
+
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- [ navigation menu ] end -->

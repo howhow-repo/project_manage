@@ -1,0 +1,127 @@
+{% extends "layouts/new_base.html" %}
+
+{% block title %} Edit User {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>編輯使用者資訊</h5>
+                                            {% if errMsg != None %}
+                                                <small class="form-text text-danger">
+                                                    {{errMsg}}
+                                                </small>
+                                            {% endif %}
+                                            {% if Msg != None %}
+                                                <small class="form-text text-success">
+                                                    {{Msg}}
+                                                </small>
+                                            {% endif %}
+                                        </div>
+                                        <form method="POST" action="{% url 'edit_user' edit_user %}">{%csrf_token%}
+                                        <div class="card-block">
+                                            <div class="row">
+                                                <div class="col-sm-6 mb-4">
+                                                    <div class="form-group">
+                                                        <label>帳號</label>
+                                                        <h1>{{edit_user}}</h1>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6 mb-4">
+                                                    <div class="form-group">
+                                                        <label>門市</label>
+                                                        <h4>{{form.location}}</h4>
+                                                        <label>部門</label>
+                                                        <h4>{{form.department}}</h4>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-3 mb-4">
+                                                    <div class="form-group">
+                                                        <label>名字</label>
+                                                        {{form.first_name}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3 mb-4">
+                                                    <div class="form-group">
+                                                        <label>姓氏</label>
+                                                        {{form.last_name}}
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-sm-6 mb-4">
+                                                    <div class="form-group">
+                                                        <label {% if not request.user.email %} class="text-danger" {% endif %}>
+                                                            Email address</label>
+                                                        {{form.email}}
+                                                        {% if not request.user.email %}
+                                                            <small id="emailHelp" class="form-text text-danger">
+                                                                You don't have an email address associated with this account.
+                                                            </small>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-sm-6 mb-4">
+                                                    <div class="form-group">
+                                                        <label>暱稱</label>
+                                                        {{form.nickname}}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-6 mb-4">
+                                                    <div class="form-group">
+                                                        <label>聯絡電話</label>
+                                                        {{form.phone_number}}
+                                                    </div>
+                                                </div>
+
+<!--                                                <div class="col-sm-6 mb-4">-->
+<!--                                                    <div class="form-group">-->
+<!--                                                        <label>{{form.is_accept}} is_accept</label>-->
+
+<!--                                                    </div>-->
+<!--                                                </div>-->
+
+                                                <div class="col-sm-12 mb-2">
+                                                    <input type = 'submit' class="btn btn-primary" value="Save">
+                                                    <a href="{% url 'view_all_users' %}" class="btn btn-light">Cancel</a>
+                                                    <a href="{% url 'delete_user' edit_user %}" class="btn btn-danger">Delete This user</a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

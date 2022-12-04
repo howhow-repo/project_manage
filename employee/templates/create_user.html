@@ -1,0 +1,140 @@
+{% extends "layouts/new_base.html" %}
+
+{% block title %} Create User {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>新增使用者帳號</h5>
+                                        </div>
+                                        <form method="POST" action="{% url 'register_user' %}">{%csrf_token%}
+                                            <div class="card-block">
+                                            <div class="row">
+
+                                                <div class="col-sm-6 mb-4">
+                                                    <div class="form-group">
+                                                        <label><b>*帳號名稱</b></label>
+                                                        {{form.username}}
+                                                    </div>
+                                                    <span class="text-error">{{ form.username.errors }}</span>
+                                                </div>
+                                                <div class="col-sm-6 mb-4">
+                                                    <div class="form-group">
+                                                        <label><b>*Email</b></label>
+                                                        {{form.email}}
+<!--                                                        <small class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+                                                    </div>
+                                                    <span class="text-error">{{ form.email.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-6 mb-4">
+                                                    <div class="form-group">
+                                                        <label><b>*密碼</b></label>
+                                                        {{form.password1}}
+                                                    </div>
+                                                    <span class="text-error">{{ form.password1.errors }}</span>
+                                                </div>
+                                                <div class="col-sm-6 mb-4">
+                                                    <div class="form-group">
+                                                        <label><b>*再次輸入密碼</b></label>
+                                                        {{form.password2}}
+                                                    </div>
+                                                    <span class="text-error">{{ form.password2.errors }}</span>
+                                                </div>
+                                                <div class="col-sm-12 mb-4">
+                                                    <hr>
+                                                </div>
+                                                <div class="col-sm-6 mb-4">
+                                                    <div class="form-group">
+                                                        <label>名字(Optional)</label>
+                                                        {{form.first_name}}
+                                                    </div>
+                                                    <span class="text-error">{{ form.first_name.errors }}</span>
+                                                </div>
+                                                <div class="col-sm-6 mb-4">
+                                                    <div class="form-group">
+                                                        <label>姓氏(Optional)</label>
+                                                        {{form.last_name}}
+                                                    </div>
+                                                    <span class="text-error">{{ form.last_name.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-6 mb-4">
+                                                    <div class="form-group">
+                                                        <label>暱稱(Optional)</label>
+                                                        {{form.nickname}}
+                                                    </div>
+                                                    <span class="text-error">{{ form.nickname.errors }}</span>
+                                                </div>
+
+
+                                                <div class="col-sm-6 mb-4">
+                                                    <div class="form-group">
+                                                        <label>聯絡電話(Optional)</label>
+                                                        {{form.phone_number}}
+                                                    </div>
+                                                    <span class="text-error">{{ form.phone_number.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-6 mb-4">
+                                                    <div class="form-group">
+                                                        <label>工作崗位(Optional)</label>
+                                                        {{form.department}}
+                                                    </div>
+                                                    <span class="text-error">{{ form.department.errors }}</span>
+
+                                                </div>
+
+                                                <div class="col-sm-6 mb-4">
+                                                    <div class="form-group">
+                                                        <label>所屬門市(Optional)</label>
+                                                        {{form.location}}
+                                                    </div>
+                                                    <span class="text-error">{{ form.location.errors }}</span>
+
+                                                </div>
+
+
+                                                <div class="col-sm-12 mb-2">
+                                                    <div class="form-group">
+                                                        <input type = 'submit' class="btn btn-primary" value="Submit"></input>
+                                                        <a href="./" class="btn btn-danger">Cancel</a>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

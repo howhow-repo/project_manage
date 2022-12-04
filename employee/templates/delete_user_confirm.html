@@ -1,0 +1,59 @@
+{% extends "layouts/new_base.html" %}
+
+{% block title %} Delete User {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <!-- [ breadcrumb ] start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">確認刪除？</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>確定要刪除使用者: <b>"{{delete_user}}"</b> 嗎?</h5>
+                                        </div>
+                                        <div class="card-block">
+                                            <form method="POST" action="{% url 'delete_user' delete_user %}">{%csrf_token%}
+                                            <td><a href="{% url 'edit_user' delete_user %}" class="btn btn-light">Cancel</a></td>
+                                                {{form.confirm}}
+                                                <input type = 'submit' class="btn btn-danger" value="Delete">
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

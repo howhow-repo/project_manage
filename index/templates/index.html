@@ -1,0 +1,122 @@
+{% extends "layouts/new_base.html" %}
+
+{% block title %} Profile {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>個人資訊</h5>
+                                            {% if errMsg != None %}
+                                                <small class="form-text text-danger">
+                                                    {{errMsg}}
+                                                </small>
+                                            {% endif %}
+                                            {% if Msg != None %}
+                                                <small class="form-text text-success">
+                                                    {{Msg}}
+                                                </small>
+                                            {% endif %}
+                                        </div>
+                                        <form method="POST" action="/">{%csrf_token%}
+                                        <div class="card-block">
+                                            <div class="row">
+                                                <div class="col-sm-6 mb-4">
+                                                    <div class="form-group">
+                                                        <label>Username</label>
+                                                        <h1>{{ request.user.username }}</h1>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6 mb-4">
+                                                    <div class="form-group">
+                                                        <label>門市</label>
+                                                        <h4>{{ user.location }}</h4>
+                                                        <label>部門</label>
+                                                        <h4>{{ user.department }}</h4>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-3 mb-4">
+                                                    <div class="form-group">
+                                                        <label>First Name</label>
+                                                        {{form.first_name}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3 mb-4">
+                                                    <div class="form-group">
+                                                        <label>Last Name</label>
+                                                        {{form.last_name}}
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-sm-6 mb-4">
+                                                    <div class="form-group">
+                                                        <label {% if not request.user.email %} class="text-danger" {% endif %}>
+                                                            Email address</label>
+                                                        {{form.email}}
+                                                        {% if not request.user.email %}
+                                                            <small id="emailHelp" class="form-text text-danger">
+                                                                You don't have an email address associated with this account.
+                                                            </small>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-sm-6 mb-4">
+                                                    <div class="form-group">
+                                                        <label>Nick Name</label>
+                                                        {{form.nickname}}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-6 mb-4">
+                                                    <div class="form-group">
+                                                        <label>Phone Number</label>
+                                                        {{form.phone_number}}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-12 mb-2">
+                                                    <div class="form-group">
+                                                        <input type = 'submit' class="btn btn-primary" value="Save">
+                                                        <a href="/" class="btn btn-danger">Cancel</a>
+                                                        <a href="/change_password" class="btn btn-light">Change password</a>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
