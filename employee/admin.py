@@ -1,7 +1,10 @@
 # -*- encoding: utf-8 -*-
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import Group
+
 from .models import User, Department
+from .forms import GroupAdminForm
 
 
 class DepartmentAdmin(admin.ModelAdmin):
@@ -19,7 +22,6 @@ class CustomUserAdmin(UserAdmin):
                 'fields': (
                     'nickname',
                     'department',
-                    'location',
                     'is_accept'
                 )
             }
@@ -31,5 +33,14 @@ class CustomUserAdmin(UserAdmin):
     )
 
 
+class GroupAdmin(admin.ModelAdmin):
+    # Use our custom form.
+    form = GroupAdminForm
+    # Filter permissions horizontal as well.
+    filter_horizontal = ['permissions']
+
+
+admin.site.unregister(Group)
+admin.site.register(Group, GroupAdmin)
 admin.site.register(Department, DepartmentAdmin)
 admin.site.register(User, CustomUserAdmin)
