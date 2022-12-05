@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     'employee',
     'doc_handle',
     'api',
+    'materials',
+    'customer',
 
     'sslserver',
     'drf_yasg',

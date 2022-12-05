@@ -2,7 +2,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
-from employee.models import Department, BranchLocation
+from employee.models import Department
 
 
 class LoginForm(forms.Form):
@@ -89,17 +89,6 @@ class SignUpForm(UserCreationForm):
         )
     )
 
-    location = forms.ModelChoiceField(
-        required=False,
-        queryset=BranchLocation.objects.all(),
-        widget=forms.Select(
-            attrs={
-                "placeholder": "location",
-                "class": "form-control"
-            }
-        )
-    )
-
     password1 = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
@@ -119,7 +108,7 @@ class SignUpForm(UserCreationForm):
 
     class Meta:
         model = get_user_model()
-        fields = ('username', 'email', 'phone_number', 'password1', 'password2', 'location', 'department')
+        fields = ('username', 'email', 'phone_number', 'password1', 'password2', 'department')
 
 
 class DeleteUserForm(forms.Form):
