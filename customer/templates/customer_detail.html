@@ -1,6 +1,6 @@
 {% extends "layouts/new_base.html" %}
 
-{% block title %} Profile {% endblock %}
+{% block title %} Customer {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -20,7 +20,7 @@
                                 <div class="col-sm-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5>個人資訊</h5>
+                                            <h5>客戶資訊</h5>
                                             {% if errMsg != None %}
                                                 <small class="form-text text-danger">
                                                     {{errMsg}}
@@ -32,83 +32,79 @@
                                                 </small>
                                             {% endif %}
                                         </div>
-                                        <form method="POST" action="/">{%csrf_token%}
+                                        <form method="POST" action="{% url 'customer_detail' customer.name %}">{%csrf_token%}
                                         <div class="card-block">
                                             <div class="row">
                                                 <div class="col-sm-6 mb-4">
                                                     <div class="form-group">
-                                                        <label>Username</label>
-                                                        <h1>{{ request.user.username }}</h1>
+                                                        <label>Name</label>
+                                                        <h1>{{ customer.name }}</h1>
+                                                        {{ form.name.as_hidden }}
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 mb-4">
                                                     <div class="form-group">
-                                                        <label>部門</label>
-                                                        <h4>{{ user.department }}</h4>
+                                                        <div class="row">
+                                                            <div class="col-sm-6 mb-4">
+                                                                <label>creator</label>
+                                                                <h6>{{ customer.creator.username }}</h6>
+                                                            </div>
+                                                            <div class="col-sm-6 mb-4">
+                                                                <label>update_time</label>
+                                                                <h6>{{ customer.update_time|date:'Y-m-d H:i' }}</h6>
+                                                            </div>
+                                                        </div>
+                                                        <label>type</label>
+                                                        <h4>{{ form.type }}</h4>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-sm-3 mb-4">
                                                     <div class="form-group">
-                                                        <label>First Name</label>
-                                                        {{form.first_name}}
+                                                        <label>TEL</label>
+                                                        {{form.tel}}
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-3 mb-4">
                                                     <div class="form-group">
-                                                        <label>Last Name</label>
-                                                        {{form.last_name}}
+                                                        <label>CEL</label>
+                                                        {{form.cel}}
                                                     </div>
                                                 </div>
 
-
                                                 <div class="col-sm-6 mb-4">
                                                     <div class="form-group">
-                                                        <label {% if not request.user.email %} class="text-danger" {% endif %}>
-                                                            Email address</label>
+                                                        <label> Email</label>
                                                         {{form.email}}
-                                                        {% if not request.user.email %}
-                                                            <small id="emailHelp" class="form-text text-danger">
-                                                                You don't have an email address associated with this account.
-                                                            </small>
-                                                        {% endif %}
                                                     </div>
                                                 </div>
 
 
                                                 <div class="col-sm-6 mb-4">
                                                     <div class="form-group">
-                                                        <label>Nick Name</label>
-                                                        {{form.nickname}}
+                                                        <label>LINE</label>
+                                                        {{form.line}}
                                                     </div>
                                                 </div>
 
                                                 <div class="col-sm-6 mb-4">
                                                     <div class="form-group">
-                                                        <label>Phone Number</label>
-                                                        {{form.phone_number}}
+                                                        <label>Address</label>
+                                                        {{form.address}}
                                                     </div>
                                                 </div>
 
-                                                <div class="col-sm-6 mb-4">
+                                                <div class="col-sm-12 mb-2">
                                                     <div class="form-group">
-                                                        <label>Line Account</label>
-                                                        {{form.line_account}}
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-6 mb-4">
-                                                    <div class="form-group">
-                                                        <label>Line Notify Token</label>
-                                                        {{form.notify_token}}
+                                                        <label>Note</label>
+                                                        {{form.note}}
                                                     </div>
                                                 </div>
 
                                                 <div class="col-sm-12 mb-2">
                                                     <div class="form-group">
                                                         <input type = 'submit' class="btn btn-primary" value="Save">
-                                                        <a href="/" class="btn btn-danger">Cancel</a>
-                                                        <a href="/change_password" class="btn btn-light">Change password</a>
+                                                        <a href="{% url 'list_customers' %}" class="btn btn-light">Cancel</a>
                                                     </div>
                                                 </div>
 

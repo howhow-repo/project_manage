@@ -1,0 +1,97 @@
+{% extends "layouts/new_base.html" %}
+
+{% block title %} Materials {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="col-sm-6">
+                        <input type="text" id="material-search" class="form-control mb-4" placeholder="search . . ">
+                    </div>
+                    <div class="main-body">
+                        {% if empty %}
+                        <h2>No Recipe Found</h2>
+                        <br>
+                        <input type ="button" class="btn btn-secondary" onclick="history.back()" value="上一頁">
+                        {% endif %}
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                {% for material in materials %}
+                                <!--[social-media section] start-->
+                                    <div class="col-md-6 col-xl-4" data-filter="{{material.name}}"  data-toggle="tooltip">
+                                        <div class="card card-social" >
+                                            <div class="card-block border-bottom">
+                                                <div class="row align-items-center justify-content-center">
+                                                    <div class="col-left">
+
+                                                    </div>
+                                                    <div class="col text-right">
+                                                        <h4>{{ material.name }}</h4>
+                                                        <h5 class="text-muted"> {{ material.type }} </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-block">
+
+                                                <div class="row align-items-center justify-content-center card-active">
+                                                    <div class="col-6">
+                                                        <h6 class="text-center m-b-10"><span
+                                                                class="text-muted m-r-5">Last Update:<br></span>{{ material.update_time|date:'Y-m-d H:i' }}</h6>
+
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <a class="btn btn-light">Detail</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                <!--[social-media section] end-->
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->            
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    {% if not empty %}
+        <script type="text/javascript">
+            $(window).on('load', function() {
+                $("#material-search").on("keyup", function() {
+                    var g = $(this).val().toLowerCase();
+                    $(".col-md-6.col-xl-4").each(function() {
+                        var t = $(this).attr('data-filter');
+                        if (t) {
+                            var s = t.toLowerCase();
+                        }
+                        if (s) {
+                            var n = s.indexOf(g);
+                            if (n !== -1) {
+                                $(this).show();
+                            } else {
+                                $(this).hide();
+                            }
+                        }
+                    });
+                });
+            });
+        </script>
+    {% endif %}
+{% endblock javascripts %}

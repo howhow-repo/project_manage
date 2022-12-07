@@ -1,0 +1,131 @@
+{% extends "layouts/new_base.html" %}
+
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <section class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="col-xl-4">
+                                <input type="text" id="customer-name-search" class="form-control mb-4" placeholder="search by name... ">
+                            </div>
+                            <div class="col-xl-4">
+                                <input type="text" id="customer-addr-search" class="form-control mb-4" placeholder="search by address... ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <!-- [ Hover-table ] start -->
+                                <div class="col-xl-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>客戶清單</h5>
+                                        </div>
+                                        <div class="card-block table-border-style">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Name</th>
+                                                            <th>Address</th>
+                                                            <th>Cel</th>
+                                                            <th>Tel</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for cos in customers %}
+                                                        <tr class = "clickable-row"
+                                                            data-filter-name="{{cos.name}}"
+                                                            data-filter-addr="{{cos.address}}"
+                                                            data-toggle="tooltip"
+                                                            data-href="{% url 'customer_detail' cos.name %}">
+
+                                                            <th scope="row">{{ forloop.counter }}</th>
+                                                            <td>{{ cos.name }}</td>
+                                                            <td>{{ cos.address }}</td>
+                                                            <td>{{ cos.cel }}</td>
+                                                            <td>{{ cos.tel }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ Hover-table ] end -->
+
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script type="text/javascript">
+        $(window).on('load', function() {
+            $("#customer-name-search").on("keyup", function() {
+                var g = $(this).val().toLowerCase();
+                $("tr").each(function() {
+                    var t = $(this).attr('data-filter-name');
+                    if (t) {
+                        var s = t.toLowerCase();
+                    }
+                    if (s) {
+                        var n = s.indexOf(g);
+                        if (n !== -1) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    }
+                });
+            });
+
+            $("#customer-addr-search").on("keyup", function() {
+                var g = $(this).val().toLowerCase();
+                $("tr").each(function() {
+                    var t = $(this).attr('data-filter-addr');
+                    if (t) {
+                        var s = t.toLowerCase();
+                    }
+                    if (s) {
+                        var n = s.indexOf(g);
+                        if (n !== -1) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    }
+                });
+            });
+        });
+
+        jQuery(document).ready(function($) {
+            $(".clickable-row").click(function() {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
+{% endblock javascripts %}

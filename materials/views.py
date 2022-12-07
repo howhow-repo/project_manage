@@ -1,3 +1,7 @@
 from django.shortcuts import render
+from .models import Material
 
-# Create your views here.
+
+def list_materials(request):
+    context = {'materials': Material.objects.all()}
+    return render(request, 'list_materials.html', context)
