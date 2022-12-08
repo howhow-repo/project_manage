@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import models
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render
+from django.urls import reverse
 
 from project.models import Project
 from .models import Customer
@@ -33,6 +34,7 @@ def add_customer(request):
             obj.editor = request.user
             obj.save()
             context['Msg'] = 'Success'
+            return HttpResponseRedirect(reverse('list_customers'))
         else:
             context['errMsg'] = 'Form is not valid'
     context.update({'form': CustomerForm()})

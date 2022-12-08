@@ -36,65 +36,46 @@
                                         <div class="card-block">
                                             <div class="row">
                                                 <div class="col-sm-6 mb-4">
-                                                    <div class="form-group">
-                                                        <label>Name</label>
-                                                        <h4>{{ form.name }}</h4>
-                                                    </div>
+                                                    <label>Name</label>
+                                                    <h4>{{ form.name }}</h4>
                                                 </div>
                                                 <div class="col-sm-6 mb-4">
-                                                    <div class="form-group">
-                                                        <label>type</label>
-                                                        <h4>{{ form.type }}</h4>
-                                                    </div>
+                                                    <label>type</label>
+                                                    <h4>{{ form.type }}</h4>
                                                 </div>
 
                                                 <div class="col-sm-3 mb-4">
-                                                    <div class="form-group">
-                                                        <label>TEL</label>
-                                                        {{form.tel}}
-                                                    </div>
+                                                    <label>TEL</label>
+                                                    {{form.tel}}
                                                 </div>
                                                 <div class="col-sm-3 mb-4">
-                                                    <div class="form-group">
-                                                        <label>CEL</label>
-                                                        {{form.cel}}
-                                                    </div>
+                                                    <label>CEL</label>
+                                                    {{form.cel}}
                                                 </div>
 
                                                 <div class="col-sm-6 mb-4">
-                                                    <div class="form-group">
-                                                        <label> Email</label>
-                                                        {{form.email}}
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="col-sm-6 mb-4">
-                                                    <div class="form-group">
-                                                        <label>LINE</label>
-                                                        {{form.line}}
-                                                    </div>
+                                                    <label> Email</label>
+                                                    {{form.email}}
                                                 </div>
 
                                                 <div class="col-sm-6 mb-4">
-                                                    <div class="form-group">
-                                                        <label>Address</label>
-                                                        {{form.address}}
-                                                    </div>
+                                                    <label>LINE</label>
+                                                    {{form.line}}
+                                                </div>
+
+                                                <div class="col-sm-6 mb-4">
+                                                    <label>Address</label>
+                                                    {{form.address}}
                                                 </div>
 
                                                 <div class="col-sm-12 mb-2">
-                                                    <div class="form-group">
-                                                        <label>Note</label>
-                                                        {{form.note}}
-                                                    </div>
+                                                    <label>Note</label>
+                                                    {{form.note}}
                                                 </div>
 
                                                 <div class="col-sm-12 mb-2">
-                                                    <div class="form-group">
-                                                        <input type = 'submit' class="btn btn-primary" value="Save">
-                                                        <a href="{% url 'list_customers' %}" class="btn btn-light">Cancel</a>
-                                                    </div>
+                                                    <input type = 'submit' class="btn btn-primary" value="Save">
+                                                    <a href="{% url 'list_customers' %}" class="btn btn-light">Cancel</a>
                                                 </div>
 
                                             </div>

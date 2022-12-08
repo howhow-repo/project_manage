@@ -36,58 +36,58 @@
                                         <div class="card-block">
                                             <div class="row">
                                                 <div class="col-sm-6 mb-4">
-                                                        <label>帳號</label>
-                                                        <h1>{{edit_user}}</h1>
+                                                    <label>帳號</label>
+                                                    <h1>{{edit_user}}</h1>
                                                 </div>
                                                 <div class="col-sm-6 mb-4">
-                                                        <label>部門</label>
-                                                        <h4>{{form.department}}</h4>
+                                                    <label>部門</label>
+                                                    <h4>{{form.department}}</h4>
                                                 </div>
 
                                                 <div class="col-sm-3 mb-4">
-                                                        <label>名字</label>
-                                                        {{form.first_name}}
+                                                    <label>名字</label>
+                                                    {{form.first_name}}
                                                 </div>
                                                 <div class="col-sm-3 mb-4">
-                                                        <label>姓氏</label>
-                                                        {{form.last_name}}
+                                                    <label>姓氏</label>
+                                                    {{form.last_name}}
                                                 </div>
 
 
                                                 <div class="col-sm-6 mb-4">
-                                                        <label {% if not request.user.email %} class="text-danger" {% endif %}>
-                                                            Email address</label>
-                                                        {{form.email}}
-                                                        {% if not request.user.email %}
-                                                            <small id="emailHelp" class="form-text text-danger">
-                                                                You don't have an email address associated with this account.
-                                                            </small>
-                                                        {% endif %}
+                                                    <label {% if not request.user.email %} class="text-danger" {% endif %}>
+                                                        Email address</label>
+                                                    {{form.email}}
+                                                    {% if not request.user.email %}
+                                                        <small id="emailHelp" class="form-text text-danger">
+                                                            You don't have an email address associated with this account.
+                                                        </small>
+                                                    {% endif %}
                                                 </div>
 
 
                                                 <div class="col-sm-6 mb-4">
-                                                        <label>暱稱</label>
-                                                        {{form.nickname}}
+                                                    <label>暱稱</label>
+                                                    {{form.nickname}}
                                                 </div>
 
                                                 <div class="col-sm-6 mb-4">
-                                                        <label>聯絡電話</label>
-                                                        {{form.phone_number}}
+                                                    <label>聯絡電話</label>
+                                                    {{form.phone_number}}
                                                 </div>
 
                                                 <div class="col-sm-6 mb-4">
-                                                        <label>Line</label>
-                                                        {{form.line_account}}
+                                                    <label>Line</label>
+                                                    {{form.line_account}}
                                                 </div>
 
                                                 <div class="col-sm-6 mb-4">
-                                                        <label>Notify Token</label>
-                                                        {{form.notify_token}}
+                                                    <label>Notify Token</label>
+                                                    {{form.notify_token}}
                                                 </div>
 
                                                 <div class="col-sm-6 mb-4">
-                                                        <label class="form-check-label">{{form.is_accept}} is_accept</label>
+                                                    <label class="form-check-label">{{form.is_accept}} is_accept</label>
                                                 </div>
 
                                                 <div class="col-sm-12 mb-2">
