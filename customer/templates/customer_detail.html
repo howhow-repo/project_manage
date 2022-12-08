@@ -40,22 +40,28 @@
                                                         <label>Name</label>
                                                         <h1>{{ customer.name }}</h1>
                                                         {{ form.name.as_hidden }}
+                                                        {{ form.creator.as_hidden }}
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 mb-4">
                                                     <div class="form-group">
                                                         <div class="row">
-                                                            <div class="col-sm-6 mb-4">
+                                                            <div class="col-sm-3 mb-4">
+                                                                <label>editor</label>
+                                                                <h6>{{ customer.editor.username }}</h6>
+                                                            </div>
+                                                            <div class="col-sm-3 mb-4">
                                                                 <label>creator</label>
                                                                 <h6>{{ customer.creator.username }}</h6>
                                                             </div>
-                                                            <div class="col-sm-6 mb-4">
+                                                            <div class="col-sm-3 mb-4">
                                                                 <label>update_time</label>
                                                                 <h6>{{ customer.update_time|date:'Y-m-d H:i' }}</h6>
                                                             </div>
                                                         </div>
                                                         <label>type</label>
                                                         <h4>{{ form.type }}</h4>
+                                                        <span class="text-error">{{ form.type.errors }}</span>
                                                     </div>
                                                 </div>
 
@@ -63,12 +69,14 @@
                                                     <div class="form-group">
                                                         <label>TEL</label>
                                                         {{form.tel}}
+                                                        <span class="text-error">{{ form.tel.errors }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-3 mb-4">
                                                     <div class="form-group">
                                                         <label>CEL</label>
                                                         {{form.cel}}
+                                                        <span class="text-error">{{ form.cel.errors }}</span>
                                                     </div>
                                                 </div>
 
@@ -76,6 +84,7 @@
                                                     <div class="form-group">
                                                         <label> Email</label>
                                                         {{form.email}}
+                                                        <span class="text-error">{{ form.email.errors }}</span>
                                                     </div>
                                                 </div>
 
@@ -84,6 +93,7 @@
                                                     <div class="form-group">
                                                         <label>LINE</label>
                                                         {{form.line}}
+                                                        <span class="text-error">{{ form.line.errors }}</span>
                                                     </div>
                                                 </div>
 
@@ -91,6 +101,7 @@
                                                     <div class="form-group">
                                                         <label>Address</label>
                                                         {{form.address}}
+                                                        <span class="text-error">{{ form.address.errors }}</span>
                                                     </div>
                                                 </div>
 
@@ -98,15 +109,10 @@
                                                     <div class="form-group">
                                                         <label>Note</label>
                                                         {{form.note}}
+                                                        <span class="text-error">{{ form.note.errors }}</span>
                                                     </div>
                                                 </div>
 
-                                                <div class="col-sm-6 mb-2">
-                                                    <div class="form-group">
-                                                        <label>Note</label>
-                                                        {{form.note}}
-                                                    </div>
-                                                </div>
 
                                                 <div class="col-sm-12 mb-2">
                                                     <div class="form-group">
@@ -141,7 +147,9 @@
                                                     </thead>
                                                     <tbody>
                                                     {% for proj in projects %}
-                                                        <tr>
+                                                        <tr class = "clickable-row"
+                                                            data-href="{% url 'project_detail' proj.id %}">
+
                                                             <th scope="row">{{ forloop.counter }}</th>
                                                             <td>{{ proj.title }}</td>
                                                             <td>{{ proj.status }}</td>
@@ -153,7 +161,7 @@
                                                     {% endfor %}
                                                     </tbody>
                                                 </table>
-                                                <a href="{% url 'add_project' customer.name %}" class="btn btn-secondary">+</a>
+                                                <a href="{% url 'add_project' customer.name %}" class="btn btn-primary">+</a>
                                             </div>
                                         </div>
                                     </div>
@@ -172,4 +180,12 @@
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            $(".clickable-row").click(function() {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
+{% endblock javascripts %}

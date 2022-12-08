@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.db import models
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render
 
@@ -23,40 +24,42 @@ def list_customers(request):
 
 @login_required(login_url="/login/")
 def add_customer(request):
-    context = {}
+    context = {'segment': 'customer'}
     if request.method == "POST":
         form = CustomerForm(data=request.POST)
         if form.is_valid():
             obj = form.save(commit=False)
             obj.creator = request.user
+            obj.editor = request.user
             obj.save()
             context['Msg'] = 'Success'
         else:
             context['errMsg'] = 'Form is not valid'
-    context = {'form': CustomerForm()}
+    context.update({'form': CustomerForm()})
     return render(request, 'add_customer.html', context)
 
 
 @login_required(login_url="/login/")
 def customer_detail(request, cust_name):
-    customer = Customer.objects.get(name=cust_name)
-    if not customer:
+    try:
+        customer = Customer.objects.get(name=cust_name)
+    except models.ObjectDoesNotExist:
         return HttpResponseNotFound()
 
     context = {'segment': 'customer'}
-
-    form = CustomerForm()
     if request.method == 'POST':
-        update_form = CustomerForm(data=request.POST, instance=customer)
-        if update_form.is_valid():
-            obj = update_form.save(commit=False)
-            obj.creator = request.user
-            obj.save()
+        form = CustomerForm(data=request.POST, instance=customer)
+        if form.is_valid():
+            customer = form.save(commit=False)
+            customer.editor = request.user
+            customer.save()
             context['Msg'] = 'Success'
         else:
-            context['errMsg'] = update_form.errors
-    form = fill_form_initial_with_org_data(Customer.objects.get(name=cust_name), form)
+            context['errMsg'] = form.errors
+    else:
+        form = CustomerForm()
 
+    form = fill_form_initial_with_org_data(customer, form)
     context.update({
         'form': form,
         'customer': customer,

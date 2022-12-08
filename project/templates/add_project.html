@@ -45,6 +45,7 @@
                                                     <div class="form-group">
                                                         <label>Title</label>
                                                         <h4>{{ form.title }}</h4>
+                                                        <span class="text-error">{{ form.title.errors }}</span>
                                                     </div>
                                                 </div>
 
@@ -52,6 +53,7 @@
                                                     <div class="form-group">
                                                         <label>Status</label>
                                                         <h4>{{ form.status }}</h4>
+                                                        <span class="text-error">{{ form.status.errors }}</span>
                                                     </div>
                                                 </div>
 
@@ -59,12 +61,14 @@
                                                     <div class="form-group">
                                                         <label>start_date</label>
                                                         {{form.start_date}}
+                                                        <span class="text-error">{{ form.start_date.errors }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-3 mb-4">
                                                     <div class="form-group">
                                                         <label>due_date</label>
                                                         {{form.due_date}}
+                                                        <span class="text-error">{{ form.due_date.errors }}</span>
                                                     </div>
                                                 </div>
 
@@ -72,6 +76,7 @@
                                                     <div class="form-group">
                                                         <label> owner</label>
                                                         {{form.owner}}
+                                                        <span class="text-error">{{ form.owner.errors }}</span>
                                                     </div>
                                                 </div>
 
@@ -79,13 +84,14 @@
                                                     <div class="form-group">
                                                         <label>Note</label>
                                                         {{form.note}}
+                                                        <span class="text-error">{{ form.note.errors }}</span>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-sm-12 mb-2">
                                                     <div class="form-group">
                                                         <input type = 'submit' class="btn btn-primary" value="Save">
-                                                        <input type ="button" class="btn btn-light" onclick="history.back()" value="Cancel">
+                                                        <a href="{% url 'customer_detail'  customer.name %}" class="btn btn-light">Cancel</a>
                                                     </div>
                                                 </div>
 

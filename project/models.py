@@ -1,3 +1,4 @@
+import uuid
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -29,13 +30,15 @@ class ProjectStatus(models.Model):
 
 
 class Project(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=20, default='no title')
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
     status = models.ForeignKey(ProjectStatus, on_delete=models.PROTECT)
     note = models.TextField(max_length=1000, default=None, null=True, blank=True)
-    creator = models.ForeignKey(User, on_delete=models.PROTECT, related_name='case_creator', )
-    owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name='case_owner',
+    creator = models.ForeignKey(User, on_delete=models.PROTECT, related_name='project_creator', )
+    owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name='project_owner',
                               default=None, null=True, blank=True)
+    editor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='project_editor')
     start_date = models.DateTimeField(default=timezone.now)
     due_date = models.DateTimeField(default=None, null=True, blank=True)
     update_time = models.DateTimeField(auto_now=True)

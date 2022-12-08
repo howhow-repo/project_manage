@@ -21,7 +21,8 @@ class Customer(models.Model):
     type = models.ForeignKey(CustomerType, on_delete=models.PROTECT, null=True, blank=True)
     note = models.TextField(max_length=1000, default=None, null=True, blank=True)
     update_time = models.DateTimeField(auto_now=True)
-    creator = models.ForeignKey(User, on_delete=models.PROTECT)
+    creator = models.ForeignKey(User, on_delete=models.PROTECT, related_name='customer_creator')
+    editor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='customer_editor')
 
     def __str__(self):
         return self.name
