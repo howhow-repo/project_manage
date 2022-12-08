@@ -20,7 +20,7 @@
                                 <div class="col-sm-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5>客戶資訊</h5>
+                                            <h5>新增客戶</h5>
                                             {% if errMsg != None %}
                                                 <small class="form-text text-danger">
                                                     {{errMsg}}
@@ -32,28 +32,17 @@
                                                 </small>
                                             {% endif %}
                                         </div>
-                                        <form method="POST" action="{% url 'customer_detail' customer.name %}">{%csrf_token%}
+                                        <form method="POST" action="{% url 'add_customer' %}">{%csrf_token%}
                                         <div class="card-block">
                                             <div class="row">
                                                 <div class="col-sm-6 mb-4">
                                                     <div class="form-group">
                                                         <label>Name</label>
-                                                        <h1>{{ customer.name }}</h1>
-                                                        {{ form.name.as_hidden }}
+                                                        <h4>{{ form.name }}</h4>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 mb-4">
                                                     <div class="form-group">
-                                                        <div class="row">
-                                                            <div class="col-sm-6 mb-4">
-                                                                <label>creator</label>
-                                                                <h6>{{ customer.creator.username }}</h6>
-                                                            </div>
-                                                            <div class="col-sm-6 mb-4">
-                                                                <label>update_time</label>
-                                                                <h6>{{ customer.update_time|date:'Y-m-d H:i' }}</h6>
-                                                            </div>
-                                                        </div>
                                                         <label>type</label>
                                                         <h4>{{ form.type }}</h4>
                                                     </div>
@@ -94,14 +83,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-sm-6 mb-2">
-                                                    <div class="form-group">
-                                                        <label>Note</label>
-                                                        {{form.note}}
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-6 mb-2">
+                                                <div class="col-sm-12 mb-2">
                                                     <div class="form-group">
                                                         <label>Note</label>
                                                         {{form.note}}
@@ -118,44 +100,6 @@
                                             </div>
                                         </div>
                                         </form>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5>專案</h5>
-                                        </div>
-                                        <div class="card-block table-border-style">
-                                            <div class="table-responsive">
-                                                <table class="table table-hover">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>#</th>
-                                                            <th>Title</th>
-                                                            <th>Status</th>
-                                                            <th>due_date</th>
-                                                            <th>start_date</th>
-                                                            <th>Owner</th>
-                                                            <th>update_time</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    {% for proj in projects %}
-                                                        <tr>
-                                                            <th scope="row">{{ forloop.counter }}</th>
-                                                            <td>{{ proj.title }}</td>
-                                                            <td>{{ proj.status }}</td>
-                                                            <td>{{ proj.due_date|date:'Y-m-d H:i' }}</td>
-                                                            <td>{{ proj.start_date|date:'Y-m-d H:i' }}</td>
-                                                            <td>{{ proj.owner }}</td>
-                                                            <td>{{ proj.update_time|date:'Y-m-d H:i' }}</td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                    </tbody>
-                                                </table>
-                                                <a href="{% url 'add_project' customer.name %}" class="btn btn-secondary">+</a>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

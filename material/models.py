@@ -1,8 +1,10 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 from employee.models import User
+from project.models import Project
 
 
 def update_img(instance, filename) -> str:
@@ -38,3 +40,26 @@ class Material(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Bom(models.Model):
+    case = models.ForeignKey(Project, on_delete=models.PROTECT)
+    note = models.TextField(max_length=500)
+    discount = models.FloatField(default=1.0, validators=[MinValueValidator(0.0), MaxValueValidator(1.0)],)
+    org_cost = models.FloatField()
+    final_cost = models.IntegerField()
+    creator = models.ForeignKey(User, on_delete=models.PROTECT)
+    update_time = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.case.__str__()
+
+
+class BomItem(models.Model):
+    material = models.ForeignKey(Material, on_delete=models.PROTECT)
+    unit = models.CharField(max_length=10)
+    quantity = models.FloatField(max_length=99999)
+    price = models.FloatField()
+
+    def __str__(self):
+        return self.material.__str__()

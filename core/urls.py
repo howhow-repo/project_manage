@@ -32,7 +32,8 @@ urlpatterns = [
     path("api/", include("api.urls")),
     path("user_management/", include("employee.urls")),
     path("customers/", include("customer.urls")),
-    path("materials/", include("materials.urls")),
+    path("material/", include("material.urls")),
+    path("projects/", include("project.urls")),
     path("resource/", include("doc_handle.urls")),
     # ADD NEW Routes HERE
 

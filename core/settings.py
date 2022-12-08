@@ -1,7 +1,6 @@
 # -*- encoding: utf-8 -*-
 import environ
 import os
-
 from decouple import config
 
 env = environ.Env(
@@ -57,8 +56,9 @@ INSTALLED_APPS = [
     'employee',
     'doc_handle',
     'api',
-    'materials',
+    'material',
     'customer',
+    'project',
 
     'sslserver',
     'drf_yasg',

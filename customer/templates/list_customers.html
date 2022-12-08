@@ -14,14 +14,12 @@
             <div class="pcoded-content">
                 <div class="pcoded-inner-content">
                     <div class="row">
-                        <div class="col-xl-12">
                             <div class="col-xl-4">
-                                <input type="text" id="customer-name-search" class="form-control mb-4" placeholder="search by name... ">
+                                <input type="text" id="customer-name-search" class="form-control mb-4" placeholder="依名稱搜尋... ">
                             </div>
                             <div class="col-xl-4">
-                                <input type="text" id="customer-addr-search" class="form-control mb-4" placeholder="search by address... ">
+                                <input type="text" id="customer-addr-search" class="form-control mb-4" placeholder="依地址搜尋... ">
                             </div>
-                        </div>
                     </div>
                     <div class="main-body">
                         <div class="page-wrapper">
@@ -41,8 +39,10 @@
                                                             <th>#</th>
                                                             <th>Name</th>
                                                             <th>Address</th>
+                                                            <th>Type</th>
                                                             <th>Cel</th>
                                                             <th>Tel</th>
+                                                            <th>update_time</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -56,8 +56,10 @@
                                                             <th scope="row">{{ forloop.counter }}</th>
                                                             <td>{{ cos.name }}</td>
                                                             <td>{{ cos.address }}</td>
+                                                            <td>{{ cos.type }}</td>
                                                             <td>{{ cos.cel }}</td>
                                                             <td>{{ cos.tel }}</td>
+                                                            <td>{{ cos.update_time|date:'Y-m-d H:i' }}</td>
                                                         </tr>
                                                     {% endfor %}
                                                     </tbody>
