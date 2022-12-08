@@ -20,7 +20,7 @@
                                 <div class="col-sm-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5>新增專案</h5>
+                                            <h5>專案細項</h5>
                                             {% if errMsg != None %}
                                                 <small class="form-text text-danger">
                                                     {{errMsg}}
@@ -32,7 +32,7 @@
                                                 </small>
                                             {% endif %}
                                         </div>
-                                        <form method="POST" action="{% url 'add_project' customer.name %}">{%csrf_token%}
+                                        <form method="POST" action="{% url 'project_detail' project.id %}">{%csrf_token%}
                                         <div class="card-block">
                                             <div class="row">
                                                 <div class="col-sm-6 mb-4">
@@ -40,10 +40,17 @@
                                                     <h4>{{ form.title }}</h4>
                                                     <span class="text-error">{{ form.title.errors }}</span>
                                                 </div>
-
-                                                <div class="col-sm-6 mb-4">
+                                                <div class="col-sm-3 mb-4">
                                                     <label>客戶</label>
-                                                    <h4>{{ customer.name }}</h4>
+                                                    <h4>{{ project.customer }}</h4>
+                                                    {{ form.customer.as_hidden }}
+                                                    {{ form.creator.as_hidden }}
+
+                                                </div>
+
+                                                <div class="col-sm-3 mb-4">
+                                                    <label>Status</label>
+                                                    <h4>{{ project.update_time|date:'Y-m-d H:i' }}</h4>
                                                 </div>
 
                                                 <div class="col-sm-3 mb-4">
@@ -55,6 +62,16 @@
                                                     <label>due_date</label>
                                                     {{form.due_date}}
                                                     <span class="text-error">{{ form.due_date.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-3 mb-4">
+                                                    <label>editor</label>
+                                                    <h4>{{project.editor}}</h4>
+                                                </div>
+
+                                                <div class="col-sm-3 mb-4">
+                                                    <label>creator</label>
+                                                    <h4>{{project.creator}}</h4>
                                                 </div>
 
                                                 <div class="col-sm-3 mb-4">
@@ -77,13 +94,39 @@
 
                                                 <div class="col-sm-12 mb-2">
                                                     <input type = 'submit' class="btn btn-primary" value="Save">
-                                                    <a href="{% url 'customer_detail'  customer.name %}" class="btn btn-light">Cancel</a>
+                                                    <a href="{% url 'customer_detail'  project.customer %}" class="btn btn-light">Cancel</a>
                                                 </div>
 
                                             </div>
                                         </div>
                                         </form>
                                     </div>
+                                </div>
+
+                                <div class="col-sm-12">
+                                    {% for report in daily_reports%}
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>{{report.title}}</h5>
+                                        </div>
+                                        <div class="card-block">
+                                            <div class="row">
+                                                <div class="col-sm-6 mb-4">
+                                                    <label>update_person</label>
+                                                    <h4>{{ report.update_person }}</h4>
+                                                </div>
+                                                <div class="col-sm-6 mb-4">
+                                                    <label>update_time</label>
+                                                    <h4>{{ report.update_time }}</h4>
+                                                </div>
+                                                <div class="col-sm-12 mb-4">
+                                                    <label>Note</label>
+                                                    <h4>{{ report.note }}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
                                 </div>
                             </div>
                             <!-- [ Main Content ] end -->
