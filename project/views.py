@@ -6,13 +6,14 @@ from django.utils import timezone
 
 from customer.models import Customer
 from customer.views import fill_form_initial_with_org_data
-from .forms import ProjectForm
+from .forms import ProjectForm, DailyReportForm, DailyReportImagesForm
 from .models import Project, DailyReport, DailyReportImages
 
 
 def add_creator_and_customer(model_obj, customer, creater):
     model_obj.customer = customer
     model_obj.creator = creater
+    model_obj.editor = creater
     return model_obj
 
 
@@ -70,3 +71,28 @@ def project_detail(request, project_id):
     return render(request, 'project_detail.html', context)
 
 
+def add_daily_report(request, project_id):
+    try:
+        project = Project.objects.get(id=project_id)
+    except models.ObjectDoesNotExist:
+        return HttpResponseNotFound()
+
+    context = {'segment': 'project'}
+    if request.method == "POST":
+        report_form = DailyReportForm(data=request.POST)
+        image_form = DailyReportImagesForm(data=request.POST)
+        if report_form.is_valid() and image_form.is_valid():
+            report_form.save()
+            image_form.save()
+            context['Msg'] = 'Success'
+        else:
+            context['errMsg'] = 'Form is not valid'
+    else:
+        report_form = DailyReport()
+        image_form = DailyReportImages()
+
+    context.update({
+        'report_form': report_form,
+        'image_form': image_form,
+        "project": project,
+    })

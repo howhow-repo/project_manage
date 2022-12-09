@@ -52,7 +52,7 @@ class DailyReport(models.Model):
     project = models.ForeignKey(Project, on_delete=models.PROTECT)
     note = models.TextField(max_length=500)
     update_person = models.ForeignKey(User, on_delete=models.PROTECT)
-    update_time = models.DateTimeField(auto_now=True)
+    update_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.project.__str__() + f"at {self.update_time}"
