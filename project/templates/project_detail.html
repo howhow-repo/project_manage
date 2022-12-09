@@ -33,23 +33,29 @@
                                             {% endif %}
                                         </div>
                                         <form method="POST" action="{% url 'project_detail' project.id %}">{%csrf_token%}
+                                        {{ form.customer.as_hidden }}
+                                        {{ form.creator.as_hidden }}
                                         <div class="card-block">
                                             <div class="row">
-                                                <div class="col-sm-6 mb-4">
+                                                <div class="col-sm-3 mb-4">
                                                     <label>Title</label>
                                                     <h4>{{ form.title }}</h4>
                                                     <span class="text-error">{{ form.title.errors }}</span>
                                                 </div>
                                                 <div class="col-sm-3 mb-4">
+                                                    <label>type</label>
+                                                    <h4>{{ form.type }}</h4>
+                                                    <span class="text-error">{{ form.title.errors }}</span>
+                                                </div>
+                                                <div class="col-sm-3 mb-4">
                                                     <label>客戶</label>
-                                                    <h4>{{ project.customer }}</h4>
-                                                    {{ form.customer.as_hidden }}
-                                                    {{ form.creator.as_hidden }}
-
+                                                    <a href="{% url 'customer_detail' project.customer %}" Target="_blank">
+                                                        <h4>{{ project.customer }}</h4>
+                                                    </a>
                                                 </div>
 
                                                 <div class="col-sm-3 mb-4">
-                                                    <label>Status</label>
+                                                    <label>更新時間</label>
                                                     <h4>{{ project.update_time|date:'Y-m-d H:i' }}</h4>
                                                 </div>
 
@@ -102,32 +108,26 @@
                                         </form>
                                     </div>
                                 </div>
-                                <a href="{% url 'add_project' customer.name %}" class="btn btn-primary">+</a>
-                                <div class="col-sm-12">
-                                    {% for report in daily_reports%}
+                            </div>
+                            <a href="{% url 'add_daily_report' project.id %}" class="btn btn-primary">+</a>
+                            <div class="row">
+                                {% for report in daily_reports%}
+                                <div class="col-sm-6">
+
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5>{{report.title}}</h5>
+                                            <h6>{{ report.update_time|date:'Y-m-d H:i' }} -- {{ report.creator.nickname }}</h6>
                                         </div>
                                         <div class="card-block">
                                             <div class="row">
                                                 <div class="col-sm-6 mb-4">
-                                                    <label>update_person</label>
-                                                    <h4>{{ report.update_person }}</h4>
-                                                </div>
-                                                <div class="col-sm-6 mb-4">
-                                                    <label>update_time</label>
-                                                    <h4>{{ report.update_time }}</h4>
-                                                </div>
-                                                <div class="col-sm-12 mb-4">
-                                                    <label>Note</label>
-                                                    <h4>{{ report.note }}</h4>
+                                                    <h6>{{ report.note|linebreaksbr }}</h6>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    {% endfor %}
                                 </div>
+                                {% endfor %}
                             </div>
                             <!-- [ Main Content ] end -->
                         </div>

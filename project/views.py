@@ -80,19 +80,30 @@ def add_daily_report(request, project_id):
     context = {'segment': 'project'}
     if request.method == "POST":
         report_form = DailyReportForm(data=request.POST)
-        image_form = DailyReportImagesForm(data=request.POST)
+        image_form = DailyReportImagesForm(data=request.POST, files=request.FILES)
         if report_form.is_valid() and image_form.is_valid():
-            report_form.save()
-            image_form.save()
+            report_instance = report_form.save(commit=False)
+            report_instance.creator = request.user
+            report_instance.save()
+
+            images_instance = image_form.save(commit=False)
+            images_instance.report = report_instance
+            images_instance.save()
+
             context['Msg'] = 'Success'
+            return HttpResponseRedirect(reverse('project_detail', kwargs={'project_id': project.id}))
         else:
             context['errMsg'] = 'Form is not valid'
+
     else:
-        report_form = DailyReport()
-        image_form = DailyReportImages()
+        report_form = DailyReportForm()
+        report_form.fields['project'].initial = project
+        image_form = DailyReportImagesForm()
+        image_form.fields['report'].initial = project
 
     context.update({
         'report_form': report_form,
         'image_form': image_form,
         "project": project,
     })
+    return render(request, 'add_daily_report.html', context)

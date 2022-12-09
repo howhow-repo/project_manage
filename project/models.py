@@ -9,9 +9,9 @@ from employee.models import User
 
 
 def update_case_img(instance, filename) -> str:
-    filename_ = instance.name
+    filename_ = instance.report.id
     file_extension = filename.split('.')[-1]
-    return settings.DOCS_ROOT + '/Case/img/%s.%s' % (filename_, file_extension)
+    return settings.DOCS_ROOT + '/Project/photo/%s.%s' % (filename_, file_extension)
 
 
 def validate_image(field_file_obj):
@@ -29,9 +29,18 @@ class ProjectStatus(models.Model):
         return self.name
 
 
+class ProjectType(models.Model):
+    name = models.CharField(max_length=20, unique=True)
+    description = models.TextField(max_length=100, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Project(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=20, default='no title')
+    type = models.ForeignKey(ProjectType, on_delete=models.PROTECT, default=None, null=True, blank=True)
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
     status = models.ForeignKey(ProjectStatus, on_delete=models.PROTECT)
     note = models.TextField(max_length=1000, default=None, null=True, blank=True)
@@ -48,18 +57,23 @@ class Project(models.Model):
 
 
 class DailyReport(models.Model):
-    title = models.CharField(max_length=20, default='no title')
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     project = models.ForeignKey(Project, on_delete=models.PROTECT)
     note = models.TextField(max_length=500)
-    update_person = models.ForeignKey(User, on_delete=models.PROTECT)
+    creator = models.ForeignKey(User, on_delete=models.PROTECT)
     update_time = models.DateTimeField(auto_now_add=True)
+    image1 = models.ImageField(upload_to=update_case_img, validators=[validate_image], default=None, null=True, blank=True)
+    image2 = models.ImageField(upload_to=update_case_img, validators=[validate_image], default=None, null=True, blank=True)
+    image3 = models.ImageField(upload_to=update_case_img, validators=[validate_image], default=None, null=True, blank=True)
+    image4 = models.ImageField(upload_to=update_case_img, validators=[validate_image], default=None, null=True, blank=True)
+    image5 = models.ImageField(upload_to=update_case_img, validators=[validate_image], default=None, null=True, blank=True)
 
     def __str__(self):
         return self.project.__str__() + f"at {self.update_time}"
 
 
 class DailyReportImages(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.PROTECT)
+    report = models.ForeignKey(DailyReport, on_delete=models.PROTECT)
     image1 = models.ImageField(upload_to=update_case_img, validators=[validate_image])
     image2 = models.ImageField(upload_to=update_case_img, validators=[validate_image])
     image3 = models.ImageField(upload_to=update_case_img, validators=[validate_image])

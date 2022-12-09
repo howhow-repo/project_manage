@@ -23,10 +23,11 @@ class ProjectForm(forms.ModelForm):
         self.fields['owner'].required = False
         self.fields['creator'].required = False
         self.fields['customer'].required = False
+        self.fields['type'].required = False
 
     class Meta:
         model = Project
-        fields = ('title', 'customer', 'status', 'note', 'owner', 'creator', 'due_date', 'start_date')
+        fields = ('title', 'type', 'customer', 'status', 'note', 'owner', 'creator', 'due_date', 'start_date')
 
 
 class DailyReportForm(forms.ModelForm):
@@ -39,7 +40,7 @@ class DailyReportForm(forms.ModelForm):
 
     class Meta:
         model = DailyReport
-        fields = ('title', 'project', 'note', 'update_person')
+        fields = ('project', 'note', 'creator', 'image1', 'image2', 'image3', 'image4', 'image5')
 
 
 class DailyReportImagesForm(forms.ModelForm):
@@ -52,4 +53,4 @@ class DailyReportImagesForm(forms.ModelForm):
 
     class Meta:
         model = DailyReportImages
-        fields = ('project', 'image1', 'image2', 'image3', 'image4', 'image5')
+        fields = ('report', 'image1', 'image2', 'image3', 'image4', 'image5')
