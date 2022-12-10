@@ -8,7 +8,7 @@ from customer.models import Customer
 from employee.models import User
 
 
-def update_case_img(instance, filename) -> str:
+def update_report_photo(instance, filename) -> str:
     filename_ = instance.report.id
     file_extension = filename.split('.')[-1]
     return settings.DOCS_ROOT + '/Project/photo/%s.%s' % (filename_, file_extension)
@@ -59,7 +59,7 @@ class Project(models.Model):
 class DailyReport(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     project = models.ForeignKey(Project, on_delete=models.PROTECT)
-    note = models.TextField(max_length=1000, default="empty")
+    note = models.TextField(max_length=1000, null=True, blank=True)
     creator = models.ForeignKey(User, on_delete=models.PROTECT)
     update_time = models.DateTimeField(auto_now_add=True)
 
@@ -69,12 +69,12 @@ class DailyReport(models.Model):
 
 class DailyReportPhoto(models.Model):
     report = models.ForeignKey(DailyReport, on_delete=models.PROTECT)
-    photo1 = models.ImageField(upload_to=update_case_img, validators=[validate_image])
-    photo2 = models.ImageField(upload_to=update_case_img, validators=[validate_image])
-    photo3 = models.ImageField(upload_to=update_case_img, validators=[validate_image])
-    photo4 = models.ImageField(upload_to=update_case_img, validators=[validate_image])
-    photo5 = models.ImageField(upload_to=update_case_img, validators=[validate_image])
-    photo6 = models.ImageField(upload_to=update_case_img, validators=[validate_image])
+    photo1 = models.ImageField(upload_to=update_report_photo, validators=[validate_image])
+    photo2 = models.ImageField(upload_to=update_report_photo, validators=[validate_image])
+    photo3 = models.ImageField(upload_to=update_report_photo, validators=[validate_image])
+    photo4 = models.ImageField(upload_to=update_report_photo, validators=[validate_image])
+    photo5 = models.ImageField(upload_to=update_report_photo, validators=[validate_image])
+    photo6 = models.ImageField(upload_to=update_report_photo, validators=[validate_image])
 
 
 class DailyReportComment(models.Model):

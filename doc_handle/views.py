@@ -29,11 +29,13 @@ def find_path_by_order(photo_sets, photo_num):
 def get_daily_report_photo(request, report_id, photo_num):
     try:
         photo_sets = DailyReportPhoto.objects.filter(report=report_id).order_by('id')
+
     except Exception:
         return HttpResponseNotFound()
 
     path = find_path_by_order(photo_sets, photo_num)
-    if path:
+
+    if path and os.path.isfile(path.name):
         with open(path.name, "rb") as file:
             return HttpResponse(file.read(), content_type="image/jpeg")
 

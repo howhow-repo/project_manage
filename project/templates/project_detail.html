@@ -23,8 +23,8 @@
                                     <ul class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
                                         <li class="breadcrumb-item"><a href="{% url 'list_customers' %}">客戶清單</a></li>
-                                        <li class="breadcrumb-item"><a href="{% url 'customer_detail' project.customer.name %}">{{project.customer.name}}</a></li>
-                                        <li class="breadcrumb-item"><a href="{% url 'project_detail' project.id %}">專案細項:{{project.title}}</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'customer_detail' project.customer.name %}">[客戶]{{project.customer.name}}</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'project_detail' project.id %}">[專案細項]{{project.title}}</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -127,25 +127,39 @@
                                     </div>
                                 </div>
                             </div>
-                            <h4> 新增紀錄 <a href="{% url 'add_daily_report' project.id %}" class="btn btn-primary">+</a></h4>
-                            <div class="row">
-                                {% for report in daily_reports%}
-                                <div class="col-sm-6">
+                            <h6>  <a href="{% url 'add_daily_report' project.id %}" class="btn btn-primary">+新增紀錄</a></h6>
+                            <div class="page-wrapper">
+                                <div class="row">
+                                    {% for report, photo_num in daily_reports %}
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h6>{{ report.update_time|date:'Y-m-d H:i' }} -- {{ report.creator.nickname }}</h6>
+                                            </div>
+                                            <div class="card-block">
+                                                <div class="row">
+                                                    <div class="col-sm-12 mb-4">
+                                                        <h6>{{ report.note|linebreaksbr }}</h6>
+                                                    </div>
+                                                    <div class="col-sm-12 mb-4">
 
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h6>{{ report.update_time|date:'Y-m-d H:i' }} -- {{ report.creator.nickname }}</h6>
-                                        </div>
-                                        <div class="card-block">
-                                            <div class="row">
-                                                <div class="col-sm-6 mb-4">
-                                                    <h6>{{ report.note|linebreaksbr }}</h6>
+                                                        <div class="col-right">
+                                                            {% for n in photo_num %}
+                                                            <a href="{% url 'get_daily_report_photo' report.id n %}">
+                                                                <img style="width:180px; height:120px"
+                                                                    src="{% url 'get_daily_report_photo' report.id n %}"
+                                                                >
+                                                            </a>
+                                                            {% endfor %}
+                                                        </div>
+
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    {% endfor %}
                                 </div>
-                                {% endfor %}
                             </div>
                             <!-- [ Main Content ] end -->
                         </div>

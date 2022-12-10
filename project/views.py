@@ -17,6 +17,18 @@ def add_creator_and_customer(model_obj, customer, creater):
     return model_obj
 
 
+def count_photos(report_id):
+    photo_sets = DailyReportPhoto.objects.filter(report=report_id)
+    if not len(photo_sets):
+        return 0
+    counter = 0
+    for photo_set in photo_sets:
+        for k in photo_set.__dict__.keys():
+            if 'photo' in k and getattr(photo_set, k):
+                counter += 1
+    return counter
+
+
 def add_project(request, customer_name):
     try:
         customer = Customer.objects.get(name=customer_name)
@@ -63,10 +75,14 @@ def project_detail(request, project_id):
     else:
         form = ProjectForm()
     form = fill_form_initial_with_org_data(project, form)
+
+    daily_reports = DailyReport.objects.filter(project=project).order_by('-update_time')
+    num_of_photo = [range(count_photos(r.id)) for r in daily_reports]
+    daily_reports = zip(daily_reports, num_of_photo)
     context.update({
         'form': form,
         "project": project,
-        "daily_reports": DailyReport.objects.filter(project=project).order_by('-update_time')
+        "daily_reports": daily_reports,
     })
     return render(request, 'project_detail.html', context)
 
