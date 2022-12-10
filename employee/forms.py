@@ -36,7 +36,7 @@ class SignUpForm(UserCreationForm):
         ))
 
     email = forms.EmailField(
-        required=True,
+        required=False,
         widget=forms.EmailInput(
             attrs={
                 "placeholder": "Email",
@@ -63,7 +63,7 @@ class SignUpForm(UserCreationForm):
         ))
 
     nickname = forms.CharField(
-        required=False,
+        required=True,
         widget=forms.TextInput(
             attrs={
                 "placeholder": "nickname",

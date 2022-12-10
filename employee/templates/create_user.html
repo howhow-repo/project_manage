@@ -31,11 +31,11 @@
                                                     {{form.username}}
                                                     <span class="text-error">{{ form.username.errors }}</span>
                                                 </div>
+
                                                 <div class="col-sm-6 mb-4">
-                                                    <label><b>*Email</b></label>
-                                                    {{form.email}}
-<!--                                                        <small class="form-text text-muted">We'll never share your email with anyone else.</small>-->
-                                                    <span class="text-error">{{ form.email.errors }}</span>
+                                                    <label>*暱稱</label>
+                                                    {{form.nickname}}
+                                                    <span class="text-error">{{ form.nickname.errors }}</span>
                                                 </div>
 
                                                 <div class="col-sm-6 mb-4">
@@ -63,11 +63,11 @@
                                                 </div>
 
                                                 <div class="col-sm-6 mb-4">
-                                                    <label>暱稱(Optional)</label>
-                                                    {{form.nickname}}
-                                                    <span class="text-error">{{ form.nickname.errors }}</span>
+                                                    <label><b>Email(Optional)</b></label>
+                                                    {{form.email}}
+<!--                                                        <small class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+                                                    <span class="text-error">{{ form.email.errors }}</span>
                                                 </div>
-
 
                                                 <div class="col-sm-6 mb-4">
                                                     <label>聯絡電話(Optional)</label>
@@ -81,7 +81,6 @@
                                                     <span class="text-error">{{ form.department.errors }}</span>
 
                                                 </div>
-
 
                                                 <div class="col-sm-12 mb-2">
                                                     <input type = 'submit' class="btn btn-primary" value="Submit"></input>

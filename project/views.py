@@ -6,8 +6,8 @@ from django.utils import timezone
 
 from customer.models import Customer
 from customer.views import fill_form_initial_with_org_data
-from .forms import ProjectForm, DailyReportForm, DailyReportImagesForm
-from .models import Project, DailyReport, DailyReportImages
+from .forms import ProjectForm, DailyReportForm, DailyReportPhotoForm
+from .models import Project, DailyReport, DailyReportPhoto
 
 
 def add_creator_and_customer(model_obj, customer, creater):
@@ -80,13 +80,13 @@ def add_daily_report(request, project_id):
     context = {'segment': 'project'}
     if request.method == "POST":
         report_form = DailyReportForm(data=request.POST)
-        image_form = DailyReportImagesForm(data=request.POST, files=request.FILES)
-        if report_form.is_valid() and image_form.is_valid():
+        photo_form = DailyReportPhotoForm(data=request.POST, files=request.FILES)
+        if report_form.is_valid() and photo_form.is_valid():
             report_instance = report_form.save(commit=False)
             report_instance.creator = request.user
             report_instance.save()
 
-            images_instance = image_form.save(commit=False)
+            images_instance = photo_form.save(commit=False)
             images_instance.report = report_instance
             images_instance.save()
 
@@ -98,12 +98,12 @@ def add_daily_report(request, project_id):
     else:
         report_form = DailyReportForm()
         report_form.fields['project'].initial = project
-        image_form = DailyReportImagesForm()
-        image_form.fields['report'].initial = project
+        photo_form = DailyReportPhotoForm()
+        photo_form.fields['report'].initial = project
 
     context.update({
         'report_form': report_form,
-        'image_form': image_form,
+        'photo_form': photo_form,
         "project": project,
     })
     return render(request, 'add_daily_report.html', context)

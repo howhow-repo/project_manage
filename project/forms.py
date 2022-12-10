@@ -1,5 +1,5 @@
 from django import forms
-from .models import DailyReport, DailyReportImages, ProjectStatus, Project
+from .models import DailyReport, DailyReportPhoto, ProjectStatus, Project
 
 
 class ProjectStatusForm(forms.ModelForm):
@@ -40,10 +40,10 @@ class DailyReportForm(forms.ModelForm):
 
     class Meta:
         model = DailyReport
-        fields = ('project', 'note', 'creator', 'image1', 'image2', 'image3', 'image4', 'image5')
+        fields = ('project', 'note', 'creator')
 
 
-class DailyReportImagesForm(forms.ModelForm):
+class DailyReportPhotoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for f in self.fields:
@@ -52,5 +52,5 @@ class DailyReportImagesForm(forms.ModelForm):
                 self.fields[f].required = False
 
     class Meta:
-        model = DailyReportImages
-        fields = ('report', 'image1', 'image2', 'image3', 'image4', 'image5')
+        model = DailyReportPhoto
+        fields = ('report', 'photo1', 'photo2', 'photo3', 'photo4', 'photo5', 'photo6')

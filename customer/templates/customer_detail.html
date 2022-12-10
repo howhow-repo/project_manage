@@ -13,6 +13,23 @@
 
             <div class="pcoded-content">
                 <div class="pcoded-inner-content">
+                    <!-- [ breadcrumb ] start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'list_customers' %}">客戶清單</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'customer_detail' customer.name %}">{{customer.name}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
                     <div class="main-body">
                         <div class="page-wrapper">
                             <!-- [ Main Content ] start -->
@@ -111,7 +128,10 @@
                                 <div class="col-sm-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5>專案</h5>
+                                            <h5>專案清單</h5>
+                                            <span class="d-block m-t-5">
+                                                直接<code>點擊資料</code>可以進入詳細資訊
+                                            </span>
                                         </div>
                                         <div class="card-block table-border-style">
                                             <div class="table-responsive">

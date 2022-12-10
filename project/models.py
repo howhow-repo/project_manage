@@ -59,26 +59,22 @@ class Project(models.Model):
 class DailyReport(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     project = models.ForeignKey(Project, on_delete=models.PROTECT)
-    note = models.TextField(max_length=500)
+    note = models.TextField(max_length=1000, default="empty")
     creator = models.ForeignKey(User, on_delete=models.PROTECT)
     update_time = models.DateTimeField(auto_now_add=True)
-    image1 = models.ImageField(upload_to=update_case_img, validators=[validate_image], default=None, null=True, blank=True)
-    image2 = models.ImageField(upload_to=update_case_img, validators=[validate_image], default=None, null=True, blank=True)
-    image3 = models.ImageField(upload_to=update_case_img, validators=[validate_image], default=None, null=True, blank=True)
-    image4 = models.ImageField(upload_to=update_case_img, validators=[validate_image], default=None, null=True, blank=True)
-    image5 = models.ImageField(upload_to=update_case_img, validators=[validate_image], default=None, null=True, blank=True)
 
     def __str__(self):
-        return self.project.__str__() + f"at {self.update_time}"
+        return self.project.__str__() + f" report at {self.update_time}"
 
 
-class DailyReportImages(models.Model):
+class DailyReportPhoto(models.Model):
     report = models.ForeignKey(DailyReport, on_delete=models.PROTECT)
-    image1 = models.ImageField(upload_to=update_case_img, validators=[validate_image])
-    image2 = models.ImageField(upload_to=update_case_img, validators=[validate_image])
-    image3 = models.ImageField(upload_to=update_case_img, validators=[validate_image])
-    image4 = models.ImageField(upload_to=update_case_img, validators=[validate_image])
-    image5 = models.ImageField(upload_to=update_case_img, validators=[validate_image])
+    photo1 = models.ImageField(upload_to=update_case_img, validators=[validate_image])
+    photo2 = models.ImageField(upload_to=update_case_img, validators=[validate_image])
+    photo3 = models.ImageField(upload_to=update_case_img, validators=[validate_image])
+    photo4 = models.ImageField(upload_to=update_case_img, validators=[validate_image])
+    photo5 = models.ImageField(upload_to=update_case_img, validators=[validate_image])
+    photo6 = models.ImageField(upload_to=update_case_img, validators=[validate_image])
 
 
 class DailyReportComment(models.Model):

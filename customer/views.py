@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.db import models
+from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render
 from django.urls import reverse
@@ -17,9 +18,30 @@ def fill_form_initial_with_org_data(org_instance, form):
     return form
 
 
+def get_page(request):
+    try:
+        return int(request.GET['page'])
+    except Exception:
+        return 1
+
+
+def get_num_of_page(request):
+    try:
+        return int(request.GET['data_num'])
+    except Exception:
+        return 50
+
+
 @login_required(login_url="/login/")
 def list_customers(request):
-    context = {'customers': Customer.objects.all().order_by('-update_time')}
+    data_num = get_num_of_page(request)
+    page = get_page(request)
+
+    customers = Customer.objects.all().order_by('-update_time')
+    query_set_len = len(customers)
+    paginator = Paginator(customers, data_num)
+    customers = paginator.get_page(page)
+    context = {'customers': customers, 'data_num': data_num, 'query_set_len': query_set_len }
     return render(request, 'list_customers.html', context)
 
 
