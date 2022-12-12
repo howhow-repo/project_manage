@@ -1,11 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import ProtectedError
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
 from .forms import SignUpForm, DeleteUserForm
 from index.forms import UserProfileEdit
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseServerError
 from django.template import loader
 
 
@@ -104,7 +105,10 @@ def delete_user(request, username):
     if request.method == "POST":  # 接受post update
         form = DeleteUserForm(request.POST)
         if form.is_valid() and form['confirm'].value() == 'yes':
-            user.delete()
+            try:
+                user.delete()
+            except ProtectedError:
+                return HttpResponseServerError("ProtectedError")
             messages.success(request, "The user is deleted")
         return HttpResponseRedirect("/user_management")
 

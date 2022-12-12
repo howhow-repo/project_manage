@@ -59,12 +59,16 @@
                                                 <div class="col-sm-3 mb-4">
                                                     <label>Today</label>
                                                     <h4>{% now "Y-m-d H:i" %}</h4>
-                                                    <span class="text-error">{{ report_form.title.errors }}</span>
                                                 </div>
 
                                                 <div class="col-sm-3 mb-4">
                                                     <label>客戶</label>
                                                     <h4>{{ project.customer.name }}</h4>
+                                                </div>
+
+                                                <div class="col-sm-3 mb-4">
+                                                    <label>填寫人</label>
+                                                    <h4>{{ user.username }}</h4>
                                                 </div>
 
                                                 <div class="col-sm-12 mb-2">

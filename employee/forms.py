@@ -111,7 +111,7 @@ class SignUpForm(UserCreationForm):
 
     class Meta:
         model = get_user_model()
-        fields = ('username', 'email', 'phone_number', 'password1', 'password2', 'department')
+        fields = ('username', 'email', 'nickname', 'phone_number', 'password1', 'password2', 'department')
 
 
 class DeleteUserForm(forms.Form):

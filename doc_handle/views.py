@@ -1,6 +1,8 @@
 # -*- encoding: utf-8 -*-
 import os
 from django.http import HttpResponse, HttpResponseNotFound
+
+from material.models import Material
 from .lib import stream_video
 from django.template import loader
 from django.contrib.auth.decorators import login_required
@@ -41,3 +43,20 @@ def get_daily_report_photo(request, report_id, photo_num):
             return HttpResponse(file.read(), content_type="image/jpeg")
 
     return HttpResponseNotFound()
+
+
+@login_required(login_url="/login/")
+def get_material_cover(request, material_id):
+    try:
+        material = Material.objects.get(id=material_id)
+    except Exception:
+        return HttpResponseNotFound()
+
+    path = material.cover
+
+    if path and os.path.isfile(path.name):
+        with open(path.name, "rb") as file:
+            return HttpResponse(file.read(), content_type="image/jpeg")
+
+    with open(settings.STATICFILES_DIRS[0] + '/assets/images/default_material_cover.png', "rb") as file:
+        return HttpResponse(file.read(), content_type="image/jpeg")

@@ -20,10 +20,12 @@ class MaterialForm(forms.ModelForm):
         for f in self.fields:
             self.fields[f].widget.attrs.update({'class': 'form-control'})
         self.fields['note'].required = False
+        self.fields['creator'].required = False
+        self.fields['note'].required = False
 
     class Meta:
         model = Material
-        fields = ('name', 'type', 'unit', 'unit_price', 'note', 'creator')
+        fields = ('name', 'part_number', 'cover', 'type', 'unit', 'unit_price', 'note', 'creator')
 
 
 class BomForm(forms.ModelForm):

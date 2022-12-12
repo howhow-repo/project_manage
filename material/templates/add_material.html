@@ -1,10 +1,123 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "layouts/new_base.html" %}
 
-</body>
-</html>
+{% block title %} Material {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <!-- [ breadcrumb ] start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'list_materials' %}">料件清單</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'add_material' %}">新增料件</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>新增料件</h5>
+                                            {% if errMsg != None %}
+                                                <small class="form-text text-danger">
+                                                    {{errMsg}}
+                                                </small>
+                                            {% endif %}
+                                            {% if Msg != None %}
+                                                <small class="form-text text-success">
+                                                    {{Msg}}
+                                                </small>
+                                            {% endif %}
+                                        </div>
+                                        <form method="POST" action="{% url 'add_material' %}" enctype="multipart/form-data">{%csrf_token%}
+                                            {{ form.creator.as_hidden }}
+                                            {{ form.editor.as_hidden }}
+                                            <div class="card-block">
+                                            <div class="row">
+                                                <div class="col-sm-3 mb-4">
+                                                    <label>Name</label>
+                                                    <h4>{{ form.name }}</h4>
+                                                    <span class="text-error">{{ form.name.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-3 mb-4">
+                                                    <label>part_number</label>
+                                                    <h4>{{ form.part_number }}</h4>
+                                                    <span class="text-error">{{ form.part_number.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-2 mb-2">
+                                                    <label>type</label>
+                                                    <h4>{{ form.type }}</h4>
+                                                    <span class="text-error">{{ form.type.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-2 mb-2">
+                                                    <label>unit_price</label>
+                                                    {{form.unit_price}}
+                                                    <span class="text-error">{{ form.unit_price.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-2 mb-2">
+                                                    <label>unit</label>
+                                                    <h4>{{ form.unit }}</h4>
+                                                    <span class="text-error">{{ form.unit.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-3 mb-4">
+                                                    <label>cover</label>
+                                                    {{form.cover}}
+                                                    <span class="text-error">{{ form.cover.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-12 mb-2">
+                                                    <label>Note</label>
+                                                    {{form.note}}
+                                                    <span class="text-error">{{ form.note.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-12 mb-2">
+                                                    <input type = 'submit' class="btn btn-primary" value="Save">
+                                                    <a href="{% url 'list_customers' %}" class="btn btn-light">Cancel</a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

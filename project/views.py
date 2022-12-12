@@ -141,6 +141,11 @@ def add_daily_report(request, project_id):
             images_instance.report = report_instance
             images_instance.save()
 
+            project.update_time = timezone.now()
+            project.save()
+            project.customer.update_time = timezone.now()
+            project.customer.save()
+
             context['Msg'] = 'Success'
             return HttpResponseRedirect(reverse('project_detail', kwargs={'project_id': project.id}))
         else:

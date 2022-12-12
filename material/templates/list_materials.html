@@ -30,27 +30,28 @@
                     <!-- [ breadcrumb ] end -->
                     <div class="main-body">
                         {% if empty %}
-                        <h2>No Recipe Found</h2>
-                        <br>
-                        <input type ="button" class="btn btn-secondary" onclick="history.back()" value="上一頁">
+                            <h2>No Material Found</h2>
+                            <br>
+                            <input type ="button" class="btn btn-secondary" onclick="history.back()" value="上一頁">
                         {% endif %}
                         <div class="page-wrapper">
                             <!-- [ Main Content ] start -->
                             <!-- [ search bar ] start -->
                             <div class="col-sm-6">
-                                <input type="text" id="material-search" class="form-control mb-4" placeholder="search . . ">
+                                <input type="text" id="material-search" class="form-control mb-4" placeholder="名稱搜尋... ">
                             </div>
                             <!-- [ search bar ] end -->
 
                             <div class="row">
                                 {% for material in materials %}
                                 <!--[social-media section] start-->
-                                    <div class="col-md-6 col-xl-4" data-filter="{{material.name}}"  data-toggle="tooltip">
+                                    <div class="col-md-6 col-xl-3 material-card" data-filter="{{material.name}}"  data-toggle="tooltip">
                                         <div class="card card-social" >
                                             <div class="card-block border-bottom">
                                                 <div class="row align-items-center justify-content-center">
                                                     <div class="col-left">
-
+                                                        <img style="width:150px; height:120px"
+                                                            src="{% url 'get_material_cover' material.id %}">
                                                     </div>
                                                     <div class="col text-right">
                                                         <h4>{{ material.name }}</h4>
@@ -60,14 +61,18 @@
                                             </div>
                                             <div class="card-block">
 
-                                                <div class="row align-items-center justify-content-center card-active">
-                                                    <div class="col-6">
-                                                        <h6 class="text-center m-b-10"><span
-                                                                class="text-muted m-r-5">Last Update:<br></span>{{ material.update_time|date:'Y-m-d H:i' }}</h6>
-
+                                                <div class="col-12">
+                                                    <div class="row text-left ">
+                                                        <h6>
+                                                            <span class="text-muted m-r-5">料號:</span>
+                                                            {{ material.part_number }}
+                                                        </h6>
                                                     </div>
-                                                    <div class="col-6">
-                                                        <a class="btn btn-light">Detail</a>
+                                                    <div class="row text-left ">
+                                                        <h6>
+                                                            <span class="text-muted m-r-5">單位:</span>
+                                                            {{ material.unit_price }}$ / {{ material.unit }}
+                                                        </h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -95,7 +100,7 @@
             $(window).on('load', function() {
                 $("#material-search").on("keyup", function() {
                     var g = $(this).val().toLowerCase();
-                    $(".col-md-6.col-xl-4").each(function() {
+                    $(".material-card").each(function() {
                         var t = $(this).attr('data-filter');
                         if (t) {
                             var s = t.toLowerCase();
