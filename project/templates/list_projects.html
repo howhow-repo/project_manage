@@ -1,0 +1,192 @@
+{% extends "layouts/new_base.html" %}
+
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <section class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <!-- [ breadcrumb ] start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'list_projects' %}?data_num={{data_num}}">專案清單</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <!-- [ search bar ] start -->
+                            <div class="row">
+                                <div class="col-xl-4">
+                                    <input type="text" id="customer-name-search" class="form-control mb-4" placeholder="依客戶搜尋... ">
+                                </div>
+                                <div class="col-xl-4">
+                                    <input type="text" id="customer-addr-search" class="form-control mb-4" placeholder="依地址搜尋... ">
+                                </div>
+                            </div>
+                            <!-- [ serch bar ] end -->
+                            <div class="row">
+                                <!-- [ Hover-table ] start -->
+                                <div class="col-xl-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>專案清單</h5>
+                                            <span>
+                                                直接<code>點擊資料</code>可以進入詳細資訊; 以最後更新時間排序
+                                            </span>
+                                            <span class="nav-item dropdown d-block m-t-5">
+                                                每頁資料:
+                                                <a class="dropdown-toggle" data-toggle="dropdown"> {{data_num}} 筆</a>
+                                                / 共 {{query_set_len}}筆
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="{% url 'list_projects' %}?data_num=10">10</a></li>
+                                                    <li><a class="dropdown-item" href="{% url 'list_projects' %}?data_num=50">50</a></li>
+                                                    <li><a class="dropdown-item" href="{% url 'list_projects' %}?data_num=100">100</a></li>
+                                                    <li><a class="dropdown-item" href="{% url 'list_projects' %}?data_num=500">500</a></li>
+                                                </ul>
+                                            </span>
+
+                                        </div>
+                                        <div class="card-block table-border-style">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>標題</th>
+                                                            <th>類型</th>
+                                                            <th>客戶名稱</th>
+                                                            <th>地址</th>
+                                                            <th>Cel</th>
+                                                            <th>最後更新時間</th>
+                                                            <th>狀態</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for proj in projects %}
+                                                        <tr class = "clickable-row"
+                                                            data-filter-name="{{proj.title}}"
+                                                            data-filter-addr="{{proj.customer.address}}"
+                                                            data-toggle="tooltip"
+                                                            data-href="{% url 'project_detail' proj.id %}">
+
+                                                            <th scope="row">{{ forloop.counter }}</th>
+                                                            <td>{{ proj.title }}</td>
+                                                            <td>{{ proj.type }}</td>
+                                                            <td>{{ proj.customer.name }}</td>
+                                                            <td>{{ proj.customer.address }}</td>
+                                                            <td>{{ proj.customer.cel }}</td>
+                                                            <td>{{ proj.update_time|date:'Y-m-d H:i' }}</td>
+                                                            <td>{{ proj.status }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ Hover-table ] end -->
+                            </div>
+                            <ul class="pagination">
+                                    <li class="page-item">
+                                        {% if projects.has_previous %}
+                                            <a class="page-link"
+                                               href="{% url 'list_projects' %}?page={{projects.previous_page_number}}&data_num={{data_num}}">
+                                                Previous
+                                            </a>
+                                        {% else %}
+                                            <a class="page-link disable">Previous</a>
+                                        {% endif %}
+                                    </li>
+                                    {% for p in projects.paginator.page_range %}
+                                        <li class="page-item {% if forloop.counter == projects.number%} active {% endif %}">
+                                            <a class="page-link" href="{% url 'list_projects' %}?page={{forloop.counter}}&data_num={{data_num}}">
+                                            {{ forloop.counter }}
+                                        </a></li>
+                                    {% endfor %}
+
+                                    <li class="page-item">
+                                        {% if projects.has_next %}
+                                            <a class="page-link" href="{% url 'list_projects' %}?page={{projects.next_page_number}}&data_num={{data_num}}">Next</a>
+                                        {% else %}
+                                            <a class="page-link disable">Next</a>
+                                        {% endif %}
+                                    </li>
+                                </ul>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script type="text/javascript">
+        $(window).on('load', function() {
+            $("#customer-name-search").on("keyup", function() {
+                var g = $(this).val().toLowerCase();
+                $("tr").each(function() {
+                    var t = $(this).attr('data-filter-name');
+                    if (t) {
+                        var s = t.toLowerCase();
+                    }
+                    if (s) {
+                        var n = s.indexOf(g);
+                        if (n !== -1) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    }
+                });
+            });
+
+            $("#customer-addr-search").on("keyup", function() {
+                var g = $(this).val().toLowerCase();
+                $("tr").each(function() {
+                    var t = $(this).attr('data-filter-addr');
+                    if (t) {
+                        var s = t.toLowerCase();
+                    }
+                    if (s) {
+                        var n = s.indexOf(g);
+                        if (n !== -1) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    }
+                });
+            });
+        });
+
+        jQuery(document).ready(function($) {
+            $(".clickable-row").click(function() {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
+{% endblock javascripts %}

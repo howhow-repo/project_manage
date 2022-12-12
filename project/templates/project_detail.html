@@ -39,6 +39,10 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <h5>專案細項</h5>
+                                            <a href="{{project.google_calendar_event}}" target="_blank">
+                                                <img class="rounded" style="width:30px;"
+                                                            src="{{ ASSETS_ROOT }}/images/widget/g_calendar.png"> 加入日曆
+                                            </a>
                                             {% if errMsg != None %}
                                                 <small class="form-text text-danger">
                                                     {{errMsg}}

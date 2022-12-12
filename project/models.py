@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime, timedelta
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -54,6 +55,39 @@ class Project(models.Model):
 
     def __str__(self):
         return self.title
+
+    def google_calendar_event(self):
+        """
+        http://www.google.com/calendar/event?
+        action=TEMPLATE
+        &text=[事件名稱]
+        &dates=[開始時間]/[結束時間]                           //時間格式為 YYYYMMDDTHHMMSS
+        &details=[詳細的描述]                                //使用 %0A 作為跳行
+        &location=[地點]
+
+        :return:
+            str: url link
+        """
+        link = 'http://www.google.com/calendar/event?action=TEMPLATE'
+        link += f"&text=[{self.customer.name}]{self.title}-{self.type}"
+
+        start_date_str = datetime.strftime(self.start_date, '%Y%m%dT%H%M00')
+        if self.due_date and self.due_date > self.start_date:
+            due_date_str = datetime.strftime(self.due_date, '%Y%m%dT%H%M00')
+        else:
+            due_date_str = datetime.strftime(self.start_date+timedelta(hours=1), '%Y%m%dT%H%M00')
+        link += f"&start_date={start_date_str}/{due_date_str}"
+
+        note_str = f"[{self.customer.name}]\n" \
+                   f"  聯絡電話：{self.customer.tel}\n" \
+                   f"  手機：{self.customer.cel}\n" \
+                   f"----\n\n" + self.note
+        note_str = note_str.replace("\n", r"%0A")
+        link += f'&details={note_str}'
+
+        link += f'&location={self.customer.address}'
+        link += '&trp=true'
+        return link
 
 
 class DailyReport(models.Model):

@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.db import models
 from django.http import HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render
@@ -27,6 +28,32 @@ def count_photos(report_id):
             if 'photo' in k and getattr(photo_set, k):
                 counter += 1
     return counter
+
+
+def get_page(request):
+    try:
+        return int(request.GET['page'])
+    except Exception:
+        return 1
+
+
+def get_num_of_page(request):
+    try:
+        return int(request.GET['data_num'])
+    except Exception:
+        return 50
+
+
+def list_projects(request):
+    data_num = get_num_of_page(request)
+    page = get_page(request)
+
+    projects = Project.objects.all().order_by('-update_time')
+    query_set_len = len(projects)
+    paginator = Paginator(projects, data_num)
+    projects = paginator.get_page(page)
+    context = {'projects': projects, 'data_num': data_num, 'query_set_len': query_set_len}
+    return render(request, 'list_projects.html', context)
 
 
 def add_project(request, customer_name):
