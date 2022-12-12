@@ -1,6 +1,6 @@
 import django.utils.timezone as timezone
 from django.contrib.auth.models import Group
-from customer.models import CustomerType, Customer
+from customer.models import CustomerType, Customer, CustomerStatus
 from project.models import ProjectStatus, ProjectType, Project
 from material.models import Material, MaterialType
 from employee.models import Department, User
@@ -14,6 +14,13 @@ def add_default_data():
         CustomerType.objects.get_or_create(name='一般住家')
         CustomerType.objects.get_or_create(name='公司行號')
         CustomerType.objects.get_or_create(name='企業合作')
+
+        CustomerStatus.objects.get_or_create(name='待回覆')
+        CustomerStatus.objects.get_or_create(name='待追蹤')
+        CustomerStatus.objects.get_or_create(name='專案進行中')
+        CustomerStatus.objects.get_or_create(name='未收款')
+        CustomerStatus.objects.get_or_create(name='已收款')
+        CustomerStatus.objects.get_or_create(name='無需求')
 
         ProjectStatus.objects.get_or_create(name='來電詢問')
         ProjectStatus.objects.get_or_create(name='待報價')

@@ -74,10 +74,25 @@
                                                             <h6>{{ customer.update_time|date:'Y-m-d H:i' }}</h6>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-12">
-                                                        <label>type</label>
-                                                        <h4>{{ form.type }}</h4>
-                                                        <span class="text-error">{{ form.type.errors }}</span>
+                                                    <div class="row col-sm-12">
+                                                        <div class="col-sm-4 mb-4">
+                                                            <label>type</label>
+                                                            <h4>{{ form.type }}</h4>
+                                                            <span class="text-error">{{ form.type.errors }}</span>
+                                                        </div>
+                                                        <div class="col-sm-4 mb-4">
+                                                            <label>status</label>
+                                                            <h4>{{ form.status }}</h4>
+                                                            <span class="text-error">{{ form.status.errors }}</span>
+                                                        </div>
+                                                        <div class="col-sm-4 mb-4">
+                                                            <label>新增提醒</label>
+                                                            <div>
+                                                                <a href="{% url 'add_schedule_notify' %}" class=" btn btn-primary">
+                                                                    +
+                                                                </a>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
 

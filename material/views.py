@@ -8,13 +8,13 @@ from .forms import MaterialForm
 
 
 def list_materials(request):
-    context = {'materials': Material.objects.all()}
+    context = {'segment': 'material', 'materials': Material.objects.all()}
     return render(request, 'list_materials.html', context)
 
 
 @login_required(login_url="/login/")
 def add_material(request):
-    context = {'segment': 'customer'}
+    context = {'segment': 'material'}
     if request.method == "POST":
         form = MaterialForm(data=request.POST, files=request.FILES)
         if form.is_valid():

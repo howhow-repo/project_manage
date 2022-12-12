@@ -55,7 +55,13 @@ def list_projects(request):
     query_set_len = len(projects)
     paginator = Paginator(projects, data_num)
     projects = paginator.get_page(page)
-    context = {'projects': projects, 'data_num': data_num, 'query_set_len': query_set_len}
+    
+    context = {
+        'segment': 'project',
+        'projects': projects,
+        'data_num': data_num,
+        'query_set_len': query_set_len
+    }
     return render(request, 'list_projects.html', context)
 
 

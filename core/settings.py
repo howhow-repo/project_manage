@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'material',
     'customer',
     'project',
+    'notify',
 
     'sslserver',
     'drf_yasg',

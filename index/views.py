@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 
 from customer.views import fill_form_initial_with_org_data
+from project.models import Project
 from .forms import UserProfileEdit
 
 
@@ -22,6 +23,7 @@ def index(request):
     context = {'segment': 'index'}
     User = get_user_model()
     user = User.objects.get(username=request.user)
+    projects = Project.objects.filter(owner=user)
 
     if request.method == 'POST':
         form = UserProfileEdit(data=request.POST, instance=request.user)
@@ -34,10 +36,12 @@ def index(request):
         elif not form.is_valid():
             context['errMsg'] = form.errors.as_data()
     else:
+
         form = UserProfileEdit()
     form = fill_form_initial_with_org_data(user, form)
 
     context['form'] = form
+    context['projects'] = projects
     return render(request, 'index.html', context)
 
 
