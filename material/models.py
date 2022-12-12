@@ -30,6 +30,7 @@ class MaterialType(models.Model):
 
 class Material(models.Model):
     name = models.CharField(max_length=20, unique=True)
+    part_number = models.CharField(max_length=50, unique=True)
     type = models.ForeignKey(MaterialType, on_delete=models.PROTECT)
     unit = models.CharField(max_length=10)
     unit_price = models.IntegerField(null=True, blank=True,)

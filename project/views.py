@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import models
 from django.http import HttpResponseNotFound, HttpResponseRedirect
@@ -22,6 +23,7 @@ def count_photos(report_id):
     photo_sets = DailyReportPhoto.objects.filter(report=report_id)
     if not len(photo_sets):
         return 0
+
     counter = 0
     for photo_set in photo_sets:
         for k in photo_set.__dict__.keys():
@@ -44,6 +46,7 @@ def get_num_of_page(request):
         return 50
 
 
+@login_required(login_url="/login/")
 def list_projects(request):
     data_num = get_num_of_page(request)
     page = get_page(request)
@@ -56,6 +59,7 @@ def list_projects(request):
     return render(request, 'list_projects.html', context)
 
 
+@login_required(login_url="/login/")
 def add_project(request, customer_name):
     try:
         customer = Customer.objects.get(name=customer_name)
@@ -83,6 +87,7 @@ def add_project(request, customer_name):
     return render(request, 'add_project.html', context)
 
 
+@login_required(login_url="/login/")
 def project_detail(request, project_id):
     try:
         project = Project.objects.get(id=project_id)
@@ -106,6 +111,7 @@ def project_detail(request, project_id):
     daily_reports = DailyReport.objects.filter(project=project).order_by('-update_time')
     num_of_photo = [range(count_photos(r.id)) for r in daily_reports]
     daily_reports = zip(daily_reports, num_of_photo)
+
     context.update({
         'form': form,
         "project": project,
@@ -114,6 +120,7 @@ def project_detail(request, project_id):
     return render(request, 'project_detail.html', context)
 
 
+@login_required(login_url="/login/")
 def add_daily_report(request, project_id):
     try:
         project = Project.objects.get(id=project_id)

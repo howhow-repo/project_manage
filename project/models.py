@@ -75,13 +75,13 @@ class Project(models.Model):
         if self.due_date and self.due_date > self.start_date:
             due_date_str = datetime.strftime(self.due_date, '%Y%m%dT%H%M00')
         else:
-            due_date_str = datetime.strftime(self.start_date+timedelta(hours=1), '%Y%m%dT%H%M00')
+            due_date_str = datetime.strftime(self.start_date + timedelta(hours=1), '%Y%m%dT%H%M00')
         link += f"&start_date={start_date_str}/{due_date_str}"
 
         note_str = f"[{self.customer.name}]\n" \
                    f"  聯絡電話：{self.customer.tel}\n" \
                    f"  手機：{self.customer.cel}\n" \
-                   f"----\n\n" + self.note
+                   f"----\n\n{self.note}"
         note_str = note_str.replace("\n", r"%0A")
         link += f'&details={note_str}'
 

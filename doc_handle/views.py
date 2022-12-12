@@ -26,6 +26,7 @@ def find_path_by_order(photo_sets, photo_num):
     return None
 
 
+@login_required(login_url="/login/")
 def get_daily_report_photo(request, report_id, photo_num):
     try:
         photo_sets = DailyReportPhoto.objects.filter(report=report_id).order_by('id')
