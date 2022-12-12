@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 
 from customer.models import Customer
@@ -56,7 +57,7 @@ class Project(models.Model):
     def __str__(self):
         return self.title
 
-    def google_calendar_event(self):
+    def google_calendar_event(self, request):
         """
         http://www.google.com/calendar/event?
         action=TEMPLATE
@@ -78,9 +79,11 @@ class Project(models.Model):
             due_date_str = datetime.strftime(self.start_date + timedelta(hours=1), '%Y%m%dT%H%M00')
         link += f"&start_date={start_date_str}/{due_date_str}"
 
+        add_daily_report_link = f"http://{request.get_host()}" + reverse('add_daily_report', kwargs={'project_id': self.id})
         note_str = f"[{self.customer.name}]\n" \
                    f"  聯絡電話：{self.customer.tel}\n" \
                    f"  手機：{self.customer.cel}\n" \
+                   f"  新增紀錄：{add_daily_report_link}\n" \
                    f"----\n\n{self.note}"
         note_str = note_str.replace("\n", r"%0A")
         link += f'&details={note_str}'

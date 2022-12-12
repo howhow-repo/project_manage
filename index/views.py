@@ -21,6 +21,7 @@ def index(request):
             user = update_form.save(commit=False)
             user.save()
             context['Msg'] = 'Success'
+            user.send_line_notify(f"個人資訊已上傳: {update_form.changed_data}")
         else:
             context['errMsg'] = update_form.errors.as_data()
 

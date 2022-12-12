@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+import requests
 from django.core.validators import MinLengthValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -19,3 +20,11 @@ class User(AbstractUser):
     notify_token = models.CharField(max_length=43, null=True, validators=[MinLengthValidator(43)])
     is_accept = models.BooleanField(default=True)
 
+    def send_line_notify(self, message):
+        if not self.notify_token:
+            return None
+        headers = {"Authorization": f"Bearer {self.notify_token}"}
+        data = {'message': message}
+        response = requests.post("https://notify-api.line.me/api/notify",
+                                 headers=headers, data=data)
+        return response

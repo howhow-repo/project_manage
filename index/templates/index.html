@@ -91,16 +91,30 @@
                                                 </div>
 
                                                 <div class="col-sm-6 mb-4">
-                                                    <div class="form-group">
-                                                        <label>Line Account</label>
-                                                        {{form.line_account}}
-                                                    </div>
+                                                <h5><a class="text-muted" href="#!" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true">
+                                                    Line資訊 (點擊展開)
+                                                </a></h5>
                                                 </div>
 
-                                                <div class="col-sm-6 mb-4">
-                                                    <div class="form-group">
-                                                        <label>Line Notify Token</label>
-                                                        {{form.notify_token}}
+                                                <div id="collapseOne" class="col-sm-12 mb-4 collapse hidden">
+                                                    <div class ="row">
+                                                        <div class="col-sm-6 mb-4">
+                                                            <div class="form-group">
+                                                                <label>Line 帳號</label>
+                                                                {{form.line_account}}
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-6 mb-4">
+                                                            <div class="form-group">
+                                                                <label>Line Notify Token --
+                                                                        <a class="text-success mb-1" href="https://notify-bot.line.me/en/" target="_blank">
+                                                                            ( 申請頁面 )
+                                                                        </a>
+                                                                </label>
+                                                                    {{form.notify_token}}
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
 

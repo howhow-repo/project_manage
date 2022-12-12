@@ -116,6 +116,7 @@ def project_detail(request, project_id):
         'form': form,
         "project": project,
         "daily_reports": daily_reports,
+        "calendar_template_link": project.google_calendar_event(request)
     })
     return render(request, 'project_detail.html', context)
 

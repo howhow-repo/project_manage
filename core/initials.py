@@ -66,7 +66,7 @@ def add_test_data():
             name='測試客戶C', type=customer_type, creator=creater, editor=creater,
             address='台南市凱達格蘭大道1號', tel='032345678', cel='0965748391')
         Project.objects.get_or_create(
-            title="裝F", customer=cusC[0], status=ProjectStatus.objects.get(name='收款結束'),
+            title="裝對講機", customer=cusC[0], status=ProjectStatus.objects.get(name='收款結束'),
             creator=creater, editor=creater,
         )
         Material.objects.get_or_create(
