@@ -37,23 +37,46 @@
                                 <div class="col-sm-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5>客戶資訊</h5>
-                                            {% if errMsg != None %}
-                                                <small class="form-text text-danger">
-                                                    {{errMsg}}
-                                                </small>
-                                            {% endif %}
-                                            {% if Msg != None %}
-                                                <small class="form-text text-success">
-                                                    {{Msg}}
-                                                </small>
-                                            {% endif %}
+                                            <div class="row">
+                                                <div class="col-sm-6 mb-1">
+                                                    <h5>客戶資訊</h5>
+                                                        {% if errMsg != None %}
+                                                            <small class="form-text text-danger">
+                                                                {{errMsg}}
+                                                            </small>
+                                                        {% endif %}
+                                                        {% if Msg != None %}
+                                                            <small class="form-text text-success">
+                                                                {{Msg}}
+                                                            </small>
+                                                        {% endif %}
+                                                </div>
+
+                                                <div class="col-sm-4 mb-1">
+                                                </div>
+
+                                                <div class="row col-sm-2 mb-1 text-right">
+                                                    {% if not is_favorite %}
+                                                    <form method="POST" action="{% url 'add_favorite_customer' customer.name%}">{%csrf_token%}
+                                                        <input type = 'submit' class="btn btn-warning" value="加入追蹤">
+                                                    </form>
+                                                    {% elif is_favorite %}
+                                                    <form method="POST" action="{% url 'rm_favorite_customer' customer.name%}">{%csrf_token%}
+                                                        <input type = 'submit' class="btn btn-light" value="取消追蹤">
+                                                    </form>
+                                                    {% endif %}
+
+                                                </div>
+
+                                            </div>
+
                                         </div>
+
                                         <form method="POST" action="{% url 'customer_detail' customer.name %}">{%csrf_token%}
                                         <div class="card-block">
                                             <div class="row">
                                                 <div class="col-sm-6 mb-4">
-                                                    <label>Name</label>
+                                                    <label>名稱</label>
                                                     <h1>{{ customer.name }}</h1>
                                                     {{ form.name.as_hidden }}
                                                     {{ form.creator.as_hidden }}
@@ -62,34 +85,34 @@
                                                 <div class="col-sm-6 mb-4">
                                                     <div class="row col-sm-12">
                                                         <div class="col-sm-4 mb-4">
-                                                            <label>editor</label>
+                                                            <label>最後編輯</label>
                                                             <h6>{{ customer.editor.username }}</h6>
                                                         </div>
                                                         <div class="col-sm-4 mb-4">
-                                                            <label>creator</label>
+                                                            <label>建立者</label>
                                                             <h6>{{ customer.creator.username }}</h6>
                                                         </div>
                                                         <div class="col-sm-4 mb-4">
-                                                            <label>update_time</label>
+                                                            <label>最後更新時間</label>
                                                             <h6>{{ customer.update_time|date:'Y-m-d H:i' }}</h6>
                                                         </div>
                                                     </div>
                                                     <div class="row col-sm-12">
                                                         <div class="col-sm-4 mb-4">
-                                                            <label>type</label>
+                                                            <label>類型</label>
                                                             <h4>{{ form.type }}</h4>
                                                             <span class="text-error">{{ form.type.errors }}</span>
                                                         </div>
                                                         <div class="col-sm-4 mb-4">
-                                                            <label>status</label>
+                                                            <label>狀態</label>
                                                             <h4>{{ form.status }}</h4>
                                                             <span class="text-error">{{ form.status.errors }}</span>
                                                         </div>
-                                                        <div class="col-sm-4 mb-4">
+                                                        <div class="col-sm-4 mb-4 ">
                                                             <label>新增提醒</label>
                                                             <div>
-                                                                <a href="{% url 'add_schedule_notify' %}" class=" btn btn-primary">
-                                                                    +
+                                                                <a href="{% url 'add_schedule_notify' %}" class=" btn btn-warning">
+                                                                    <div class="text-left"><i class="feather icon-bell text-left"></i></div>
                                                                 </a>
                                                             </div>
                                                         </div>
@@ -97,18 +120,18 @@
                                                 </div>
 
                                                 <div class="col-sm-3 mb-4">
-                                                    <label>TEL</label>
+                                                    <label>聯絡電話</label>
                                                     {{form.tel}}
                                                     <span class="text-error">{{ form.tel.errors }}</span>
                                                 </div>
                                                 <div class="col-sm-3 mb-4">
-                                                    <label>CEL</label>
+                                                    <label>手機</label>
                                                     {{form.cel}}
                                                     <span class="text-error">{{ form.cel.errors }}</span>
                                                 </div>
 
                                                 <div class="col-sm-6 mb-4">
-                                                    <label> Email</label>
+                                                    <label>Email</label>
                                                     {{form.email}}
                                                     <span class="text-error">{{ form.email.errors }}</span>
                                                 </div>
@@ -121,13 +144,13 @@
                                                 </div>
 
                                                 <div class="col-sm-6 mb-4">
-                                                    <label>Address</label>
+                                                    <label>地址</label>
                                                     {{form.address}}
                                                     <span class="text-error">{{ form.address.errors }}</span>
                                                 </div>
 
                                                 <div class="col-sm-12 mb-2">
-                                                    <label>Note</label>
+                                                    <label>筆記</label>
                                                     {{form.note}}
                                                     <span class="text-error">{{ form.note.errors }}</span>
                                                 </div>

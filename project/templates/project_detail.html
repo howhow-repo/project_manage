@@ -38,11 +38,31 @@
                                 <div class="col-sm-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5>專案細項</h5>
-                                            <a href="{{calendar_template_link}}" target="_blank">
-                                                <img class="rounded" style="width:30px;"
-                                                            src="{{ ASSETS_ROOT }}/images/widget/g_calendar.png"> 加入日曆
-                                            </a>
+                                            <div class="row">
+                                                <div class="col-sm-6 mb-1">
+                                                    <h5 >專案細項</h5>
+                                                    <a href="{{calendar_template_link}}" target="_blank">
+                                                        <img class="rounded" style="width:30px;"
+                                                                    src="{{ ASSETS_ROOT }}/images/widget/g_calendar.png"> 加入日曆
+                                                    </a>
+                                                </div>
+
+                                                <div class="col-sm-4 mb-1">
+                                                </div>
+
+                                                <div class="row col-sm-2 mb-1 text-right">
+                                                    {% if not is_favorite %}
+                                                    <form method="POST" action="{% url 'add_favorite_project' project.id%}">{%csrf_token%}
+                                                        <input type = 'submit' class="btn btn-warning" value="加入追蹤">
+                                                    </form>
+                                                    {% elif is_favorite %}
+                                                    <form method="POST" action="{% url 'rm_favorite_project' project.id%}">{%csrf_token%}
+                                                        <input type = 'submit' class="btn btn-light" value="取消追蹤">
+                                                    </form>
+                                                    {% endif %}
+
+                                                </div>
+                                            </div>
                                             {% if errMsg != None %}
                                                 <small class="form-text text-danger">
                                                     {{errMsg}}
@@ -53,6 +73,7 @@
                                                     {{Msg}}
                                                 </small>
                                             {% endif %}
+
                                         </div>
                                         <form method="POST" action="{% url 'project_detail' project.id %}">{%csrf_token%}
                                         {{ form.customer.as_hidden }}
@@ -60,12 +81,12 @@
                                         <div class="card-block">
                                             <div class="row">
                                                 <div class="col-sm-3 mb-4">
-                                                    <label>Title</label>
+                                                    <label>標題</label>
                                                     <h4>{{ form.title }}</h4>
                                                     <span class="text-error">{{ form.title.errors }}</span>
                                                 </div>
                                                 <div class="col-sm-3 mb-4">
-                                                    <label>type</label>
+                                                    <label>類型</label>
                                                     <h4>{{ form.type }}</h4>
                                                     <span class="text-error">{{ form.title.errors }}</span>
                                                 </div>
@@ -77,45 +98,51 @@
                                                 </div>
 
                                                 <div class="col-sm-3 mb-4">
-                                                    <label>更新時間</label>
+                                                    <label>最後更新時間</label>
                                                     <h4>{{ project.update_time|date:'Y-m-d H:i' }}</h4>
                                                 </div>
 
                                                 <div class="col-sm-3 mb-4">
-                                                    <label>start_date</label>
+                                                    <label>開始時間</label>
                                                     {{form.start_date}}
                                                     <span class="text-error">{{ form.start_date.errors }}</span>
                                                 </div>
                                                 <div class="col-sm-3 mb-4">
-                                                    <label>due_date</label>
+                                                    <label>預計完成時間</label>
                                                     {{form.due_date}}
                                                     <span class="text-error">{{ form.due_date.errors }}</span>
                                                 </div>
 
                                                 <div class="col-sm-3 mb-4">
-                                                    <label>editor</label>
+                                                    <label>最後編輯</label>
                                                     <h4>{{project.editor}}</h4>
                                                 </div>
 
                                                 <div class="col-sm-3 mb-4">
-                                                    <label>creator</label>
+                                                    <label>建立者</label>
                                                     <h4>{{project.creator}}</h4>
                                                 </div>
 
                                                 <div class="col-sm-3 mb-4">
-                                                    <label>Status</label>
+                                                    <label>狀態</label>
                                                     <h4>{{ form.status }}</h4>
                                                     <span class="text-error">{{ form.status.errors }}</span>
                                                 </div>
 
                                                 <div class="col-sm-3 mb-4">
-                                                    <label> owner</label>
+                                                    <label>負責人員</label>
                                                     {{form.owner}}
                                                     <span class="text-error">{{ form.owner.errors }}</span>
                                                 </div>
 
+                                                <div class="col-sm-6 mb-2">
+                                                    <label>地址</label>
+                                                    {{form.address}}
+                                                    <span class="text-error">{{ form.address.errors }}</span>
+                                                </div>
+
                                                 <div class="col-sm-12 mb-2">
-                                                    <label>Note</label>
+                                                    <label>筆記</label>
                                                     {{form.note}}
                                                     <span class="text-error">{{ form.note.errors }}</span>
                                                 </div>
@@ -138,26 +165,27 @@
                                     <div class="col-sm-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h6>{{ report.update_time|date:'Y-m-d H:i' }} -- {{ report.creator.nickname }}</h6>
+                                                <h6>
+                                                    [{{ report.update_time|date:'Y-m-d' }}
+                                                    <span class="text-muted mb-1">{{ report.update_time|date:'H:i' }}</span>] {{ report.creator.nickname }}
+                                                </h6>
                                             </div>
                                             <div class="card-block">
                                                 <div class="row">
-                                                    <div class="col-sm-12 mb-4">
+                                                    <div class="col-sm-4 mb-1">
                                                         <h6>{{ report.note|linebreaksbr }}</h6>
                                                     </div>
-                                                    <div class="col-sm-12 mb-4">
-
+                                                    {% for n in photo_num %}
+                                                    <div class="col-sm-2 mb-4">
                                                         <div class="col-right">
-                                                            {% for n in photo_num %}
                                                             <a href="{% url 'get_daily_report_photo' report.id n %}">
                                                                 <img style="width:180px; height:120px"
                                                                     src="{% url 'get_daily_report_photo' report.id n %}"
                                                                 >
                                                             </a>
-                                                            {% endfor %}
                                                         </div>
-
                                                     </div>
+                                                    {% endfor %}
                                                 </div>
                                             </div>
                                         </div>

@@ -17,6 +17,91 @@
                         <div class="page-wrapper">
                             <!-- [ Main Content ] start -->
                             <div class="row">
+                                <!-- [ Hover-table ] start -->
+                                <div class="col-xl-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>[專案]追蹤中</h5>
+                                            <span>
+                                                直接<code>點擊資料</code>可以進入詳細資訊; 以最後更新時間排序
+                                            </span>
+                                        </div>
+                                        <div class="card-block table-border-style">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>標題</th>
+                                                            <th>種類</th>
+                                                            <th>客戶</th>
+                                                            <th>狀態</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for f_project in favorite_projects %}
+                                                        <tr class = "clickable-row"
+                                                            data-toggle="tooltip"
+                                                            data-href="{% url 'project_detail' f_project.project.id %}">
+
+                                                            <th scope="row">{{ forloop.counter }}</th>
+                                                            <td>{{ f_project.project.title }}</td>
+                                                            <td>{{ f_project.project.type }}</td>
+                                                            <td>{{ f_project.project.customer.name }}</td>
+                                                            <td>{{ f_project.project.status }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ Hover-table ] end -->
+
+                                <!-- [ Hover-table ] start -->
+                                <div class="col-xl-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>[客戶]追蹤中</h5>
+                                            <span>
+                                                直接<code>點擊資料</code>可以進入詳細資訊; 以最後更新時間排序
+                                            </span>
+                                        </div>
+
+                                        <div class="card-block table-border-style">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>名稱</th>
+                                                            <th>種類</th>
+                                                            <th>手機</th>
+                                                            <th>地址</th>
+                                                            <th>狀態</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for f_customer in favorite_customers %}
+                                                        <tr class = "clickable-row"
+                                                            data-toggle="tooltip"
+                                                            data-href="{% url 'customer_detail' f_customer.customer.name %}">
+                                                            <th scope="row">{{ forloop.counter }}</th>
+                                                            <td>{{ f_customer.customer.name }}</td>
+                                                            <td>{{ f_customer.customer.type }}</td>
+                                                            <td>{{ f_customer.customer.cel }}</td>
+                                                            <td>{{ f_customer.customer.address }}</td>
+                                                            <td>{{ f_customer.customer.status }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ Hover-table ] end -->
                                 <div class="col-sm-12">
                                     <div class="card">
                                         <div class="card-header">
@@ -38,7 +123,7 @@
                                             <div class="row">
                                                 <div class="col-sm-6 mb-4">
                                                     <div class="form-group">
-                                                        <label>Username</label>
+                                                        <label>帳號名稱</label>
                                                         <h1>{{ request.user.username }}</h1>
                                                     </div>
                                                 </div>
@@ -51,13 +136,13 @@
 
                                                 <div class="col-sm-3 mb-4">
                                                     <div class="form-group">
-                                                        <label>First Name</label>
+                                                        <label>名字</label>
                                                         {{form.first_name}}
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-3 mb-4">
                                                     <div class="form-group">
-                                                        <label>Last Name</label>
+                                                        <label>姓氏</label>
                                                         {{form.last_name}}
                                                     </div>
                                                 </div>
@@ -79,14 +164,14 @@
 
                                                 <div class="col-sm-6 mb-4">
                                                     <div class="form-group">
-                                                        <label>Nick Name</label>
+                                                        <label>暱稱</label>
                                                         {{form.nickname}}
                                                     </div>
                                                 </div>
 
                                                 <div class="col-sm-6 mb-4">
                                                     <div class="form-group">
-                                                        <label>Phone Number</label>
+                                                        <label>聯絡電話</label>
                                                         {{form.phone_number}}
                                                     </div>
                                                 </div>
@@ -146,4 +231,12 @@
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+    <script>
+        jQuery(document).ready(function($) {
+            $(".clickable-row").click(function() {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
+{% endblock javascripts %}

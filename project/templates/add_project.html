@@ -53,24 +53,24 @@
                                         <form method="POST" action="{% url 'add_project' customer.name %}">{%csrf_token%}
                                         <div class="card-block">
                                             <div class="row">
-                                                <div class="col-sm-6 mb-4">
-                                                    <label>Title</label>
+                                                <div class="col-sm-3 mb-4">
+                                                    <label>標題</label>
                                                     <h4>{{ form.title }}</h4>
                                                     <span class="text-error">{{ form.title.errors }}</span>
                                                 </div>
 
-                                                <div class="col-sm-6 mb-4">
+                                                <div class="col-sm-3 mb-4">
                                                     <label>客戶</label>
                                                     <h4>{{ customer.name }}</h4>
                                                 </div>
 
                                                 <div class="col-sm-3 mb-4">
-                                                    <label>start_date</label>
+                                                    <label>開始時間</label>
                                                     {{form.start_date}}
                                                     <span class="text-error">{{ form.start_date.errors }}</span>
                                                 </div>
                                                 <div class="col-sm-3 mb-4">
-                                                    <label>due_date</label>
+                                                    <label>預計結束時間</label>
                                                     {{form.due_date}}
                                                     <span class="text-error">{{ form.due_date.errors }}</span>
                                                 </div>
@@ -82,13 +82,19 @@
                                                 </div>
 
                                                 <div class="col-sm-3 mb-4">
-                                                    <label> owner</label>
+                                                    <label>負責人員</label>
                                                     {{form.owner}}
                                                     <span class="text-error">{{ form.owner.errors }}</span>
                                                 </div>
 
+                                                <div class="col-sm-6 mb-2">
+                                                    <label>專案地址(預設為 客戶地址)</label>
+                                                    {{form.address}}
+                                                    <span class="text-error">{{ form.address.errors }}</span>
+                                                </div>
+
                                                 <div class="col-sm-12 mb-2">
-                                                    <label>Note</label>
+                                                    <label>筆記</label>
                                                     {{form.note}}
                                                     <span class="text-error">{{ form.note.errors }}</span>
                                                 </div>

@@ -44,6 +44,7 @@ class Project(models.Model):
     title = models.CharField(max_length=20, default='no title')
     type = models.ForeignKey(ProjectType, on_delete=models.PROTECT, default=None, null=True, blank=True)
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
+    address = models.CharField(max_length=50, default=None, null=True, blank=True)
     status = models.ForeignKey(ProjectStatus, on_delete=models.PROTECT)
     note = models.TextField(max_length=1000, default=None, null=True, blank=True)
     creator = models.ForeignKey(User, on_delete=models.PROTECT, related_name='project_creator', )
@@ -79,7 +80,8 @@ class Project(models.Model):
             due_date_str = datetime.strftime(self.start_date + timedelta(hours=1), '%Y%m%dT%H%M00')
         link += f"&start_date={start_date_str}/{due_date_str}"
 
-        add_daily_report_link = f"http://{request.get_host()}" + reverse('add_daily_report', kwargs={'project_id': self.id})
+        add_daily_report_link = f"http://{request.get_host()}" + reverse('add_daily_report',
+                                                                         kwargs={'project_id': self.id})
         note_str = f"[{self.customer.name}]\n" \
                    f"  聯絡電話：{self.customer.tel}\n" \
                    f"  手機：{self.customer.cel}\n" \
@@ -88,7 +90,7 @@ class Project(models.Model):
         note_str = note_str.replace("\n", r"%0A")
         link += f'&details={note_str}'
 
-        link += f'&location={self.customer.address}'
+        link += f'&location={self.address}'
         link += '&trp=true'
         return link
 
@@ -122,3 +124,8 @@ class DailyReportComment(models.Model):
 
     def __str__(self):
         return self.daily_report.__str__() + f" comment"
+
+
+class FavoriteProject(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    project = models.ForeignKey(Project, on_delete=models.PROTECT)

@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from project.models import Project
-from .models import Customer
+from .models import Customer, FavoriteCustomer
 from .forms import CustomerForm
 
 
@@ -87,6 +87,7 @@ def customer_detail(request, cust_name):
     context.update({
         'form': form,
         'customer': customer,
-        'projects': Project.objects.filter(customer=customer)
+        'projects': Project.objects.filter(customer=customer),
+        'is_favorite': FavoriteCustomer.objects.filter(user=request.user, customer=customer).exists()
     })
     return render(request, 'customer_detail.html', context)

@@ -12,7 +12,7 @@ class DepartmentAdmin(admin.ModelAdmin):
 
 
 class CustomUserAdmin(UserAdmin):
-    list_display = ('username', 'nickname', 'department', 'phone_number', 'is_accept')
+    list_display = ('id', 'username', 'nickname', 'department', 'phone_number', 'is_accept')
     fieldsets = (
         (None, {'fields': ('username',)}),
         ('Personal info', {'fields': ('first_name', 'last_name', 'email')}),

@@ -8,8 +8,8 @@ from django.utils import timezone
 
 from customer.models import Customer
 from customer.views import fill_form_initial_with_org_data
-from .forms import ProjectForm, DailyReportForm, DailyReportPhotoForm
-from .models import Project, DailyReport, DailyReportPhoto
+from .forms import ProjectForm, DailyReportForm, DailyReportPhotoForm, FavoriteProjectForm
+from .models import Project, DailyReport, DailyReportPhoto, FavoriteProject
 
 
 def add_creator_and_customer(model_obj, customer, creater):
@@ -89,6 +89,7 @@ def add_project(request, customer_name):
     else:
         form = ProjectForm()
     form.fields['customer'].initial = customer
+    form.fields['address'].initial = customer.address
     context.update({'form': form, 'customer': customer})
     return render(request, 'add_project.html', context)
 
@@ -112,6 +113,9 @@ def project_detail(request, project_id):
             context['errMsg'] = 'Form is not valid'
     else:
         form = ProjectForm()
+
+    add_favorite_form = FavoriteProjectForm()
+    add_favorite_form.set_initial(request.user.id, project_id)
     form = fill_form_initial_with_org_data(project, form)
 
     daily_reports = DailyReport.objects.filter(project=project).order_by('-update_time')
@@ -122,7 +126,9 @@ def project_detail(request, project_id):
         'form': form,
         "project": project,
         "daily_reports": daily_reports,
-        "calendar_template_link": project.google_calendar_event(request)
+        "calendar_template_link": project.google_calendar_event(request),
+        "add_favorite_form": add_favorite_form,
+        "is_favorite": FavoriteProject.objects.filter(user=request.user, project=project).exists()
     })
     return render(request, 'project_detail.html', context)
 
