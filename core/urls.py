@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
@@ -28,6 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),  # Django admin route
     path("", include("apps.authentication.urls")),  # Auth routes - login / register
     path("", include("index.urls")),
+    re_path(r'^\.well-known/', include('letsencrypt.urls')),
     path("docs/", schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path("api/", include("api.urls")),
     path("user_management/", include("employee.urls")),
