@@ -80,8 +80,7 @@ class Project(models.Model):
             due_date_str = datetime.strftime(self.start_date + timedelta(hours=1), '%Y%m%dT%H%M00')
         link += f"&start_date={start_date_str}/{due_date_str}"
 
-        add_daily_report_link = f"http://{request.get_host()}" + reverse('add_daily_report',
-                                                                         kwargs={'project_id': self.id})
+        add_daily_report_link = self.create_add_report_link(request)
         note_str = f"[{self.customer.name}]\n" \
                    f"  聯絡電話：{self.customer.tel}\n" \
                    f"  手機：{self.customer.cel}\n" \
@@ -90,9 +89,18 @@ class Project(models.Model):
         note_str = note_str.replace("\n", r"%0A")
         link += f'&details={note_str}'
 
-        link += f'&location={self.address}'
+        if self.address:
+            link += f'&location={self.address}'
+        else:
+            link += f'&location={self.customer.address}'
         link += '&trp=true'
         return link
+
+    def create_detail_link(self, request):
+        return f"http://{request.get_host()}" + reverse('project_detail', kwargs={'project_id': self.id})
+
+    def create_add_report_link(self, request):
+        return f"http://{request.get_host()}" + reverse('add_daily_report', kwargs={'project_id': self.id})
 
 
 class DailyReport(models.Model):

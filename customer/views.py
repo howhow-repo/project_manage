@@ -1,21 +1,24 @@
 from django.contrib.auth.decorators import login_required
-from django.db import models
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render
 from django.urls import reverse
 
+from lib.fill_form_initial_with_org_data import fill_form_initial_with_org_data
+from lib.translate_table import TranslateTable
+from notify.lib.notify_followers import notify_customer_followers
 from project.models import Project
+from project.views import get_model_or_none
 from .models import Customer, FavoriteCustomer
 from .forms import CustomerForm
 
 
-def fill_form_initial_with_org_data(org_instance, form):
-    for element in form.fields:
-        db_data = getattr(org_instance, element)
-        if db_data is not None or db_data != "":
-            form.fields[element].initial = db_data
-    return form
+def send_change_message_to_followers(request, updated_form):
+    updated_customer = updated_form.instance
+    s = f"{request.user.nickname} 更新了 \n" \
+        f"[客戶]{updated_customer.name}({updated_customer.status})\n" \
+        f"更新欄位：{[TranslateTable[field] for field in updated_form.changed_data]}"
+    notify_customer_followers(updated_customer, s)
 
 
 def get_page(request):
@@ -65,9 +68,8 @@ def add_customer(request):
 
 @login_required(login_url="/login/")
 def customer_detail(request, cust_name):
-    try:
-        customer = Customer.objects.get(name=cust_name)
-    except models.ObjectDoesNotExist:
+    customer = get_model_or_none(Customer, {'name': cust_name})
+    if not customer:
         return HttpResponseNotFound()
 
     context = {'segment': 'customer'}
@@ -78,6 +80,7 @@ def customer_detail(request, cust_name):
             customer.editor = request.user
             customer.save()
             context['Msg'] = 'Success'
+            send_change_message_to_followers(request, form)
         else:
             context['errMsg'] = form.errors
     else:
@@ -87,7 +90,7 @@ def customer_detail(request, cust_name):
     context.update({
         'form': form,
         'customer': customer,
-        'projects': Project.objects.filter(customer=customer),
+        'projects': Project.objects.filter(customer=customer).order_by('-update_time'),
         'is_favorite': FavoriteCustomer.objects.filter(user=request.user, customer=customer).exists()
     })
     return render(request, 'customer_detail.html', context)
