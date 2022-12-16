@@ -19,8 +19,7 @@ def add_material(request):
         form = MaterialForm(data=request.POST, files=request.FILES)
         if form.is_valid():
             obj = form.save(commit=False)
-            obj.creator = request.user
-            obj.editor = request.user
+            obj.creator, obj.editor = request.user, request.user
             obj.save()
             context['Msg'] = 'Success'
             return HttpResponseRedirect(reverse('list_materials'))

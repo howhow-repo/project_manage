@@ -10,12 +10,10 @@ def save_new_project_or_none(request, customer):
     form = ProjectForm(data=request.POST)
     if form.is_valid():
         new_project = form.save(commit=False)
-        new_project.customer = customer
-        new_project.creator = request.user
-        new_project.editor = request.user
+        new_project.customer, new_project.creator, new_project.editor = customer, request.user, request.user
         new_project.save()
-        customer.editor = request.user
-        customer.update_time = timezone.now()
+
+        customer.editor, customer.update_time = request.user, timezone.now()
         customer.save()
         return new_project
     return None
