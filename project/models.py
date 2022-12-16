@@ -53,6 +53,7 @@ class Project(models.Model):
     editor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='project_editor')
     start_date = models.DateTimeField(default=timezone.now)
     due_date = models.DateTimeField(default=None, null=True, blank=True)
+    dispatch_date = models.DateTimeField(default=None, null=True, blank=True)
     update_time = models.DateTimeField(auto_now=True)
 
     def __str__(self):

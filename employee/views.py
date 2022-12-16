@@ -12,9 +12,7 @@ from django.template import loader
 
 def manager_required(func):  # use as decorator
     def wrapper(request, *args, **kwargs):
-        User = get_user_model()
-        user = User.objects.get(username=request.user)
-        if user.department and user.department.name == '管理':
+        if request.user.department and request.user.department.name == '管理':
             return func(request, *args, **kwargs)
         else:
             html_template = loader.get_template('home/page-403.html')
@@ -49,6 +47,7 @@ def view_all_users(request):
     return render(request, 'user_management.html', context)
 
 
+@manager_required
 @require_http_methods(["GET", "POST"])
 @login_required(login_url="/login/")
 def register_user(request):
@@ -73,6 +72,7 @@ def register_user(request):
                   })
 
 
+@manager_required
 @require_http_methods(["GET", "POST"])
 @login_required(login_url="/login/")
 def edit_user(request, username):
@@ -96,6 +96,7 @@ def edit_user(request, username):
     return render(request, 'edit_user.html', context)
 
 
+@manager_required
 @require_http_methods(["GET", "POST"])
 @login_required(login_url="/login/")
 def delete_user(request, username):

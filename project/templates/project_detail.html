@@ -102,12 +102,17 @@
                                                     <h4>{{ project.update_time|date:'Y-m-d H:i' }}</h4>
                                                 </div>
 
-                                                <div class="col-sm-3 mb-4">
+                                                <div class="col-sm-2 mb-4">
                                                     <label>開始時間</label>
                                                     {{form.start_date}}
                                                     <span class="text-error">{{ form.start_date.errors }}</span>
                                                 </div>
-                                                <div class="col-sm-3 mb-4">
+                                                <div class="col-sm-2 mb-4">
+                                                    <label>預計派工時間</label>
+                                                    {{form.dispatch_date}}
+                                                    <span class="text-error">{{ form.dispatch_date.errors }}</span>
+                                                </div>
+                                                <div class="col-sm-2 mb-4">
                                                     <label>預計完成時間</label>
                                                     {{form.due_date}}
                                                     <span class="text-error">{{ form.due_date.errors }}</span>

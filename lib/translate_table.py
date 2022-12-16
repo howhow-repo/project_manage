@@ -12,4 +12,16 @@ TranslateTable = {
     'start_date': '開始時間',
     'due_date': '預計完成時間',
     'update_time': '最後編輯時間',
+    'cel': '手機',
+    'dispatch_date': '預計派工日期'
 }
+
+
+def translate_field_name(fields):
+    ch_change_field = []
+    for field in fields:
+        if TranslateTable.get(field):
+            ch_change_field.append(TranslateTable.get(field))
+        else:
+            ch_change_field.append(field)
+    return ch_change_field

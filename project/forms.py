@@ -19,13 +19,13 @@ class ProjectForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for f in self.fields:
             self.fields[f].widget.attrs.update({'class': 'form-control'})
-            if f != 'title':
+            if f != 'title' and f != 'status':
                 self.fields[f].required = False
 
     class Meta:
         model = Project
         fields = (
-            'title', 'type', 'customer', 'address', 'status', 'note', 'owner', 'creator', 'due_date', 'start_date')
+            'title', 'type', 'customer', 'address', 'status', 'note', 'owner', 'creator', 'due_date', 'start_date', 'dispatch_date')
 
 
 class DailyReportForm(forms.ModelForm):

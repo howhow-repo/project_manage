@@ -74,6 +74,7 @@
                                                             <th>類型</th>
                                                             <th>聯絡電話</th>
                                                             <th>手機</th>
+                                                            <th>狀態</th>
                                                             <th>最後更新時間</th>
                                                         </tr>
                                                     </thead>
@@ -91,6 +92,7 @@
                                                             <td>{{ cos.type }}</td>
                                                             <td>{{ cos.cel }}</td>
                                                             <td>{{ cos.tel }}</td>
+                                                            <td>{{ cos.status }}</td>
                                                             <td>{{ cos.update_time|date:'Y-m-d H:i' }}</td>
                                                         </tr>
                                                     {% endfor %}

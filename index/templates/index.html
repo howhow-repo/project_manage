@@ -33,7 +33,7 @@
                                                         <tr>
                                                             <th>#</th>
                                                             <th>標題</th>
-                                                            <th>種類</th>
+                                                            <th>類型</th>
                                                             <th>客戶</th>
                                                             <th>狀態</th>
                                                         </tr>
@@ -76,7 +76,6 @@
                                                         <tr>
                                                             <th>#</th>
                                                             <th>名稱</th>
-                                                            <th>種類</th>
                                                             <th>手機</th>
                                                             <th>地址</th>
                                                             <th>狀態</th>
@@ -89,7 +88,6 @@
                                                             data-href="{% url 'customer_detail' f_customer.customer.name %}">
                                                             <th scope="row">{{ forloop.counter }}</th>
                                                             <td>{{ f_customer.customer.name }}</td>
-                                                            <td>{{ f_customer.customer.type }}</td>
                                                             <td>{{ f_customer.customer.cel }}</td>
                                                             <td>{{ f_customer.customer.address }}</td>
                                                             <td>{{ f_customer.customer.status }}</td>

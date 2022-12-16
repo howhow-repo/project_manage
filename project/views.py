@@ -1,94 +1,17 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.db import models
 from django.http import HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
-
-from customer.models import Customer, FavoriteCustomer
+from threading import Thread
+from customer.models import Customer
 from customer.views import fill_form_initial_with_org_data
-from notify.lib.notify_followers import notify_customer_followers, notify_project_followers
+from lib.get_model_or_none import get_model_or_none
 from .forms import ProjectForm, DailyReportForm, DailyReportPhotoForm, FavoriteProjectForm
-from .models import Project, DailyReport, DailyReportPhoto, FavoriteProject
-from lib.translate_table import TranslateTable
-
-
-def get_model_or_none(model, query_dict):
-    try:
-        return model.objects.get(**query_dict)
-    except models.ObjectDoesNotExist:
-        return None
-
-
-def send_add_project_to_followers(request, new_project):
-    s = f"{request.user.nickname}建立新專案：\n" \
-        f"({new_project.customer.name})[專案]{new_project.title}/{new_project.type}\n"
-    notify_customer_followers(new_project.customer, s)
-
-
-def send_change_message_to_followers(request, updated_form):
-    updated_project = updated_form.instance
-    s = f"{request.user.nickname} 更新了 \n" \
-        f"[專案]{updated_project.title}/{updated_project.type}({updated_project.customer.name})\n" \
-        f"更新欄位：{[TranslateTable[field] for field in updated_form.changed_data]}"
-    notify_project_followers(updated_project, s)
-
-
-def send_add_report_message_to_followers(request, report):
-    s = f"{request.user.nickname} 建立了紀錄: \n " \
-        f"[{report.project.customer.name}]{report.project.title}/{report.project.type}\n" \
-        f"---\n" \
-        f"{report.note}\n" \
-        f"---\n" \
-        f"{report.project.create_detail_link(request)}"
-    notify_project_followers(report.project, s)
-
-
-def count_photos(report_id):
-    photo_sets = DailyReportPhoto.objects.filter(report=report_id)
-    if not len(photo_sets):
-        return 0
-
-    counter = 0
-    for photo_set in photo_sets:
-        for k in photo_set.__dict__.keys():
-            if 'photo' in k and getattr(photo_set, k):
-                counter += 1
-    return counter
-
-
-def save_new_project(request, customer):
-    form = ProjectForm(data=request.POST)
-    if form.is_valid():
-        new_project = form.save(commit=False)
-        new_project.customer = customer
-        new_project.creator = request.user
-        new_project.editor = request.user
-        new_project.save()
-        customer.editor = request.user
-        customer.update_time = timezone.now()
-        customer.save()
-        return new_project
-    return None
-
-
-def update_project():
-    pass
-
-
-def get_page(request):
-    try:
-        return int(request.GET['page'])
-    except Exception:
-        return 1
-
-
-def get_num_of_page(request):
-    try:
-        return int(request.GET['data_num'])
-    except Exception:
-        return 50
+from .lib.project_lib import save_new_project_or_none, send_add_project_msg_to_followers, send_owner_notify, \
+    send_change_message_to_followers, send_add_report_message_to_followers, count_photos, get_num_of_page, get_page
+from .models import Project, DailyReport, FavoriteProject
 
 
 @login_required(login_url="/login/")
@@ -100,7 +23,7 @@ def list_projects(request):
     queryset_len = len(projects)
     paginator = Paginator(projects, data_num)
     projects = paginator.get_page(page)
-    
+
     context = {
         'segment': 'project',
         'projects': projects,
@@ -117,19 +40,27 @@ def add_project(request, customer_name):
         return HttpResponseNotFound()
 
     context = {'segment': 'project'}
+    # Do POST
     if request.method == "POST":
         form = ProjectForm(data=request.POST)
-        new_project = save_new_project(request, customer)
-        if new_project:
+        new_project = save_new_project_or_none(request, customer)
+        if not new_project:
             context['Msg'] = 'Success'
-            send_add_project_to_followers(request, new_project)
+            Thread(target=send_add_project_msg_to_followers, args=(request, new_project))
+            if new_project.owner:
+                send_owner_notify(request, new_project)
+            # everything ok
             return HttpResponseRedirect(reverse('customer_detail', kwargs={'cust_name': customer_name}))
         else:
             context['errMsg'] = 'Form is not valid'
+
+    # Do GET
     else:
         form = ProjectForm()
+
     form.fields['customer'].initial = customer
     form.fields['address'].initial = customer.address
+    form.fields['dispatch_date'].initial = timezone.now()
     context.update({'form': form, 'customer': customer})
     return render(request, 'add_project.html', context)
 
@@ -149,7 +80,7 @@ def project_detail(request, project_id):
             updated_project.save()
             context['Msg'] = 'Success'
 
-            send_change_message_to_followers(request, form)
+            Thread(target=send_change_message_to_followers, args=(request, form)).start()
 
             form = fill_form_initial_with_org_data(updated_project, form)
         else:
@@ -202,7 +133,7 @@ def add_daily_report(request, project_id):
             project.save()
 
             # send notify
-            send_add_report_message_to_followers(request, report_instance)
+            Thread(target=send_add_report_message_to_followers, args=(request, report_instance))
 
             context['Msg'] = 'Success'
             return HttpResponseRedirect(reverse('project_detail', kwargs={'project_id': project.id}))
