@@ -97,11 +97,10 @@ def add_favorite_project(request, project_id):
             favorite_project.project = project
             favorite_project.user = request.user
             favorite_project.save()
-            return HttpResponseRedirect('/')
 
         else:
             return HttpResponse("You've added already.")
-    HttpResponseRedirect(reverse('project_detail', kwargs={'project_id': project.id}))
+    return HttpResponseRedirect(reverse('project_detail', kwargs={'project_id': project.id}))
 
 
 @login_required(login_url="/login/")
@@ -117,10 +116,9 @@ def rm_favorite_project(request, project_id):
         if is_in_project_favorite(request.user, project):
             f_project = FavoriteProject.objects.get(user=request.user, project=project)
             f_project.delete()
-            return HttpResponseRedirect('/')
         else:
             return HttpResponse("it is not in you 關注．")
-    HttpResponseRedirect(reverse('project_detail', kwargs={'project_id': project.id}))
+    return HttpResponseRedirect(reverse('project_detail', kwargs={'project_id': project.id}))
 
 
 @login_required(login_url="/login/")
@@ -138,11 +136,9 @@ def add_favorite_customer(request, customer_name):
             favorite_customer.customer = customer
             favorite_customer.user = request.user
             favorite_customer.save()
-            return HttpResponseRedirect('/')
-        #
         else:
             return HttpResponse("You've added already.")
-    HttpResponseRedirect(reverse('customer_detail', kwargs={'customer_name': customer.name}))
+    return HttpResponseRedirect(reverse('customer_detail', kwargs={'cust_name': customer.name}))
 
 
 @login_required(login_url="/login/")
@@ -159,7 +155,6 @@ def rm_favorite_customer(request, customer_name):
         if is_in_customer_favorite(request.user, customer):
             f_customer = FavoriteCustomer.objects.get(user=request.user, customer=customer)
             f_customer.delete()
-            return HttpResponseRedirect('/')
         else:
             return HttpResponse("it is not in you 關注．")
-    HttpResponseRedirect(reverse('customer_detail', kwargs={'customer_name': customer.name}))
+    return HttpResponseRedirect(reverse('customer_detail', kwargs={'cust_name': customer.name}))
