@@ -46,7 +46,7 @@ def add_project(request, customer_name):
         new_project = save_new_project_or_none(request, customer)
         if not new_project:
             context['Msg'] = 'Success'
-            Thread(target=send_add_project_msg_to_followers, args=(request, new_project))
+            Thread(target=send_add_project_msg_to_followers, args=(request, new_project)).start()
             if new_project.owner:
                 send_owner_notify(request, new_project)
             # everything ok
@@ -133,7 +133,7 @@ def add_daily_report(request, project_id):
             project.save()
 
             # send notify
-            Thread(target=send_add_report_message_to_followers, args=(request, report_instance))
+            Thread(target=send_add_report_message_to_followers, args=(request, report_instance)).start()
 
             context['Msg'] = 'Success'
             return HttpResponseRedirect(reverse('project_detail', kwargs={'project_id': project.id}))
