@@ -46,13 +46,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'letsencrypt',
+    "sslserver",
     # 'apps.demo',                                    # Enable the inner demo (demo)
     'apps.authentication',
-    'allauth',                                      # OAuth new
-    'allauth.account',                              # OAuth new
-    'allauth.socialaccount',                        # OAuth new
-    'allauth.socialaccount.providers.github',       # OAuth new
-    'allauth.socialaccount.providers.twitter',      # OAuth new
+    # 'allauth',                                      # OAuth new
+    # 'allauth.account',                              # OAuth new
+    # 'allauth.socialaccount',                        # OAuth new
+    # 'allauth.socialaccount.providers.github',       # OAuth new
+    # 'allauth.socialaccount.providers.twitter',      # OAuth new
     'index',
     'employee',
     'doc_handle',
