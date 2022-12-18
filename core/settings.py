@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'letsencrypt',
-    "sslserver",
     # 'apps.demo',                                    # Enable the inner demo (demo)
     'apps.authentication',
     # 'allauth',                                      # OAuth new
