@@ -81,7 +81,7 @@ def edit_user(request, username):
     user = User.objects.get(username=username)
     form = UserProfileEdit()
 
-    if request.method == "POST":  # 接受post update
+    if request.method == "POST":
         update_form = UserProfileEdit(data=request.POST, instance=user)
         if update_form.is_valid():
             user = update_form.save(commit=False)
@@ -103,7 +103,7 @@ def delete_user(request, username):
     User = get_user_model()
     user = User.objects.get(username=username)
 
-    if request.method == "POST":  # 接受post update
+    if request.method == "POST":
         form = DeleteUserForm(request.POST)
         if form.is_valid() and form['confirm'].value() == 'yes':
             try:

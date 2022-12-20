@@ -1,0 +1,163 @@
+{% extends "layouts/new_base.html" %}
+
+{% block title %} Material {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <!-- [ breadcrumb ] start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'list_materials' %}">料件清單</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'material_detail' material.name %}">[料件]{{material.name}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <div class="row">
+                                                <div class="col-sm-6 mb-1">
+                                                    <h5>料件資訊</h5>
+                                                        {% if errMsg != None %}
+                                                            <small class="form-text text-danger">
+                                                                {{errMsg}}
+                                                            </small>
+                                                        {% endif %}
+                                                        {% if Msg != None %}
+                                                            <small class="form-text text-success">
+                                                                {{Msg}}
+                                                            </small>
+                                                        {% endif %}
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <form method="POST" action="{% url 'material_detail' material.name %}">{%csrf_token%}
+                                        <div class="card-block">
+                                            <div class="row">
+                                                <div class="col-sm-6 mb-4">
+                                                    <img style="width:150px; height:120px"
+                                                            src="{% url 'get_material_cover' material.id %}">
+                                                </div>
+
+                                                <div class="col-sm-6 mb-4">
+                                                    <div class="row col-sm-12">
+                                                        <div class="col-sm-4 mb-4">
+                                                            <label>最後編輯</label>
+                                                            <h6>{{ material.editor.username }}</h6>
+                                                        </div>
+                                                        <div class="col-sm-4 mb-4">
+                                                            <label>建立者</label>
+                                                            <h6>{{ material.creator.username }}</h6>
+                                                        </div>
+                                                        <div class="col-sm-4 mb-4">
+                                                            <label>最後更新時間</label>
+                                                            <h6>{{ material.update_time|date:'Y-m-d H:i' }}</h6>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row col-sm-12">
+                                                        <div class="col-sm-4 mb-4">
+                                                            <label>類型</label>
+                                                            <h4>{{ form.type }}</h4>
+                                                            <span class="text-error">{{ form.type.errors }}</span>
+                                                        </div>
+                                                        <div class="col-sm-4 mb-4">
+                                                            <label>單位</label>
+                                                            <h4>{{ form.unit }}</h4>
+                                                            <span class="text-error">{{ form.unit.errors }}</span>
+                                                        </div>
+                                                        <div class="col-sm-4 mb-4">
+                                                            <label>新增提醒</label>
+                                                            <div>
+                                                                <a href="{% url 'add_schedule_notify' %}"
+                                                                   class="btn btn-warning"
+                                                                   style="background-color: #02B201; border-color: #02B201"
+                                                                >
+                                                                    <div class="text-left"><i class="feather icon-bell text-left"></i></div>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2 mb-4">
+                                                    <label>名稱</label>
+                                                    <h3>{{ material.name }}</h3>
+                                                        {{ form.name.as_hidden }}
+                                                        {{ form.creator.as_hidden }}
+                                                </div>
+
+                                                <div class="col-sm-2 mb-4">
+                                                    <label>料號</label>
+                                                    {{form.part_number}}
+                                                    <span class="text-error">{{ form.part_number.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-2 mb-4">
+                                                    <label>單價(整數)</label>
+                                                    {{form.unit_price}}
+                                                    <span class="text-error">{{ form.unit_price.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-12 mb-2">
+                                                    <label>筆記</label>
+                                                    {{form.note}}
+                                                    <span class="text-error">{{ form.note.errors }}</span>
+                                                </div>
+
+
+                                                <div class="col-sm-12 mb-2">
+                                                    <input type = 'submit' class="btn btn-primary" value="Save">
+                                                    <a href="{% url 'list_materials' %}" class="btn btn-light">Cancel</a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            $(".clickable-row").click(function() {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
+{% endblock javascripts %}

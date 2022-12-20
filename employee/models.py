@@ -12,6 +12,15 @@ class Department(models.Model):
         return self.name
 
 
+class Company(models.Model):
+    name = models.CharField(max_length=20)
+    tel = models.CharField(max_length=20)
+    fax = models.CharField(max_length=20, null=True)
+    email = models.EmailField(null=True)
+    mail_addr = models.CharField(max_length=50, null=True)
+    business_addr = models.CharField(max_length=50)
+
+
 class User(AbstractUser):
     nickname = models.CharField(max_length=10, null=True, blank=True)
     department = models.ForeignKey(Department, on_delete=models.PROTECT, default=None, null=True)

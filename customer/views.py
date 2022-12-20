@@ -7,7 +7,7 @@ from threading import Thread
 
 from lib.fill_form_initial_with_org_data import fill_form_initial_with_org_data
 from project.models import Project
-from project.views import get_model_or_none
+from lib import get_model_or_none
 from .lib.customer_lib import get_num_of_page, get_page, send_change_message_to_followers
 from .models import Customer, FavoriteCustomer
 from .forms import CustomerForm

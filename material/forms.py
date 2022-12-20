@@ -1,5 +1,5 @@
 from django import forms
-from .models import Material, MaterialType, Bom, BomItem
+from .models import Material, MaterialType
 
 
 class MaterialTypeForm(forms.ModelForm):
@@ -26,27 +26,3 @@ class MaterialForm(forms.ModelForm):
     class Meta:
         model = Material
         fields = ('name', 'part_number', 'cover', 'type', 'unit', 'unit_price', 'note', 'creator')
-
-
-class BomForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for f in self.fields:
-            self.fields[f].widget.attrs.update({'class': 'form-control'})
-        self.fields['discount'].required = False
-
-    class Meta:
-        model = Bom
-        fields = ('case', 'note', 'discount', 'org_cost', 'final_cost', 'creator')
-
-
-class BomItemForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for f in self.fields:
-            self.fields[f].widget.attrs.update({'class': 'form-control'})
-        self.fields['unit'].required = False
-
-    class Meta:
-        model = BomItem
-        fields = ('material', 'unit', 'quantity', 'price')

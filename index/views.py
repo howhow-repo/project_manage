@@ -10,7 +10,7 @@ from django.views.decorators.http import require_http_methods
 
 from customer.forms import FavoriteCustomerForm
 from customer.models import Customer, FavoriteCustomer
-from lib.fill_form_initial_with_org_data import fill_form_initial_with_org_data
+from lib import fill_form_initial_with_org_data
 from project.models import Project, FavoriteProject
 from project.forms import FavoriteProjectForm
 from .forms import UserProfileEdit

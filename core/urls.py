@@ -36,6 +36,7 @@ urlpatterns = [
     path("material/", include("material.urls")),
     path("projects/", include("project.urls")),
     path("resource/", include("doc_handle.urls")),
+    path("quotation/", include("quotation.urls")),
     path("notify/", include("notify.urls")),
     # ADD NEW Routes HERE
 

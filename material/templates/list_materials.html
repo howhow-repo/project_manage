@@ -60,21 +60,23 @@
                                                 </div>
                                             </div>
                                             <div class="card-block">
+                                                <div class="row">
 
-                                                <div class="col-12">
-                                                    <div class="row text-left ">
+                                                    <div class="col-6 text-left">
                                                         <h6>
-                                                            <span class="text-muted m-r-5">料號:</span>
-                                                            {{ material.part_number }}
-                                                        </h6>
-                                                    </div>
-                                                    <div class="row text-left ">
-                                                        <h6>
+                                                            <h6>
+                                                                <span class="text-muted m-r-5">料號:</span>
+                                                                {{ material.part_number }}
+                                                            </h6>
                                                             <span class="text-muted m-r-5">單位:</span>
                                                             {{ material.unit_price }}$ / {{ material.unit }}
                                                         </h6>
                                                     </div>
-                                                </div>
+                                                    <div class="col-6 text-right">
+                                                        <a href="{% url 'material_detail' material.name %}" class="btn btn-light">詳細</a>
+                                                    </div>
+
+                                            </div>
                                             </div>
                                         </div>
                                     </div>

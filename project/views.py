@@ -7,7 +7,7 @@ from django.utils import timezone
 from threading import Thread
 from customer.models import Customer
 from customer.views import fill_form_initial_with_org_data
-from lib.get_model_or_none import get_model_or_none
+from lib import get_model_or_none
 from .forms import ProjectForm, DailyReportForm, DailyReportPhotoForm, FavoriteProjectForm
 from .lib.project_lib import save_new_project_or_none, send_add_project_msg_to_followers, send_owner_notify, \
     send_change_message_to_followers, send_add_report_message_to_followers, count_photos, get_num_of_page, get_page
@@ -44,11 +44,11 @@ def add_project(request, customer_name):
     if request.method == "POST":
         form = ProjectForm(data=request.POST)
         new_project = save_new_project_or_none(request, customer)
-        if not new_project:
+        if new_project:
             context['Msg'] = 'Success'
             Thread(target=send_add_project_msg_to_followers, args=(request, new_project)).start()
             if new_project.owner:
-                send_owner_notify(request, new_project)
+                Thread(target=send_owner_notify, args=(request, new_project)).start()
             # everything ok
             return HttpResponseRedirect(reverse('customer_detail', kwargs={'cust_name': customer_name}))
         else:

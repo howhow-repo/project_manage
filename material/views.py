@@ -1,8 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render
 from django.urls import reverse
 
+from lib import get_model_or_none, fill_form_initial_with_org_data
 from .models import Material
 from .forms import MaterialForm
 
@@ -38,5 +39,26 @@ def delete_material(request):
 
 
 @login_required(login_url="/login/")
-def material_detail(request):
-    pass  # TODO
+def material_detail(request, material_name):
+    material = get_model_or_none(Material, {'name': material_name})
+    if not material:
+        return HttpResponseNotFound()
+
+    context = {'segment': 'material'}
+    if request.method == 'POST':
+        form = MaterialForm(data=request.POST, instance=material)
+        if form.is_valid():
+            material = form.save(commit=False)
+            material.editor = request.user
+            material.save()
+            context['Msg'] = 'Success'
+        else:
+            context['errMsg'] = form.errors
+    else:
+        form = MaterialForm()
+    form = fill_form_initial_with_org_data(material, form)
+    context.update({
+        'form': form,
+        'material': material,
+    })
+    return render(request, 'material_detail.html', context)
