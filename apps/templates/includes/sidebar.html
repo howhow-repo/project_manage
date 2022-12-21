@@ -3,9 +3,6 @@
     <div class="navbar-wrapper">
         <div class="navbar-brand header-logo">
             <a href="/" class="b-brand">
-<!--                <div class="b-bg ">-->
-<!--                    <i class="feather icon-trending-up"></i>-->
-<!--                </div>-->
                 <img style="width:52px; height:52px"
                      src="{{ ASSETS_ROOT }}/images/logo-thumb.png" class="rounded-circle">
                 <span class="b-title">Manual</span>
@@ -73,13 +70,16 @@
                             class="pcoded-mtext">料件資訊</span></a>
                     <ul class="pcoded-submenu">
                         <li class=""><a href="{% url 'list_materials' %}">全部</a></li>
+                        <li data-username="add material bom">
+                            <a href="{% url 'add_material' %}">＋ 新增</a>
+                        </li>
                     </ul>
 
                 </li>
                 <li data-username="add material bom"
                     class="nav-item">
-                    <a href="{% url 'add_material' %}" class="nav-link"><span class="pcoded-micon"><i class="feather icon-plus"></i></span><span
-                            class="pcoded-mtext">新增</span></a>
+                    <a href="{% url 'material_type' %}" class="nav-link"><span class="pcoded-micon"><i class="feather icon-plus"></i></span><span
+                            class="pcoded-mtext">新增類型</span></a>
                 </li>
 
                 <li><br><hr></li>
@@ -91,9 +91,6 @@
                     <a href="{% url 'schema-swagger-ui' %}" class="nav-link" target="_blank"><span class="pcoded-micon"><i class="feather icon-command"></i></span><span
                             class="pcoded-mtext">API</span></a>
                 </li>
-
-
-
             </ul>
         </div>
     </div>

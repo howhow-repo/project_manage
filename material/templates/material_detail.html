@@ -55,7 +55,7 @@
 
                                         </div>
 
-                                        <form method="POST" action="{% url 'material_detail' material.name %}">{%csrf_token%}
+                                        <form method="POST" action="{% url 'material_detail' material.name %}" enctype="multipart/form-data">{%csrf_token%}
                                         <div class="card-block">
                                             <div class="row">
                                                 <div class="col-sm-6 mb-4">

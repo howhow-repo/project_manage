@@ -4,33 +4,11 @@ from django.db.models import ProtectedError
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
+
+from lib import manager_required, fill_form_initial_with_org_data
 from .forms import SignUpForm, DeleteUserForm
 from index.forms import UserProfileEdit
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseServerError
-from django.template import loader
-
-
-def manager_required(func):  # use as decorator
-    def wrapper(request, *args, **kwargs):
-        if request.user.department and request.user.department.name == '管理':
-            return func(request, *args, **kwargs)
-        else:
-            html_template = loader.get_template('home/page-403.html')
-            return HttpResponseForbidden(HttpResponse(html_template.render({}, request)))
-
-    return wrapper
-
-
-def set_org_data_in_form_initial(model_instance, form, skip_fields=None):
-    if skip_fields is None:
-        skip_fields = []
-    for element in form.fields:
-        if element in skip_fields:
-            continue
-        initial_data = getattr(model_instance, element)
-        if initial_data is not None or initial_data != "":
-            form.fields[element].initial = initial_data
-    return form
+from django.http import HttpResponseRedirect, HttpResponseServerError
 
 
 @require_http_methods(["GET", "POST"])
@@ -90,7 +68,7 @@ def edit_user(request, username):
         else:
             context['errMsg'] = 'Form is not valid'
 
-    form = set_org_data_in_form_initial(user, form)
+    form = fill_form_initial_with_org_data(user, form)
 
     context['form'] = form
     return render(request, 'edit_user.html', context)

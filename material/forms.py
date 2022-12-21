@@ -26,3 +26,7 @@ class MaterialForm(forms.ModelForm):
     class Meta:
         model = Material
         fields = ('name', 'part_number', 'cover', 'type', 'unit', 'unit_price', 'note', 'creator')
+
+
+class MaterialTypeDelForm(forms.Form):
+    pass

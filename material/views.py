@@ -1,16 +1,46 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, HttpResponseNotFound
+from django.db.models import ProtectedError
+from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponseBadRequest
 from django.shortcuts import render
 from django.urls import reverse
 
-from lib import get_model_or_none, fill_form_initial_with_org_data
-from .models import Material
-from .forms import MaterialForm
+from lib import get_model_or_none, fill_form_initial_with_org_data, manager_required
+from .models import Material, MaterialType
+from .forms import MaterialForm, MaterialTypeForm, MaterialTypeDelForm
 
 
 def list_materials(request):
     context = {'segment': 'material', 'materials': Material.objects.all()}
     return render(request, 'list_materials.html', context)
+
+
+@manager_required
+@login_required(login_url="/login/")
+def material_type(request):
+    context = {'segment': 'material'}
+    if request.method == "POST":
+        form = MaterialTypeForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+
+    form = MaterialTypeForm()
+    material_type = MaterialType.objects.all()
+    context.update({'form': form, 'material_type': material_type})
+    return render(request, 'material_type.html', context)
+
+
+@manager_required
+@login_required(login_url="/login/")
+def del_material_type(request, type_name):
+    material_type = get_model_or_none(MaterialType, {'name': type_name})
+    if request.method == "POST" and material_type:
+        form = MaterialTypeDelForm(data=request.POST)
+        if form.is_valid():
+            try:
+                material_type.delete()
+            except ProtectedError:
+                return HttpResponseBadRequest("分類使用中，無法刪除。")
+    return HttpResponseRedirect(reverse('material_type'))
 
 
 @login_required(login_url="/login/")
