@@ -91,6 +91,7 @@ def edit_bom(request, bom_id):
     # Do GET
     bom_item_form, nonstandard_item_form = BomItemForm(), NonStandardItemForm()
     bom_item_form.fields['bom'].initial, nonstandard_item_form.fields['bom'].initial = bom, bom
+    bom_item_form.fields['quantity'].initial = 1
     context.update({
         'form': bom_form,
         'item_form': bom_item_form,
