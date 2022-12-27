@@ -1,6 +1,6 @@
 from django.utils import timezone
 from django.db.models import Sum
-from django.http import HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponseNotFound, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -165,3 +165,13 @@ def del_nonstandard_item(request, bom_id, bom_item_id):
 
 def del_bom(request, bom_id):
     pass
+
+
+def download_xlsx(request, bom_id):
+    bom = get_model_or_none(Bom, {'id': bom_id})
+    if not bom:
+        return HttpResponseNotFound()
+
+    resp = HttpResponse(bom.create_xlsx(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    resp['Content-Disposition'] = f'attachment; filename=報價單{bom.sn}.xlsx'
+    return resp

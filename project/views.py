@@ -81,12 +81,11 @@ def project_detail(request, project_id):
 
             Thread(target=send_change_message_to_followers, args=(request, form)).start()
 
-            form = fill_form_initial_with_org_data(updated_project, form)
+            form = ProjectForm(data=request.POST, instance=updated_project)
         else:
             context['errMsg'] = 'Form is not valid'
     else:
-        form = ProjectForm()
-        form = fill_form_initial_with_org_data(project, form)
+        form = ProjectForm(instance=project)
 
     add_favorite_form = FavoriteProjectForm()
     add_favorite_form.set_initial(request.user.id, project_id)

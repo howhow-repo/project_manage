@@ -2,10 +2,12 @@ import math
 import uuid
 from datetime import timedelta
 
+import openpyxl
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models import Sum
 from django.utils import dateformat, timezone
+from django.conf import settings
 
 from employee.models import User
 from material.models import Material
@@ -29,7 +31,7 @@ class Bom(models.Model):
     discount = models.FloatField(default=1.0, validators=[MinValueValidator(0.0), MaxValueValidator(1.0)])
     org_cost = models.FloatField(default=0, validators=[MinValueValidator(0), ])
     tax = models.FloatField(default=0, validators=[MinValueValidator(0), ])
-    final_cost = models.IntegerField(default=0 ,validators=[MinValueValidator(0), ])
+    final_cost = models.IntegerField(default=0, validators=[MinValueValidator(0), ])
     editor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='bom_editor')
     creator = models.ForeignKey(User, on_delete=models.PROTECT, related_name='bom_creator')
     create_time = models.DateTimeField(auto_now_add=True)
@@ -40,24 +42,36 @@ class Bom(models.Model):
 
     def create_sn(self):
         utc_now = timezone.now()
+        local_now = utc_now.today()
         today_begin = utc_now - timedelta(
-            hours=utc_now.today().hour,
-            minutes=utc_now.today().minute,
-            seconds=utc_now.today().second,
-            microseconds=utc_now.today().microsecond
+            hours=local_now.hour,
+            minutes=local_now.minute,
+            seconds=local_now.second,
+            microseconds=local_now.microsecond
         )
         data_count = Bom.objects.filter(create_time__range=[today_begin, utc_now]).count()
         self.sn = f"{dateformat.format(timezone.now(), 'Ymd')}{str(data_count + 1).zfill(2)}"
 
     def calculate_bom(self):
         standard_cost = (BomItem.objects.filter(bom=self).aggregate(Sum('total_price')))['total_price__sum'] or 0
-        nonstandard_cost = (NonStandardItem.objects.filter(bom=self).aggregate(Sum('total_price')))['total_price__sum'] or 0
+        nonstandard_cost = (NonStandardItem.objects.filter(bom=self).aggregate(Sum('total_price')))[
+                               'total_price__sum'] or 0
         self.org_cost = standard_cost + nonstandard_cost
         self.tax = self.org_cost * 5 / 100 * self.discount
         self.final_cost = math.ceil((self.org_cost * self.discount) + self.tax)
 
     def set_editor(self, request):
         self.editor = request.user
+
+    def create_xlsx(self, request):
+        q_template = openpyxl.load_workbook(f'{settings.BASEDIR}/quotation/quotation_template.xlsx')
+        q_template.worksheets[0]['B4'] = f'NO.{self.sn}'
+        q_template.worksheets[0]['E4'] = f'NO.{request.user.nickname}'
+        q_template.worksheets[0]['B8'] = self.project.customer.name
+        q_template.worksheets[0]['B9'] = self.project.customer.name
+        q_template.worksheets[0]['B10'] = self.project.address
+        q_template.worksheets[0]['F7'] = timezone.now().today().date()
+        return q_template
 
 
 class BomItem(models.Model):

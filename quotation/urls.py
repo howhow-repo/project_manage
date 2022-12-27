@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import list_bom, add_bom, edit_bom, add_bom_item, del_bom_item, del_bom
-from .views import add_nonstandard_item, del_nonstandard_item
+from .views import add_nonstandard_item, del_nonstandard_item, download_xlsx
 
 urlpatterns = [
     path("<str:project_id>/list", list_bom, name='list_bom'),
@@ -14,4 +14,5 @@ urlpatterns = [
     path("edit/<str:bom_id>/del_nonstandard_item/<str:bom_item_id>", del_nonstandard_item, name='del_nonstandard_item'),
 
     path("edit/<str:bom_id>/del_bom", del_bom, name='del_bom'),
+    path("edit/<str:bom_id>/download_xlsx", download_xlsx, name='download_xlsx'),
 ]
