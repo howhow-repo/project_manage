@@ -4,6 +4,7 @@ from customer.models import CustomerType, Customer, CustomerStatus
 from project.models import ProjectStatus, ProjectType, Project
 from material.models import Material, MaterialType
 from employee.models import Department, User
+from quotation.models import BomStatus
 
 
 def add_default_data():
@@ -28,6 +29,7 @@ def add_default_data():
         ProjectStatus.objects.get_or_create(name='待出工')
         ProjectStatus.objects.get_or_create(name='待收款')
         ProjectStatus.objects.get_or_create(name='收款結束')
+        ProjectStatus.objects.get_or_create(name='其他')
 
         ProjectType.objects.get_or_create(name='其他')
         ProjectType.objects.get_or_create(name='拉線')
@@ -38,7 +40,19 @@ def add_default_data():
 
         Department.objects.get_or_create(name='一般')
         Department.objects.get_or_create(name='管理')
+
         MaterialType.objects.get_or_create(name='人力')
+        MaterialType.objects.get_or_create(name='線材')
+        MaterialType.objects.get_or_create(name='網路設備')
+        MaterialType.objects.get_or_create(name='監視器')
+        MaterialType.objects.get_or_create(name='對講機')
+        MaterialType.objects.get_or_create(name='智慧家庭')
+        MaterialType.objects.get_or_create(name='耗材')
+        MaterialType.objects.get_or_create(name='其他')
+
+        BomStatus.objects.get_or_create(name='編輯中')
+        BomStatus.objects.get_or_create(name='已提供')
+        BomStatus.objects.get_or_create(name='已確認')
 
     except Exception:
         print("ERROR add_default_data")

@@ -30,3 +30,7 @@ class MaterialForm(forms.ModelForm):
 
 class MaterialTypeDelForm(forms.Form):
     pass
+
+
+class MaterialDelForm(forms.Form):
+    pass

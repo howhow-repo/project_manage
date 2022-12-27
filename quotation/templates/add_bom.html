@@ -1,0 +1,107 @@
+{% extends "layouts/new_base.html" %}
+
+{% block title %} Project {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <!-- [ breadcrumb ] start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'list_customers' %}">客戶清單</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'customer_detail' project.customer.name %}">[客戶]{{project.customer.name}}</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'project_detail' project.id %}">[專案細項]{{project.title}}</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'add_bom' project.id %}">新增 報價單</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <div class="row">
+                                                <div class="col-sm-6 mb-1">
+                                                    <h5 >報價單</h5>
+                                                </div>
+                                            </div>
+                                            {% if errMsg != None %}
+                                                <small class="form-text text-danger">
+                                                    {{errMsg}}
+                                                </small>
+                                            {% endif %}
+                                            {% if Msg != None %}
+                                                <small class="form-text text-success">
+                                                    {{Msg}}
+                                                </small>
+                                            {% endif %}
+
+                                        </div>
+                                        <form method="POST" action="{% url 'add_bom' project.id %}">{%csrf_token%}
+                                            {{bom_form.project.as_hidden}}
+                                        <div class="card-block">
+                                            <div class="row">
+                                                <div class="col-sm-3 mb-4">
+                                                    <label>客戶</label>
+                                                    <a href="{% url 'customer_detail' project.customer %}" Target="_blank">
+                                                        <h4>{{ project.customer }}</h4>
+                                                    </a>
+                                                </div>
+
+                                                <div class="col-sm-3 mb-4">
+                                                    <label>專案</label>
+                                                    <a href="{% url 'project_detail' project.id %}" Target="_blank">
+                                                        <h4>[{{project.type}}] {{ project.title }}</h4>
+                                                    </a>
+                                                </div>
+
+                                                <div class="col-sm-6 mb-2">
+                                                    <label>筆記</label>
+                                                    {{bom_form.note}}
+                                                    <span class="text-error">{{ bom_form.note.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-12 mb-2">
+                                                    <input type = 'submit' class="btn btn-primary" value="按此建立">
+                                                    <a href="{% url 'list_bom'  project.id %}" class="btn btn-light">Cancel</a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

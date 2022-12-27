@@ -156,7 +156,7 @@ AUTH_USER_MODEL = 'employee.User'
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
+USE_TZ = True
 TIME_ZONE = 'Asia/Taipei'
 
 USE_I18N = True

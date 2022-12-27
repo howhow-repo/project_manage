@@ -1,0 +1,68 @@
+{% extends "layouts/new_base.html" %}
+
+{% block title %} Delete Recipe Type {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <!-- [ breadcrumb ] start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">確認刪除？</h5>
+                                        {% if errMsg != None %}
+                                            <small class="form-text text-danger">
+                                                {{errMsg}}
+                                            </small>
+                                        {% endif %}
+                                        {% if Msg != None %}
+                                            <small class="form-text text-success">
+                                                {{Msg}}
+                                            </small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>確定要刪除食譜: <b>"{{ material.name }}"</b> 嗎?</h5>
+                                        </div>
+                                        <div class="card-block">
+                                            <form method="POST" action="{% url 'delete_material' material.name %}">{%csrf_token%}
+                                                <td><a href="{% url 'material_detail' material.name %}" class="btn btn-light">Cancel</a></td>
+                                                <input type = 'submit' class="btn btn-danger" value="Delete">
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

@@ -1,0 +1,267 @@
+{% extends "layouts/new_base.html" %}
+
+{% block title %} Customer {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <!-- [ breadcrumb ] start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'list_customers' %}">客戶清單</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'customer_detail' bom.project.customer.name %}">[客戶]{{project.customer.name}}</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'project_detail' bom.project.id %}">[專案細項]{{project.title}}</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'edit_bom' bom.id %}">報價單 no.{{bom.sn}} </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <div class="col-sm-6 mb-1">
+                                                <h5>報價單資訊-- no.<span style="color:red">{{ bom.sn }}</span></h5>
+                                                    {% if errMsg != None %}
+                                                        <small class="form-text text-danger">
+                                                            {{errMsg}}
+                                                        </small>
+                                                    {% endif %}
+                                                    {% if Msg != None %}
+                                                        <small class="form-text text-success">
+                                                            {{Msg}}
+                                                        </small>
+                                                    {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <form method="POST" action="{% url 'edit_bom' bom.id %}">{%csrf_token%}
+                                            {{ form.project.as_hidden }}
+                                            {{ form.creator.as_hidden }}
+                                        <div class="card-block">
+                                            <div class="row">
+                                                <div class="col-sm-3 mb-8">
+                                                    <label>專案</label>
+                                                    <h3>[{{bom.project.type}}] {{bom.project.title}}</h3>
+                                                </div>
+
+                                                <div class="col-sm-3 mb-4">
+                                                    <label>客戶</label>
+                                                    <h3>{{ bom.project.customer }}</h3>
+                                                </div>
+                                                <div class="row col-sm-6">
+
+                                                    <div class="col-sm-3 mb-4">
+                                                        <label>最後編輯</label>
+                                                        <h6>{{ bom.editor.username }}</h6>
+                                                    </div>
+
+                                                    <div class="col-sm-3 mb-4">
+                                                        <label>最後更新時間</label>
+                                                        <h6>{{ bom.update_time|date:'Y-m-d H:i' }}</h6>
+                                                    </div>
+
+                                                    <div class="col-sm-3 mb-4">
+                                                        <label>建立者</label>
+                                                        <h6>{{ bom.creator }}</h6>
+                                                    </div>
+
+                                                    <div class="col-sm-3 mb-4">
+                                                        <label>建立時間</label>
+                                                        <h6>{{ bom.create_time|date:'Y-m-d H:i' }}</h6>
+                                                    </div>
+
+
+
+                                                </div>
+
+                                                <div class="col-sm-2 mb-4">
+                                                    <label>狀態</label>
+                                                    <h6>{{ form.status }}</h6>
+                                                    <span class="text-error">{{ form.status.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-2 mb-4">
+                                                    <label data-toggle="tooltip" title="(0~1.0; ex:8折=0.8)">折扣</label>
+                                                    <h6>{{ form.discount }}</h6>
+                                                    <span class="text-error">{{ form.discount.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-2 mb-4">
+                                                    <label data-toggle="tooltip" title="(原始金額*折扣) 5%">稅金</label>
+                                                    <h5>{{bom.tax}}</h5>
+                                                    <span class="text-error">{{ form.tax.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-3 mb-4">
+                                                    <label data-toggle="tooltip" title="小記總和">原始金額</label>
+                                                    <h5>{{bom.org_cost}}</h5>
+                                                    <span class="text-error">{{ form.org_cost.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-3 mb-4">
+                                                    <label data-toggle="tooltip" title="原始金額*折扣 + 稅金">最終金額</label>
+                                                    <h5>{{bom.final_cost}}</h5>
+                                                    <span class="text-error">{{ form.org_cost.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-12 mb-2">
+                                                    <label>筆記</label>
+                                                    {{form.note}}
+                                                    <span class="text-error">{{ form.note.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-12 mb-2">
+                                                    <input type = 'submit' class="btn btn-primary" value="Save">
+                                                    <a href="{% url 'list_bom' bom.project.id %}" class="btn btn-light">Cancel</a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>制式項目</h5>
+                                        </div>
+                                        <div class="card-block table-border-style">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>品項</th>
+                                                            <th>單位</th>
+                                                            <th>個數</th>
+                                                            <th>單價</th>
+                                                            <th>小記</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for item in bom_items %}
+                                                        <form method="POST" action="{% url 'del_bom_item' bom.id item.id %}">{%csrf_token%}
+                                                        <tr>
+                                                            <th scope="row">{{forloop.counter}}</th>
+                                                            <td>{{ item.freeze_material_name }}</td>
+                                                            <td>{{ item.material.unit }}</td>
+                                                            <td>{{ item.quantity }}</td>
+                                                            <td>{{ item.freeze_material_price}}</td>
+                                                            <td>{{ item.total_price }}</td>
+                                                            <td>
+                                                                <input type = 'submit' class="btn btn-danger" value="Del">
+                                                            </td>
+                                                        </tr>
+                                                        </form>
+                                                    {% endfor %}
+                                                        <form method="POST" action="{% url 'add_bom_item' bom.id %}">{%csrf_token%}
+                                                            {{item_form.bom.as_hidden}}
+                                                        <tr>
+                                                            <th scope="row">#</th>
+                                                            <td>{{item_form.material}}</td>
+                                                            <td></td>
+                                                            <td>{{item_form.quantity}}</td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td><input type = 'submit' class="btn btn-primary" value="+"></td>
+
+                                                        </tr>
+                                                        </form>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>非制式項目</h5>
+                                        </div>
+                                        <div class="card-block table-border-style">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>品項</th>
+                                                            <th>單位</th>
+                                                            <th>個數</th>
+                                                            <th>單價</th>
+                                                            <th>小記</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for item in nonstandard_item %}
+                                                        <form method="POST" action="{% url 'del_nonstandard_item' bom.id item.id %}">{%csrf_token%}
+                                                        <tr>
+                                                            <th scope="row">{{forloop.counter}}</th>
+                                                            <td>{{ item.name }}</td>
+                                                            <td>{{ item.unit }}</td>
+                                                            <td>{{ item.quantity }}</td>
+                                                            <td>{{ item.unit_price}}</td>
+                                                            <td>{{ item.total_price }}</td>
+                                                            <td>
+                                                                <input type = 'submit' class="btn btn-danger" value="Del">
+                                                            </td>
+                                                        </tr>
+                                                        </form>
+                                                    {% endfor %}
+                                                        <form method="POST" action="{% url 'add_nonstandard_item' bom.id %}">{%csrf_token%}
+                                                            {{nonstandard_item_form.bom.as_hidden}}
+                                                        <tr>
+                                                            <th scope="row">#</th>
+                                                            <td>{{nonstandard_item_form.name}}</td>
+                                                            <td>{{nonstandard_item_form.unit}}</td>
+                                                            <td>{{nonstandard_item_form.quantity}}</td>
+                                                            <td>{{nonstandard_item_form.unit_price}}</td>
+                                                            <td></td>
+                                                            <td><input type = 'submit' class="btn btn-primary" value="+"></td>
+
+                                                        </tr>
+                                                        </form>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

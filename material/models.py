@@ -34,12 +34,13 @@ class Material(models.Model):
     part_number = models.CharField(max_length=50, unique=True)
     type = models.ForeignKey(MaterialType, on_delete=models.PROTECT)
     unit = models.CharField(max_length=10)
-    unit_price = models.IntegerField(null=True, blank=True,)
+    unit_price = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(0), ])
     cover = models.ImageField(upload_to=update_img, null=True, blank=True, default=None, validators=[validate_image])
     note = models.TextField(max_length=500, null=True, blank=True,)
     creator = models.ForeignKey(User, on_delete=models.PROTECT, related_name='material_creator', null=True,)
     editor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='material_editor', null=True,)
     update_time = models.DateTimeField(auto_now=True)
+    valid = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name

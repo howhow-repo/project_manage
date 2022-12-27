@@ -1,0 +1,104 @@
+{% extends "layouts/new_base.html" %}
+
+{% block title %} Bom {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <section class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <!-- [ breadcrumb ] start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'list_customers' %}">客戶清單</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'customer_detail' project.customer.name %}">[客戶]{{project.customer.name}}</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'project_detail' project.id %}">[專案細項]{{project.title}}</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'list_bom' project.id %}">報價單清單</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <!-- [ Hover-table ] start -->
+                                <div class="col-xl-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>報價清單</h5>
+                                            <span>
+                                                直接<code>點擊資料</code>可以進入詳細資訊; 以最後更新時間排序
+                                            </span>
+                                        </div>
+                                        <div class="card-block table-border-style">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>建立日期</th>
+                                                            <th>SN</th>
+                                                            <th>最終價格</th>
+                                                            <th>狀態</th>
+                                                            <th>最後更新時間</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for bom in bom_list %}
+                                                        <tr class = "clickable-row"
+                                                            data-toggle="tooltip"
+                                                            data-href="{% url 'edit_bom' bom.id %}">
+
+                                                            <th scope="row">{{ forloop.counter }}</th>
+                                                            <td>{{ bom.create_time|date:'Y-m-d' }}</td>
+                                                            <td>{{ bom.sn }}</td>
+                                                            <td>{{ bom.final_cost }}</td>
+                                                            <td>{{ bom.status }}</td>
+                                                            <td>{{ bom.update_time|date:'Y-m-d H:i' }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <a href="{% url 'add_bom' project.id %}" class="btn btn-primary">＋</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ Hover-table ] end -->
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            $(".clickable-row").click(function() {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
+{% endblock javascripts %}

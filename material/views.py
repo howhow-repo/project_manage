@@ -1,3 +1,5 @@
+import os
+
 from django.contrib.auth.decorators import login_required
 from django.db.models import ProtectedError
 from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponseBadRequest
@@ -6,7 +8,13 @@ from django.urls import reverse
 
 from lib import get_model_or_none, fill_form_initial_with_org_data, manager_required
 from .models import Material, MaterialType
-from .forms import MaterialForm, MaterialTypeForm, MaterialTypeDelForm
+from .forms import MaterialForm, MaterialTypeForm, MaterialTypeDelForm, MaterialDelForm
+
+
+def delete_material_related_file(material_instance):
+    img_path = material_instance.cover.name
+    if os.path.isfile(img_path):
+        os.remove(img_path)
 
 
 def list_materials(request):
@@ -24,25 +32,26 @@ def material_type(request):
             form.save()
 
     form = MaterialTypeForm()
-    material_type = MaterialType.objects.all()
-    context.update({'form': form, 'material_type': material_type})
+    material_types = MaterialType.objects.all()
+    context.update({'form': form, 'material_type': material_types})
     return render(request, 'material_type.html', context)
 
 
 @manager_required
 @login_required(login_url="/login/")
 def del_material_type(request, type_name):
-    material_type = get_model_or_none(MaterialType, {'name': type_name})
-    if request.method == "POST" and material_type:
+    material_types = get_model_or_none(MaterialType, {'name': type_name})
+    if request.method == "POST" and material_types:
         form = MaterialTypeDelForm(data=request.POST)
         if form.is_valid():
             try:
-                material_type.delete()
+                material_types.delete()
             except ProtectedError:
                 return HttpResponseBadRequest("分類使用中，無法刪除。")
     return HttpResponseRedirect(reverse('material_type'))
 
 
+@manager_required
 @login_required(login_url="/login/")
 def add_material(request):
     context = {'segment': 'material'}
@@ -61,11 +70,6 @@ def add_material(request):
 
     context.update({'form': form})
     return render(request, 'add_material.html', context)
-
-
-@login_required(login_url="/login/")
-def delete_material(request):
-    pass  # TODO
 
 
 @login_required(login_url="/login/")
@@ -92,3 +96,25 @@ def material_detail(request, material_name):
         'material': material,
     })
     return render(request, 'material_detail.html', context)
+
+
+@manager_required
+@login_required(login_url="/login/")
+def delete_material(request, material_name):
+    context = {'segment': 'material'}
+    material = get_model_or_none(Material, {'name': material_name})
+    if not material:
+        return HttpResponseNotFound()
+
+    if request.method == "POST":
+        form = MaterialDelForm(data=request.POST)
+        if form.is_valid():
+            try:
+                delete_material_related_file(material)
+                material.delete()
+                return HttpResponseRedirect(reverse('list_materials'))
+            except ProtectedError:
+                context['errMsg'] = "料件使用中，無法刪除。"
+
+    context['material'] = material
+    return render(request, 'del_material.html', context)

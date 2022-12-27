@@ -67,7 +67,11 @@
                                                 </div>
 
                                                 <div class="col-sm-2 mb-2">
-                                                    <label>類型</label>
+                                                    <label>類型
+                                                        <span>
+                                                            <a href="{% url 'material_type' %}">(類型管理)</a>
+                                                        </span>
+                                                    </label>
                                                     <h4>{{ form.type }}</h4>
                                                     <span class="text-error">{{ form.type.errors }}</span>
                                                 </div>
@@ -98,7 +102,7 @@
 
                                                 <div class="col-sm-12 mb-2">
                                                     <input type = 'submit' class="btn btn-primary" value="Save">
-                                                    <a href="{% url 'list_customers' %}" class="btn btn-light">Cancel</a>
+                                                    <a href="{% url 'list_materials' %}" class="btn btn-light">Cancel</a>
                                                 </div>
 
                                             </div>

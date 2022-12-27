@@ -29,6 +29,7 @@ class Customer(models.Model):
     type = models.ForeignKey(CustomerType, on_delete=models.PROTECT, null=True, blank=True)
     status = models.ForeignKey(CustomerStatus, on_delete=models.PROTECT, null=True, blank=True)
     note = models.TextField(max_length=1000, default=None, null=True, blank=True)
+    create_time = models.DateTimeField(auto_now_add=True)
     update_time = models.DateTimeField(auto_now=True)
     creator = models.ForeignKey(User, on_delete=models.PROTECT, related_name='customer_creator')
     editor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='customer_editor')

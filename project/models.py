@@ -54,6 +54,7 @@ class Project(models.Model):
     start_date = models.DateTimeField(default=timezone.now)
     due_date = models.DateTimeField(default=None, null=True, blank=True)
     dispatch_date = models.DateTimeField(default=None, null=True, blank=True)
+    create_time = models.DateTimeField(auto_now_add=True)
     update_time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
