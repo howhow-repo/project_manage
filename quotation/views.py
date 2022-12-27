@@ -172,6 +172,6 @@ def download_xlsx(request, bom_id):
     if not bom:
         return HttpResponseNotFound()
 
-    resp = HttpResponse(bom.create_xlsx(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    resp = HttpResponse(bom.create_xlsx(request), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     resp['Content-Disposition'] = f'attachment; filename=報價單{bom.sn}.xlsx'
     return resp

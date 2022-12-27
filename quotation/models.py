@@ -64,13 +64,13 @@ class Bom(models.Model):
         self.editor = request.user
 
     def create_xlsx(self, request):
-        q_template = openpyxl.load_workbook(f'{settings.BASEDIR}/quotation/quotation_template.xlsx')
-        q_template.worksheets[0]['B4'] = f'NO.{self.sn}'
-        q_template.worksheets[0]['E4'] = f'NO.{request.user.nickname}'
-        q_template.worksheets[0]['B8'] = self.project.customer.name
-        q_template.worksheets[0]['B9'] = self.project.customer.name
-        q_template.worksheets[0]['B10'] = self.project.address
-        q_template.worksheets[0]['F7'] = timezone.now().today().date()
+        q_template = openpyxl.load_workbook(f'{settings.BASE_DIR}/quotation/quotation_template.xlsx')
+        # q_template.worksheets[0]['B4'] = f'NO.{self.sn}'
+        # q_template.worksheets[0]['E4'] = f'NO.{request.user.nickname}'
+        # q_template.worksheets[0]['B8'] = self.project.customer.name
+        # q_template.worksheets[0]['B9'] = self.project.customer.name
+        # q_template.worksheets[0]['B10'] = self.project.address
+        # q_template.worksheets[0]['F7'] = timezone.now().today().date()
         return q_template
 
 
