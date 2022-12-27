@@ -75,9 +75,7 @@ def edit_bom(request, bom_id):
         if bom_form.is_valid():
             new_bom = bom_form.save(commit=False)
             new_bom.editor = request.user
-            new_bom.org_cost = (BomItem.objects.filter(bom=bom).aggregate(Sum('price')))['price__sum']
-            new_bom.tax = bom.org_cost * 5 / 100
-            new_bom.final_cost = (bom.org_cost + bom.tax) * bom.discount
+            new_bom.calculate_bom()
             new_bom.save()
             context['Msg'] = 'Success'
 
