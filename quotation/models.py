@@ -1,8 +1,8 @@
-import math
 import uuid
 from datetime import timedelta
 
 import openpyxl
+from openpyxl.writer.excel import save_virtual_workbook
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models import Sum
@@ -58,20 +58,42 @@ class Bom(models.Model):
                                'total_price__sum'] or 0
         self.org_cost = standard_cost + nonstandard_cost
         self.tax = self.org_cost * 5 / 100 * self.discount
-        self.final_cost = math.ceil((self.org_cost * self.discount) + self.tax)
+        self.final_cost = round((self.org_cost * self.discount) + self.tax)
 
     def set_editor(self, request):
         self.editor = request.user
 
     def create_xlsx(self, request):
-        q_template = openpyxl.load_workbook(f'{settings.BASE_DIR}/quotation/quotation_template.xlsx')
-        # q_template.worksheets[0]['B4'] = f'NO.{self.sn}'
-        # q_template.worksheets[0]['E4'] = f'NO.{request.user.nickname}'
-        # q_template.worksheets[0]['B8'] = self.project.customer.name
-        # q_template.worksheets[0]['B9'] = self.project.customer.name
-        # q_template.worksheets[0]['B10'] = self.project.address
-        # q_template.worksheets[0]['F7'] = timezone.now().today().date()
-        return q_template
+        q_template = openpyxl.load_workbook(f'{settings.BASE_DIR}/quotation/quotation_template.xlsm')
+        q_template.worksheets[0]['B4'], q_template.worksheets[0]['E4'] = f'NO.{self.sn}', f'{request.user.nickname}'
+        q_template.worksheets[0]['B8'] = self.project.customer.name
+        q_template.worksheets[0]['B9'] = self.project.customer.name
+        q_template.worksheets[0]['B10'] = self.project.address
+        today = timezone.now().today()
+        q_template.worksheets[0]['F7'] = f"{today.year}/{today.month}/{today.day}"
+        q_template.worksheets[0]['F8'] = self.project.customer.tel
+        q_template.worksheets[0]['F9'] = self.project.customer.tel
+        q_template.worksheets[0]['F10'] = self.project.customer.email
+        item_sets = list(BomItem.objects.filter(bom=self)) + list(NonStandardItem.objects.filter(bom=self))
+        for i, item in enumerate(item_sets):
+            if i < 21:
+                pass
+            else:
+                q_template.insert_rows(i + 13)
+
+            if item.__class__.__name__ == "BomItem":
+                q_template.worksheets[0][f'B{i + 13}'] = item.freeze_material_name
+                q_template.worksheets[0][f'C{i + 13}'] = item.quantity
+                q_template.worksheets[0][f'D{i + 13}'] = item.unit
+                q_template.worksheets[0][f'E{i + 13}'] = item.freeze_material_price
+                q_template.worksheets[0][f'F{i + 13}'] = item.total_price
+            else:
+                q_template.worksheets[0][f'B{i + 13}'] = item.name
+                q_template.worksheets[0][f'C{i + 13}'] = item.quantity
+                q_template.worksheets[0][f'D{i + 13}'] = item.unit
+                q_template.worksheets[0][f'E{i + 13}'] = item.unit_price
+                q_template.worksheets[0][f'F{i + 13}'] = item.total_price
+        return save_virtual_workbook(q_template)
 
 
 class BomItem(models.Model):
@@ -89,6 +111,8 @@ class BomItem(models.Model):
     def freeze_material_info(self):
         self.freeze_material_name = self.material.name
         self.freeze_material_price = self.material.unit_price
+        if not self.unit:
+            self.unit = self.material.unit
 
     def calculate_price(self):
         self.total_price = self.quantity * self.freeze_material_price

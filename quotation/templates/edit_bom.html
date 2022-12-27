@@ -133,6 +133,9 @@
                                                 <div class="col-sm-12 mb-2">
                                                     <input type = 'submit' class="btn btn-primary" value="Save">
                                                     <a href="{% url 'list_bom' bom.project.id %}" class="btn btn-light">Cancel</a>
+                                                    <a href="{% url 'download_xlsx' bom.id %}" class="btn btn-light"
+                                                       style="color: white; background-color: #02A224; border-color: #02A224" target="_blank">Excel</a>
+
                                                 </div>
 
                                             </div>
@@ -250,7 +253,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <a href="{% url 'download_xlsx' bom.id %}" class="btn btn-light" target="_blank">test</a>
+
                             </div>
                             <!-- [ Main Content ] end -->
                         </div>

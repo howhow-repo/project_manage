@@ -1,5 +1,5 @@
-from django.utils import timezone
-from django.db.models import Sum
+# -*- encoding: utf-8 -*-
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotFound, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -10,6 +10,7 @@ from .form import BomForm, BomItemForm, BomItemDelForm, NonStandardItemForm
 from lib import get_model_or_none
 
 
+@login_required(login_url="/login/")
 def save_new_bom_or_none(request, project):
     form = BomForm(data=request.POST)
     if form.is_valid():
@@ -23,6 +24,7 @@ def save_new_bom_or_none(request, project):
     return None
 
 
+@login_required(login_url="/login/")
 def list_bom(request, project_id):
     project = get_model_or_none(Project, {'id': project_id})
     if not project:
@@ -36,6 +38,7 @@ def list_bom(request, project_id):
     return render(request, 'list_bom.html', context)
 
 
+@login_required(login_url="/login/")
 def add_bom(request, project_id):
     project = get_model_or_none(Project, {'id': project_id})
     if not project:
@@ -63,6 +66,7 @@ def add_bom(request, project_id):
     return render(request, 'add_bom.html', context)
 
 
+@login_required(login_url="/login/")
 def edit_bom(request, bom_id):
     bom = get_model_or_none(Bom, {'id': bom_id})
     if not bom:
@@ -98,6 +102,7 @@ def edit_bom(request, bom_id):
     return render(request, 'edit_bom.html', context)
 
 
+@login_required(login_url="/login/")
 def add_bom_item(request, bom_id):
     bom = get_model_or_none(Bom, {'id': bom_id})
     if not bom:
@@ -117,6 +122,7 @@ def add_bom_item(request, bom_id):
     return HttpResponseRedirect(reverse('edit_bom', kwargs={'bom_id': bom.id}))
 
 
+@login_required(login_url="/login/")
 def del_bom_item(request, bom_id, bom_item_id):
     bom = get_model_or_none(Bom, {'id': bom_id})
     if not bom:
@@ -132,6 +138,7 @@ def del_bom_item(request, bom_id, bom_item_id):
     return HttpResponseRedirect(reverse('edit_bom', kwargs={'bom_id': bom.id}))
 
 
+@login_required(login_url="/login/")
 def add_nonstandard_item(request, bom_id):
     bom = get_model_or_none(Bom, {'id': bom_id})
     if not bom:
@@ -148,6 +155,7 @@ def add_nonstandard_item(request, bom_id):
     return HttpResponseRedirect(reverse('edit_bom', kwargs={'bom_id': bom.id}))
 
 
+@login_required(login_url="/login/")
 def del_nonstandard_item(request, bom_id, bom_item_id):
     bom = get_model_or_none(Bom, {'id': bom_id})
     if not bom:
@@ -167,11 +175,13 @@ def del_bom(request, bom_id):
     pass
 
 
+@login_required(login_url="/login/")
 def download_xlsx(request, bom_id):
     bom = get_model_or_none(Bom, {'id': bom_id})
     if not bom:
         return HttpResponseNotFound()
 
-    resp = HttpResponse(bom.create_xlsx(request), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-    resp['Content-Disposition'] = f'attachment; filename=報價單{bom.sn}.xlsx'
-    return resp
+    response = HttpResponse(content=bom.create_xlsx(request),
+                            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = f'attachment; filename=quotation_{bom.sn}.xlsm'
+    return response
