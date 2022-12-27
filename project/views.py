@@ -6,7 +6,6 @@ from django.urls import reverse
 from django.utils import timezone
 from threading import Thread
 from customer.models import Customer
-from customer.views import fill_form_initial_with_org_data
 from lib import get_model_or_none
 from .forms import ProjectForm, DailyReportForm, DailyReportPhotoForm, FavoriteProjectForm
 from .lib.project_lib import save_new_project_or_none, send_add_project_msg_to_followers, send_owner_notify, \

@@ -5,7 +5,7 @@ from django.views.decorators.http import require_http_methods
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
 
-from lib import manager_required, fill_form_initial_with_org_data
+from lib import manager_required
 from .forms import SignUpForm, DeleteUserForm
 from index.forms import UserProfileEdit
 from django.http import HttpResponseRedirect, HttpResponseServerError
@@ -57,7 +57,6 @@ def edit_user(request, username):
     context = {'manager': True, 'segment': 'user_management', 'edit_user': username}
     User = get_user_model()
     user = User.objects.get(username=username)
-    form = UserProfileEdit()
 
     if request.method == "POST":
         update_form = UserProfileEdit(data=request.POST, instance=user)
@@ -68,7 +67,7 @@ def edit_user(request, username):
         else:
             context['errMsg'] = 'Form is not valid'
 
-    form = fill_form_initial_with_org_data(user, form)
+    form = UserProfileEdit(instance=user)
 
     context['form'] = form
     return render(request, 'edit_user.html', context)

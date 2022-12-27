@@ -10,7 +10,6 @@ from django.views.decorators.http import require_http_methods
 
 from customer.forms import FavoriteCustomerForm
 from customer.models import Customer, FavoriteCustomer
-from lib import fill_form_initial_with_org_data
 from project.models import Project, FavoriteProject
 from project.forms import FavoriteProjectForm
 from .forms import UserProfileEdit
@@ -38,29 +37,22 @@ class MyPasswordChangeForm(PasswordChangeForm):
 @login_required(login_url="/login/")
 def index(request):
     context = {'segment': 'index'}
-    User = get_user_model()
-    user = User.objects.get(username=request.user)
-    favorite_projects = FavoriteProject.objects.filter(user=user).order_by('-project__update_time')
-    favorite_customers = FavoriteCustomer.objects.filter(user=user).order_by('-customer__update_time')
 
     if request.method == 'POST':
         form = UserProfileEdit(data=request.POST, instance=request.user)
         if form.is_valid() and form.changed_data:
             user = form.save(commit=False)
             user.save()
-            # update_session_auth_hash(request, user)  # Important!
             context['Msg'] = 'Success'
             user.send_line_notify(f"個人資訊已上傳: {form.changed_data}")
         elif not form.is_valid():
             context['errMsg'] = form.errors.as_data()
-    else:
 
-        form = UserProfileEdit()
-    form = fill_form_initial_with_org_data(user, form)
+    form = UserProfileEdit(instance=request.user)
 
     context['form'] = form
-    context['favorite_projects'] = favorite_projects
-    context['favorite_customers'] = favorite_customers
+    context['favorite_projects'] = FavoriteProject.objects.filter(user=request.user).order_by('-project__update_time')
+    context['favorite_customers'] = FavoriteCustomer.objects.filter(user=request.user).order_by('-customer__update_time')
     return render(request, 'index.html', context)
 
 

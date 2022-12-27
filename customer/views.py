@@ -5,7 +5,6 @@ from django.shortcuts import render
 from django.urls import reverse
 from threading import Thread
 
-from lib.fill_form_initial_with_org_data import fill_form_initial_with_org_data
 from project.models import Project
 from lib import get_model_or_none
 from .lib.customer_lib import get_num_of_page, get_page, send_change_message_to_followers
@@ -61,10 +60,8 @@ def customer_detail(request, cust_name):
             context['Msg'] = 'Success'
         else:
             context['errMsg'] = form.errors
-    else:
-        form = CustomerForm()
 
-    form = fill_form_initial_with_org_data(customer, form)
+    form = CustomerForm(instance=customer)
     context.update({
         'form': form,
         'customer': customer,

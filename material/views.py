@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 
-from lib import get_model_or_none, fill_form_initial_with_org_data, manager_required
+from lib import get_model_or_none, manager_required
 from .models import Material, MaterialType
 from .forms import MaterialForm, MaterialTypeForm, MaterialTypeDelForm, MaterialDelForm
 
@@ -88,9 +88,8 @@ def material_detail(request, material_name):
             context['Msg'] = 'Success'
         else:
             context['errMsg'] = form.errors
-    else:
-        form = MaterialForm()
-    form = fill_form_initial_with_org_data(material, form)
+
+    form = MaterialForm(instance=material)
     context.update({
         'form': form,
         'material': material,

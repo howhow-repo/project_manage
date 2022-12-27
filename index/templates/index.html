@@ -117,6 +117,7 @@
                                         </div>
                                         <form method="POST" action="/">{%csrf_token%}
                                             {{form.is_accept.as_hidden}}
+                                            {{form.department.as_hidden}}
                                         <div class="card-block">
                                             <div class="row">
                                                 <div class="col-sm-6 mb-4">
