@@ -184,5 +184,5 @@ def download_xlsx(request, bom_id):
 
     response = HttpResponse(content=bom.create_xlsx(request),
                             content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = f'attachment; filename=quotation_{bom.sn}.xlsm'
+    response['Content-Disposition'] = f'attachment; filename=quotation_{bom.sn}.xlsx'
     return response
