@@ -11,9 +11,8 @@ from employee.models import User
 
 
 def update_report_photo(instance, filename) -> str:
-    filename_ = instance.report.id
     file_extension = filename.split('.')[-1]
-    return settings.DOCS_ROOT + '/Project/photo/%s.%s' % (filename_, file_extension)
+    return settings.DOCS_ROOT + '/Project/photo/%s.%s' % (instance.report.id, file_extension)
 
 
 def validate_image(field_file_obj):
