@@ -1,4 +1,4 @@
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponse
 from django.template import loader
 
 
