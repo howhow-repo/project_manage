@@ -7,7 +7,7 @@ from django.urls import reverse
 from project.models import Project
 from .models import Bom, BomItem, NonStandardItem, BomStatus
 from .form import BomForm, BomItemForm, BomItemDelForm, NonStandardItemForm, BomFreezeForm, BomSignForm
-from lib import get_model_or_none, manager_required
+from lib import get_model_or_none, manager_only, allow_department
 
 
 def save_new_bom_or_none(request, project):
@@ -37,7 +37,7 @@ def list_bom(request, project_id):
     return render(request, 'list_bom.html', context)
 
 
-@manager_required
+@allow_department(['管理', '業務'])
 @login_required(login_url="/login/")
 def add_bom(request, project_id):
     project = get_model_or_none(Project, {'id': project_id})
@@ -66,7 +66,7 @@ def add_bom(request, project_id):
     return render(request, 'add_bom.html', context)
 
 
-@manager_required
+@allow_department(['管理', '業務'])
 @login_required(login_url="/login/")
 def edit_bom(request, bom_id):
     bom = get_model_or_none(Bom, {'id': bom_id})
@@ -107,7 +107,7 @@ def edit_bom(request, bom_id):
     return render(request, 'edit_bom.html', context)
 
 
-@manager_required
+@allow_department(['管理', '業務'])
 @login_required(login_url="/login/")
 def add_bom_item(request, bom_id):
     bom = get_model_or_none(Bom, {'id': bom_id})
@@ -128,7 +128,7 @@ def add_bom_item(request, bom_id):
     return HttpResponseRedirect(reverse('edit_bom', kwargs={'bom_id': bom.id}))
 
 
-@manager_required
+@allow_department(['管理', '業務'])
 @login_required(login_url="/login/")
 def del_bom_item(request, bom_id, bom_item_id):
     bom = get_model_or_none(Bom, {'id': bom_id})
@@ -145,7 +145,7 @@ def del_bom_item(request, bom_id, bom_item_id):
     return HttpResponseRedirect(reverse('edit_bom', kwargs={'bom_id': bom.id}))
 
 
-@manager_required
+@allow_department(['管理', '業務'])
 @login_required(login_url="/login/")
 def add_nonstandard_item(request, bom_id):
     bom = get_model_or_none(Bom, {'id': bom_id})
@@ -163,7 +163,7 @@ def add_nonstandard_item(request, bom_id):
     return HttpResponseRedirect(reverse('edit_bom', kwargs={'bom_id': bom.id}))
 
 
-@manager_required
+@allow_department(['管理', '業務'])
 @login_required(login_url="/login/")
 def del_nonstandard_item(request, bom_id, bom_item_id):
     bom = get_model_or_none(Bom, {'id': bom_id})
@@ -184,7 +184,7 @@ def del_bom(request, bom_id):
     pass
 
 
-@manager_required
+@manager_only
 @login_required(login_url="/login/")
 def download_xlsx(request, bom_id):
     bom = get_model_or_none(Bom, {'id': bom_id})
@@ -197,7 +197,7 @@ def download_xlsx(request, bom_id):
     return response
 
 
-@manager_required
+@allow_department(['管理', '業務'])
 @login_required(login_url="/login/")
 def freeze_bom(request, bom_id):
     bom = get_model_or_none(Bom, {'id': bom_id})
@@ -210,6 +210,7 @@ def freeze_bom(request, bom_id):
         if form.is_valid():
             bom.freeze = True
             bom.status = BomStatus.objects.get_or_create(name='編輯完成')[0]
+            bom.freezer = request.user
             bom.save()
 
             return HttpResponseRedirect(reverse('edit_bom', kwargs={'bom_id': bom.id}))
@@ -240,6 +241,7 @@ def sign_bom(request, bom_id):
             bom = form.save(commit=False)
             bom.freeze = True
             bom.status = BomStatus.objects.get_or_create(name='客戶已簽章')[0]
+            bom.signer = request.user
             bom.save()
 
             return HttpResponseRedirect(reverse('edit_bom', kwargs={'bom_id': bom.id}))

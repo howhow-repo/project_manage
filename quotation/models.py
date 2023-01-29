@@ -39,6 +39,8 @@ class Bom(models.Model):
     update_time = models.DateTimeField(auto_now=True)
     signature = JSignatureField(default=None, null=True)
     freeze = models.BooleanField(default=False)
+    freezer = models.ForeignKey(User, on_delete=models.PROTECT, related_name='bom_freezer', default=None, null=True)
+    signer = models.ForeignKey(User, on_delete=models.PROTECT, related_name='bom_signer', default=None, null=True)
 
     def __str__(self):
         return 'bom' + self.project.__str__()

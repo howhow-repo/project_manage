@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 
-from lib import get_model_or_none, manager_required
+from lib import get_model_or_none, manager_only
 from .models import Material, MaterialType
 from .forms import MaterialForm, MaterialTypeForm, MaterialTypeDelForm, MaterialDelForm
 
@@ -22,7 +22,7 @@ def list_materials(request):
     return render(request, 'list_materials.html', context)
 
 
-@manager_required
+@manager_only
 @login_required(login_url="/login/")
 def material_type(request):
     context = {'segment': 'material'}
@@ -37,7 +37,7 @@ def material_type(request):
     return render(request, 'material_type.html', context)
 
 
-@manager_required
+@manager_only
 @login_required(login_url="/login/")
 def del_material_type(request, type_name):
     material_types = get_model_or_none(MaterialType, {'name': type_name})
@@ -51,7 +51,7 @@ def del_material_type(request, type_name):
     return HttpResponseRedirect(reverse('material_type'))
 
 
-@manager_required
+@manager_only
 @login_required(login_url="/login/")
 def add_material(request):
     context = {'segment': 'material'}
@@ -97,7 +97,7 @@ def material_detail(request, material_name):
     return render(request, 'material_detail.html', context)
 
 
-@manager_required
+@manager_only
 @login_required(login_url="/login/")
 def delete_material(request, material_name):
     context = {'segment': 'material'}

@@ -5,12 +5,13 @@ from django.views.decorators.http import require_http_methods
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
 
-from lib import manager_required
+from lib import manager_only
 from .forms import SignUpForm, DeleteUserForm
 from index.forms import UserProfileEdit
 from django.http import HttpResponseRedirect, HttpResponseServerError
 
 
+@manager_only
 @require_http_methods(["GET", "POST"])
 @login_required(login_url="/login/")
 def view_all_users(request):
@@ -25,7 +26,7 @@ def view_all_users(request):
     return render(request, 'user_management.html', context)
 
 
-@manager_required
+@manager_only
 @require_http_methods(["GET", "POST"])
 @login_required(login_url="/login/")
 def register_user(request):
@@ -50,7 +51,7 @@ def register_user(request):
                   })
 
 
-@manager_required
+@manager_only
 @require_http_methods(["GET", "POST"])
 @login_required(login_url="/login/")
 def edit_user(request, username):
@@ -73,7 +74,7 @@ def edit_user(request, username):
     return render(request, 'edit_user.html', context)
 
 
-@manager_required
+@manager_only
 @require_http_methods(["GET", "POST"])
 @login_required(login_url="/login/")
 def delete_user(request, username):

@@ -20,6 +20,7 @@
                             class="pcoded-mtext">個人資訊</span></a>
                 </li>
 
+                {% if user.department.name == "管理" %}
                 <li data-username="user_management employee"
                     class="nav-item pcoded-hasmenu" >
                     <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-user"></i></span><span
@@ -29,6 +30,7 @@
                         <li class=""><a href="{% url 'register_user' %}">創建使用者</a></li>
                     </ul>
                 </li>
+                {% endif %}
 
                 <li class="nav-item pcoded-menu-caption">
                     <label>客戶</label>

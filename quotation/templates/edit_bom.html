@@ -168,7 +168,8 @@
                                                                 FREEZE
                                                             </a>
                                                         {% elif bom.freeze  %}
-                                                            <td><a href="{% url 'sign_bom' bom.id %}" class="btn btn-dark">客戶簽章</a></td>
+                                                            <a href="{% url 'sign_bom' bom.id %}" class="btn btn-dark">客戶簽章</a>
+                                                            <h6>Freeze by {{ bom.freezer.nickname }}</h6>
                                                         {% endif %}
                                                         </div>
                                                     </div>
@@ -189,6 +190,7 @@
                                                 <h5>客戶簽章</h5>
                                             </div>
                                             <div class="card-block">
+                                                <h6>Sign query by {{ bom.signer.nickname }}</h6>
                                                 <div class="col-sm-12 mb-1">
                                                     <img src="{{ bom.signature|signature_base64 }}" alt="{{ bom }}" />
                                                 </div>
