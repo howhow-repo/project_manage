@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'letsencrypt',
     # 'apps.demo',                                    # Enable the inner demo (demo)
     'apps.authentication',
+    'jsignature',
     # 'allauth',                                      # OAuth new
     # 'allauth.account',                              # OAuth new
     # 'allauth.socialaccount',                        # OAuth new

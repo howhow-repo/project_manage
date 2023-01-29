@@ -48,6 +48,14 @@
                                                     {{form.password2}}
                                                     <span class="text-error">{{ form.password2.errors }}</span>
                                                 </div>
+
+                                                <div class="col-sm-6 mb-4">
+                                                    <label>工作部門</label>
+                                                    {{form.department}}
+                                                    <span class="text-error">{{ form.department.errors }}</span>
+
+                                                </div>
+
                                                 <div class="col-sm-12 mb-4">
                                                     <hr>
                                                 </div>
@@ -73,13 +81,6 @@
                                                     <label>聯絡電話(Optional)</label>
                                                     {{form.phone_number}}
                                                     <span class="text-error">{{ form.phone_number.errors }}</span>
-                                                </div>
-
-                                                <div class="col-sm-6 mb-4">
-                                                    <label>工作部門(Optional)</label>
-                                                    {{form.department}}
-                                                    <span class="text-error">{{ form.department.errors }}</span>
-
                                                 </div>
 
                                                 <div class="col-sm-12 mb-2">

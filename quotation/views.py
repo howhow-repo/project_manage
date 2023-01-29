@@ -5,12 +5,11 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from project.models import Project
-from .models import Bom, BomItem, NonStandardItem
-from .form import BomForm, BomItemForm, BomItemDelForm, NonStandardItemForm
-from lib import get_model_or_none
+from .models import Bom, BomItem, NonStandardItem, BomStatus
+from .form import BomForm, BomItemForm, BomItemDelForm, NonStandardItemForm, BomFreezeForm, BomSignForm
+from lib import get_model_or_none, manager_required
 
 
-@login_required(login_url="/login/")
 def save_new_bom_or_none(request, project):
     form = BomForm(data=request.POST)
     if form.is_valid():
@@ -38,6 +37,7 @@ def list_bom(request, project_id):
     return render(request, 'list_bom.html', context)
 
 
+@manager_required
 @login_required(login_url="/login/")
 def add_bom(request, project_id):
     project = get_model_or_none(Project, {'id': project_id})
@@ -66,6 +66,7 @@ def add_bom(request, project_id):
     return render(request, 'add_bom.html', context)
 
 
+@manager_required
 @login_required(login_url="/login/")
 def edit_bom(request, bom_id):
     bom = get_model_or_none(Bom, {'id': bom_id})
@@ -76,12 +77,15 @@ def edit_bom(request, bom_id):
     # Do POST
     if request.method == "POST":
         bom_form = BomForm(data=request.POST, instance=bom)
-        if bom_form.is_valid():
+        if bom_form.is_valid() and not bom.freeze:
             new_bom = bom_form.save(commit=False)
             new_bom.editor = request.user
             new_bom.calculate_bom()
             new_bom.save()
             context['Msg'] = 'Success'
+
+        elif bom.freeze:
+            context['errMsg'] = 'Bom has been freeze.'
 
         else:
             context['errMsg'] = 'Form is not valid'
@@ -103,6 +107,7 @@ def edit_bom(request, bom_id):
     return render(request, 'edit_bom.html', context)
 
 
+@manager_required
 @login_required(login_url="/login/")
 def add_bom_item(request, bom_id):
     bom = get_model_or_none(Bom, {'id': bom_id})
@@ -111,7 +116,7 @@ def add_bom_item(request, bom_id):
 
     if request.method == "POST":
         form = BomItemForm(data=request.POST)
-        if form.is_valid():
+        if form.is_valid() and not bom.freeze:
             new_item = form.save(commit=False)
             new_item.freeze_material_info()
             new_item.calculate_price()
@@ -123,6 +128,7 @@ def add_bom_item(request, bom_id):
     return HttpResponseRedirect(reverse('edit_bom', kwargs={'bom_id': bom.id}))
 
 
+@manager_required
 @login_required(login_url="/login/")
 def del_bom_item(request, bom_id, bom_item_id):
     bom = get_model_or_none(Bom, {'id': bom_id})
@@ -130,7 +136,7 @@ def del_bom_item(request, bom_id, bom_item_id):
         return HttpResponseNotFound()
     if request.method == "POST":
         form = BomItemDelForm(data=request.POST)
-        if form.is_valid():
+        if form.is_valid() and not bom.freeze:
             item = BomItem.objects.get(id=bom_item_id)
             item.delete()
             bom.calculate_bom()
@@ -139,6 +145,7 @@ def del_bom_item(request, bom_id, bom_item_id):
     return HttpResponseRedirect(reverse('edit_bom', kwargs={'bom_id': bom.id}))
 
 
+@manager_required
 @login_required(login_url="/login/")
 def add_nonstandard_item(request, bom_id):
     bom = get_model_or_none(Bom, {'id': bom_id})
@@ -146,7 +153,7 @@ def add_nonstandard_item(request, bom_id):
         return HttpResponseNotFound()
     if request.method == "POST":
         form = NonStandardItemForm(data=request.POST)
-        if form.is_valid():
+        if form.is_valid() and not bom.freeze:
             new_item = form.save(commit=False)
             new_item.calculate_price()
             new_item.save()
@@ -156,6 +163,7 @@ def add_nonstandard_item(request, bom_id):
     return HttpResponseRedirect(reverse('edit_bom', kwargs={'bom_id': bom.id}))
 
 
+@manager_required
 @login_required(login_url="/login/")
 def del_nonstandard_item(request, bom_id, bom_item_id):
     bom = get_model_or_none(Bom, {'id': bom_id})
@@ -163,7 +171,7 @@ def del_nonstandard_item(request, bom_id, bom_item_id):
         return HttpResponseNotFound()
     if request.method == "POST":
         form = BomItemDelForm(data=request.POST)
-        if form.is_valid():
+        if form.is_valid() and not bom.freeze:
             item = NonStandardItem.objects.get(id=bom_item_id)
             item.delete()
             bom.calculate_bom()
@@ -176,6 +184,7 @@ def del_bom(request, bom_id):
     pass
 
 
+@manager_required
 @login_required(login_url="/login/")
 def download_xlsx(request, bom_id):
     bom = get_model_or_none(Bom, {'id': bom_id})
@@ -186,3 +195,56 @@ def download_xlsx(request, bom_id):
                             content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = f'attachment; filename=quotation_{bom.sn}.xlsx'
     return response
+
+
+@manager_required
+@login_required(login_url="/login/")
+def freeze_bom(request, bom_id):
+    bom = get_model_or_none(Bom, {'id': bom_id})
+    if not bom:
+        return HttpResponseNotFound()
+
+    context = {'segment': 'project'}
+    if request.method == "POST":
+        form = BomFreezeForm(data=request.POST)
+        if form.is_valid():
+            bom.freeze = True
+            bom.status = BomStatus.objects.get_or_create(name='編輯完成')[0]
+            bom.save()
+
+            return HttpResponseRedirect(reverse('edit_bom', kwargs={'bom_id': bom.id}))
+    # freeze bom confirm page
+    context.update({
+        'form': BomFreezeForm(),
+        'bom': bom,
+    })
+    return render(request, 'freeze_bom.html', context)
+
+
+@login_required(login_url="/login/")
+def sign_bom(request, bom_id):
+    bom = get_model_or_none(Bom, {'id': bom_id})
+    if not bom:
+        return HttpResponseNotFound()
+
+    if not bom.freeze:
+        return HttpResponseRedirect(reverse('freeze_bom', kwargs={'bom_id': bom.id}))
+
+    # if bom.signature:
+    #     return HttpResponseRedirect(reverse('edit_bom', kwargs={'bom_id': bom.id}))
+
+    context = {'segment': 'project'}
+    if request.method == "POST":
+        form = BomSignForm(data=request.POST, instance=bom)
+        if form.is_valid():
+            bom = form.save(commit=False)
+            bom.freeze = True
+            bom.status = BomStatus.objects.get_or_create(name='客戶已簽章')[0]
+            bom.save()
+
+            return HttpResponseRedirect(reverse('edit_bom', kwargs={'bom_id': bom.id}))
+    context.update({
+        'form': BomSignForm(),
+        'bom': bom,
+    })
+    return render(request, 'sign_bom.html', context)

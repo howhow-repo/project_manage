@@ -2,6 +2,7 @@ import uuid
 from datetime import timedelta
 
 import openpyxl
+from jsignature.fields import JSignatureField
 from openpyxl.writer.excel import save_virtual_workbook
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
@@ -36,6 +37,8 @@ class Bom(models.Model):
     creator = models.ForeignKey(User, on_delete=models.PROTECT, related_name='bom_creator')
     create_time = models.DateTimeField(auto_now_add=True)
     update_time = models.DateTimeField(auto_now=True)
+    signature = JSignatureField(default=None, null=True)
+    freeze = models.BooleanField(default=False)
 
     def __str__(self):
         return 'bom' + self.project.__str__()

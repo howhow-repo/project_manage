@@ -1,5 +1,5 @@
 {% extends "layouts/new_base.html" %}
-
+{% load jsignature_filters %}
 {% block title %} Customer {% endblock %}
 
 <!-- Specific CSS goes HERE -->
@@ -40,7 +40,7 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <div class="col-sm-6 mb-1">
-                                                <h5>報價單資訊-- NO.<span style="color:red">{{ bom.sn }}</span></h5>
+                                                <h5>報價單-- NO.<span style="color:red">{{ bom.sn }}</span></h5>
                                                     {% if errMsg != None %}
                                                         <small class="form-text text-danger">
                                                             {{errMsg}}
@@ -51,7 +51,14 @@
                                                             {{Msg}}
                                                         </small>
                                                     {% endif %}
+                                                    {% if bom.freeze %}
+                                                        <div>
+                                                            <hr>
+                                                        <h3>報價單已完成確認，無法繼續編輯。</h3>
+                                                            </div>
+                                                    {% endif %}
                                             </div>
+
                                         </div>
 
                                         <form method="POST" action="{% url 'edit_bom' bom.id %}">{%csrf_token%}
@@ -68,6 +75,7 @@
                                                     <label>客戶</label>
                                                     <h3>{{ bom.project.customer }}</h3>
                                                 </div>
+
                                                 <div class="row col-sm-6">
 
                                                     <div class="col-sm-3 mb-4">
@@ -96,14 +104,22 @@
 
                                                 <div class="col-sm-2 mb-4">
                                                     <label>狀態</label>
+                                                    {% if not bom.freeze %}
                                                     <h6>{{ form.status }}</h6>
                                                     <span class="text-error">{{ form.status.errors }}</span>
+                                                    {% else %}
+                                                    <h5>{{ bom.status }}</h5>
+                                                    {% endif %}
                                                 </div>
 
                                                 <div class="col-sm-2 mb-4">
                                                     <label data-toggle="tooltip" title="(0~1.0; ex:8折=0.8)">折扣</label>
+                                                    {% if not bom.freeze %}
                                                     <h6>{{ form.discount }}</h6>
                                                     <span class="text-error">{{ form.discount.errors }}</span>
+                                                    {% else %}
+                                                    <h5>{{ bom.discount }}</h5>
+                                                    {% endif %}
                                                 </div>
 
                                                 <div class="col-sm-2 mb-4">
@@ -130,11 +146,33 @@
                                                     <span class="text-error">{{ form.note.errors }}</span>
                                                 </div>
 
-                                                <div class="col-sm-12 mb-2">
-                                                    <input type = 'submit' class="btn btn-primary" value="Save">
-                                                    <a href="{% url 'list_bom' bom.project.id %}" class="btn btn-light">Cancel</a>
-                                                    <a href="{% url 'download_xlsx' bom.id %}" class="btn btn-light"
-                                                       style="color: white; background-color: #02A224; border-color: #02A224" target="_blank">Excel</a>
+                                                <div class="col-sm-12 mb-2 row">
+
+                                                    <div class="col-sm-6 mb-2 text-left">
+                                                        {% if not bom.freeze %}
+                                                        <input type = 'submit' class="btn btn-primary" value="Save">
+                                                        {% endif %}
+                                                        <a href="{% url 'list_bom' bom.project.id %}" class="btn btn-light">Cancel</a>
+                                                        <a href="{% url 'download_xlsx' bom.id %}" class="btn btn-light"
+                                                           style="color: white; background-color: #02A224; border-color: #02A224" target="_blank">Excel</a>
+                                                    </div>
+
+
+                                                    <div class="col-sm-6 mb-2 text-right">
+                                                        <div class="text-right">
+                                                        {% if not bom.freeze %}
+                                                            <a data-toggle="tooltip"
+                                                               title="確認之後，這張報價單便不可再編輯，用以提供客戶簽章。"
+                                                               href="{% url 'freeze_bom' bom.id %}"
+                                                               class="btn btn-dark text-right">
+                                                                FREEZE
+                                                            </a>
+                                                        {% elif bom.freeze  %}
+                                                            <td><a href="{% url 'sign_bom' bom.id %}" class="btn btn-dark">客戶簽章</a></td>
+                                                        {% endif %}
+                                                        </div>
+                                                    </div>
+
 
                                                 </div>
 
@@ -143,6 +181,21 @@
                                         </form>
                                     </div>
                                 </div>
+
+                                {% if bom.signature %}
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                            <div class="card-header">
+                                                <h5>客戶簽章</h5>
+                                            </div>
+                                            <div class="card-block">
+                                                <div class="col-sm-12 mb-1">
+                                                    <img src="{{ bom.signature|signature_base64 }}" alt="{{ bom }}" />
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+                                {% endif %}
 
                                 <div class="col-sm-12">
                                     <div class="card">
@@ -173,12 +226,15 @@
                                                             <td>{{ item.quantity }}</td>
                                                             <td>{{ item.freeze_material_price}}</td>
                                                             <td>{{ item.total_price }}</td>
+                                                            {% if not bom.freeze %}
                                                             <td>
                                                                 <input type = 'submit' class="btn btn-danger" value="Del">
                                                             </td>
+                                                            {% endif %}
                                                         </tr>
                                                         </form>
                                                     {% endfor %}
+                                                    {% if not bom.freeze %}
                                                         <form method="POST" action="{% url 'add_bom_item' bom.id %}">{%csrf_token%}
                                                             {{item_form.bom.as_hidden}}
                                                         <tr>
@@ -191,6 +247,7 @@
                                                             <td><input type = 'submit' class="btn btn-primary" value="+"></td>
 
                                                         </tr>
+                                                    {% endif %}
                                                         </form>
                                                     </tbody>
                                                 </table>
@@ -228,12 +285,15 @@
                                                             <td>{{ item.quantity }}</td>
                                                             <td>{{ item.unit_price}}</td>
                                                             <td>{{ item.total_price }}</td>
+                                                            {% if not bom.freeze %}
                                                             <td>
                                                                 <input type = 'submit' class="btn btn-danger" value="Del">
                                                             </td>
+                                                            {% endif %}
                                                         </tr>
                                                         </form>
                                                     {% endfor %}
+                                                    {% if not bom.freeze %}
                                                         <form method="POST" action="{% url 'add_nonstandard_item' bom.id %}">{%csrf_token%}
                                                             {{nonstandard_item_form.bom.as_hidden}}
                                                         <tr>
@@ -247,6 +307,7 @@
 
                                                         </tr>
                                                         </form>
+                                                    {% endif %}
                                                     </tbody>
                                                 </table>
                                             </div>

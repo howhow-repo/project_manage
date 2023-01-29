@@ -23,6 +23,15 @@ class BomForm(forms.ModelForm):
         fields = ('project', 'note', 'discount', 'status', 'org_cost', 'final_cost', 'tax', 'creator')
 
 
+class BomSignForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['signature'].widget.attrs.update({'class': 'form-control'})
+    class Meta:
+        model = Bom
+        fields = ('signature',)
+
+
 class BomItemForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -37,6 +46,10 @@ class BomItemForm(forms.ModelForm):
 
 
 class BomItemDelForm(forms.Form):
+    pass
+
+
+class BomFreezeForm(forms.Form):
     pass
 
 

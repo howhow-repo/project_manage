@@ -1,0 +1,92 @@
+{% extends "layouts/new_base.html" %}
+
+{% block title %} Delete User {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <!-- [ breadcrumb ] start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">客戶驗收簽名</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>報價單:NO.<span style="color:red">{{bom.sn}}</span></h5>
+                                        </div>
+                                        <div class="card-block">
+                                            <div class="row">
+                                                <div class="col-sm-2">
+                                                    <label>專案</label>
+                                                    <h5>[{{bom.project.type}}] {{bom.project.title}}</h5>
+                                                </div>
+
+                                                <div class="col-sm-2">
+                                                    <label>客戶</label>
+                                                    <h5>{{ bom.project.customer }}</h5>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <label data-toggle="tooltip" title="(原始金額*折扣) 5%">稅金</label>
+                                                    <h5>{{bom.tax}}</h5>
+                                                    <span class="text-error">{{ form.tax.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-2">
+                                                    <label data-toggle="tooltip" title="小記總和">原始金額</label>
+                                                    <h5>{{bom.org_cost}}</h5>
+                                                    <span class="text-error">{{ form.org_cost.errors }}</span>
+                                                </div>
+
+                                                <div class="col-sm-2">
+                                                    <label data-toggle="tooltip" title="原始金額*折扣 + 稅金">最終金額</label>
+                                                    <h5>{{bom.final_cost}}</h5>
+                                                    <span class="text-error">{{ form.org_cost.errors }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 mb-8">
+                                                <form method="POST" action="{% url 'sign_bom' bom.id %}">{%csrf_token%}
+                                                    {{form.signature}}
+                                                    <hr>
+                                                    <a href="{% url 'list_bom' bom.project.id %}" class="btn btn-light">取消</a>
+                                                    <input type = 'submit' class="btn btn-primary" value="確認">
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+{{ form.media }}
+{% endblock javascripts %}

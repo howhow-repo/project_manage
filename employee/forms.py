@@ -82,7 +82,7 @@ class SignUpForm(UserCreationForm):
         ))
 
     department = forms.ModelChoiceField(
-        required=False,
+        required=True,
         queryset=Department.objects.all(),
         widget=forms.Select(
             attrs={

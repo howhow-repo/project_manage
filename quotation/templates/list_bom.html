@@ -69,6 +69,9 @@
                                                             <td>{{ bom.final_cost }}</td>
                                                             <td>{{ bom.status }}</td>
                                                             <td>{{ bom.update_time|date:'Y-m-d H:i' }}</td>
+                                                            {% if bom.freeze and not bom.signature %}
+                                                                <td><a href="{% url 'sign_bom' bom.id %}" class="rounded label theme-bg2 text-white f-12 ">客戶簽章</a></td>
+                                                            {% endif %}
                                                         </tr>
                                                     {% endfor %}
                                                     </tbody>
