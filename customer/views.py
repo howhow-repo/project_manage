@@ -21,7 +21,7 @@ def list_customers(request):
     query_set_len = len(customers)
     paginator = Paginator(customers, data_num)
     customers = paginator.get_page(page)
-    context = {'customers': customers, 'data_num': data_num, 'query_set_len': query_set_len }
+    context = {'customers': customers, 'data_num': data_num, 'query_set_len': query_set_len, 'segment': 'customer' }
     return render(request, 'list_customers.html', context)
 
 
@@ -69,3 +69,13 @@ def customer_detail(request, cust_name):
         'is_favorite': FavoriteCustomer.objects.filter(user=request.user, customer=customer).exists()
     })
     return render(request, 'customer_detail.html', context)
+
+
+
+@login_required(login_url="/login/")
+def search_customers(request):  # TODO
+    context = {'segment': 'customer'}
+    if request.method == 'GET':
+        pass
+
+
