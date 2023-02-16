@@ -84,7 +84,7 @@
                                                             data-filter-name="{{cos.name}}"
                                                             data-filter-addr="{{cos.address}}"
                                                             data-toggle="tooltip"
-                                                            data-href="{% url 'customer_detail' cos.name %}">
+                                                            data-href="{% url 'customer_detail' cos.id   %}">
 
                                                             <th scope="row">{{ forloop.counter }}</th>
                                                             <td>{{ cos.name }}</td>

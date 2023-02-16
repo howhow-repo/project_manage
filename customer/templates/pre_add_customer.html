@@ -1,0 +1,88 @@
+{% extends "layouts/new_base.html" %}
+
+{% block title %} Customer {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <!-- [ breadcrumb ] start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'list_customers' %}">客戶清單</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'pre_add_customer' %}">新增客戶</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>新增客戶</h5>
+                                            {% if errMsg != None %}
+                                                <small class="form-text text-danger">
+                                                    {{errMsg}}
+                                                </small>
+                                            {% endif %}
+                                            {% if Msg != None %}
+                                                <small class="form-text text-success">
+                                                    {{Msg}}
+                                                </small>
+                                            {% endif %}
+                                        </div>
+                                        <form method="POST" action="{% url 'pre_add_customer' %}">{%csrf_token%}
+                                        <div class="card-block">
+                                            <div class="row">
+
+                                                <div class="col-sm-3 mb-4">
+                                                    <label>手機</label>
+                                                    {{form.cel}}
+                                                    <span class="text-error">{{ form.cel.errors }}</span>
+                                                </div>
+
+
+
+                                                <div class="col-sm-12 mb-2">
+                                                    <input type = 'submit' class="btn btn-primary" value="搜尋新增">
+                                                    <a href="{% url 'list_customers' %}" class="btn btn-light">Cancel</a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

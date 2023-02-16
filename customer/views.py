@@ -9,7 +9,7 @@ from project.models import Project
 from lib import get_model_or_none
 from .lib.customer_lib import get_num_of_page, get_page, send_change_message_to_followers
 from .models import Customer, FavoriteCustomer
-from .forms import CustomerForm
+from .forms import CustomerForm, PreAddCustomerForm
 
 
 @login_required(login_url="/login/")
@@ -44,8 +44,24 @@ def add_customer(request):
 
 
 @login_required(login_url="/login/")
-def customer_detail(request, cust_name):
-    customer = get_model_or_none(Customer, {'name': cust_name})
+def pre_add_customer(request):
+    context = {'segment': 'customer'}
+    if request.method == "POST":
+        form = PreAddCustomerForm(data=request.POST)
+        cel = form.data.get('cel').replace(" ", "")
+        customer = get_model_or_none(Customer, {'cel': cel})
+        if not customer:
+            return HttpResponseRedirect(reverse('add_customer'))
+        elif customer:
+            return HttpResponseRedirect(reverse('customer_detail', kwargs={'cust_id': customer.id}))
+
+    context.update({'form': PreAddCustomerForm()})
+    return render(request, 'pre_add_customer.html', context)
+
+
+@login_required(login_url="/login/")
+def customer_detail(request, cust_id):
+    customer = get_model_or_none(Customer, {'id': cust_id})
     if not customer:
         return HttpResponseNotFound()
 
@@ -69,7 +85,6 @@ def customer_detail(request, cust_name):
         'is_favorite': FavoriteCustomer.objects.filter(user=request.user, customer=customer).exists()
     })
     return render(request, 'customer_detail.html', context)
-
 
 
 @login_required(login_url="/login/")

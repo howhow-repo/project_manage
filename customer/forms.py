@@ -28,6 +28,18 @@ class CustomerForm(forms.ModelForm):
         fields = ('name', 'address', 'email', 'tel', 'cel', 'line', 'type', 'status', 'note', 'creator', )
 
 
+class PreAddCustomerForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for f in self.fields:
+            self.fields[f].widget.attrs.update({'class': 'form-control'})
+
+    class Meta:
+        model = Customer
+        fields = ('cel',)
+
+
+
 class FavoriteCustomerForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):

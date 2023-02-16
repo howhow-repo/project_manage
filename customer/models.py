@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 
 from employee.models import User
@@ -20,12 +22,13 @@ class CustomerStatus(models.Model):
 
 
 class Customer(models.Model):
-    name = models.CharField(max_length=20, unique=True)
-    address = models.CharField(max_length=50)
-    email = models.EmailField()
-    tel = models.CharField(max_length=20)
-    cel = models.CharField(max_length=20)
-    line = models.CharField(max_length=20)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=20)
+    address = models.CharField(max_length=50, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
+    tel = models.CharField(max_length=20, null=True, blank=True)
+    cel = models.CharField(max_length=20, unique=True)
+    line = models.CharField(max_length=20, null=True, blank=True)
     type = models.ForeignKey(CustomerType, on_delete=models.PROTECT, null=True, blank=True)
     status = models.ForeignKey(CustomerStatus, on_delete=models.PROTECT, null=True, blank=True)
     note = models.TextField(max_length=1000, default=None, null=True, blank=True)
