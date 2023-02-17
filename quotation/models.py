@@ -26,7 +26,7 @@ class BomStatus(models.Model):
 class Bom(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     project = models.ForeignKey(Project, on_delete=models.PROTECT)
-    sn = models.CharField(max_length=12, null=True, unique=True)
+    sn = models.CharField(max_length=15, null=True, unique=True)
     status = models.ForeignKey(BomStatus, on_delete=models.PROTECT, default=1)
     note = models.TextField(max_length=500)
     discount = models.FloatField(default=1.0, validators=[MinValueValidator(0.0), MaxValueValidator(1.0)])
@@ -45,17 +45,23 @@ class Bom(models.Model):
     def __str__(self):
         return 'bom' + self.project.__str__()
 
-    def create_sn(self):
-        utc_now = timezone.now()
-        local_now = utc_now.today()
-        today_begin = utc_now - timedelta(
-            hours=local_now.hour,
-            minutes=local_now.minute,
-            seconds=local_now.second,
-            microseconds=local_now.microsecond
-        )
-        data_count = Bom.objects.filter(create_time__range=[today_begin, utc_now]).count()
-        self.sn = f"{dateformat.format(timezone.now(), 'Ymd')}{str(data_count + 1).zfill(2)}"
+    def create_sn_version(self):
+        project_bom_count = Bom.objects.filter(project=self.project).count()
+        if project_bom_count != 0:
+            sn = Bom.objects.filter(project=self.project)[0].sn
+            sn = sn.split("-")[0]
+            self.sn = f"{sn}-{project_bom_count + 1}"
+        else:
+            utc_now = timezone.now()
+            local_now = utc_now.today()
+            today_begin = utc_now - timedelta(
+                hours=local_now.hour,
+                minutes=local_now.minute,
+                seconds=local_now.second,
+                microseconds=local_now.microsecond
+            )
+            data_count = Bom.objects.filter(create_time__range=[today_begin, utc_now]).count()
+            self.sn = f"{dateformat.format(timezone.now(), 'Ymd')}{str(data_count + 1).zfill(2)}-1"
 
     def calculate_bom(self):
         standard_cost = (BomItem.objects.filter(bom=self).aggregate(Sum('total_price')))['total_price__sum'] or 0

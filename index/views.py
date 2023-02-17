@@ -115,9 +115,9 @@ def rm_favorite_project(request, project_id):
 
 @login_required(login_url="/login/")
 @require_http_methods(["POST"])
-def add_favorite_customer(request, customer_name):
+def add_favorite_customer(request, customer_id):
     try:
-        customer = Customer.objects.get(name=customer_name)
+        customer = Customer.objects.get(id=customer_id)
     except Exception:
         return HttpResponseNotFound()
     #
@@ -130,14 +130,14 @@ def add_favorite_customer(request, customer_name):
             favorite_customer.save()
         else:
             return HttpResponse("You've added already.")
-    return HttpResponseRedirect(reverse('customer_detail', kwargs={'cust_name': customer.name}))
+    return HttpResponseRedirect(reverse('customer_detail', kwargs={'cust_id': customer.id}))
 
 
 @login_required(login_url="/login/")
 @require_http_methods(["POST"])
-def rm_favorite_customer(request, customer_name):
+def rm_favorite_customer(request, customer_id):
     try:
-        customer = Customer.objects.get(name=customer_name)
+        customer = Customer.objects.get(id=customer_id)
     except Exception:
         return HttpResponseNotFound()
 
@@ -149,4 +149,4 @@ def rm_favorite_customer(request, customer_name):
             f_customer.delete()
         else:
             return HttpResponse("it is not in you 關注．")
-    return HttpResponseRedirect(reverse('customer_detail', kwargs={'cust_name': customer.name}))
+    return HttpResponseRedirect(reverse('customer_detail', kwargs={'cust_id': customer.id}))

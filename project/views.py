@@ -33,8 +33,8 @@ def list_projects(request):
 
 
 @login_required(login_url="/login/")
-def add_project(request, customer_name):
-    customer = get_model_or_none(Customer, {'name': customer_name})
+def add_project(request, customer_id):
+    customer = get_model_or_none(Customer, {'id': customer_id})
     if not customer:
         return HttpResponseNotFound()
 
@@ -49,7 +49,7 @@ def add_project(request, customer_name):
             if new_project.owner:
                 Thread(target=send_owner_notify, args=(request, new_project)).start()
             # everything ok
-            return HttpResponseRedirect(reverse('customer_detail', kwargs={'cust_name': customer_name}))
+            return HttpResponseRedirect(reverse('customer_detail', kwargs={'cust_id': customer_id}))
         else:
             context['errMsg'] = 'Form is not valid'
 

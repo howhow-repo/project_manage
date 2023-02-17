@@ -9,7 +9,7 @@ urlpatterns = [
     path("change_password", change_password, name='change_password'),
     path("add_favorite_project/<str:project_id>", add_favorite_project, name="add_favorite_project"),
     path("rm_favorite_project/<str:project_id>", rm_favorite_project, name="rm_favorite_project"),
-    path("add_favorite_customer/<str:customer_name>", add_favorite_customer, name="add_favorite_customer"),
-    path("rm_favorite_customer/<str:customer_name>", rm_favorite_customer, name="rm_favorite_customer")
+    path("add_favorite_customer/<str:customer_id>", add_favorite_customer, name="add_favorite_customer"),
+    path("rm_favorite_customer/<str:customer_id>", rm_favorite_customer, name="rm_favorite_customer")
 
 ]

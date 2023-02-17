@@ -27,7 +27,7 @@ class Customer(models.Model):
     address = models.CharField(max_length=50, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
     tel = models.CharField(max_length=20, null=True, blank=True)
-    cel = models.CharField(max_length=20, unique=True)
+    cel = models.CharField(max_length=20)
     line = models.CharField(max_length=20, null=True, blank=True)
     type = models.ForeignKey(CustomerType, on_delete=models.PROTECT, null=True, blank=True)
     status = models.ForeignKey(CustomerStatus, on_delete=models.PROTECT, null=True, blank=True)

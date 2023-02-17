@@ -23,7 +23,7 @@
                                     <ul class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
                                         <li class="breadcrumb-item"><a href="{% url 'list_customers' %}">客戶清單</a></li>
-                                        <li class="breadcrumb-item"><a href="{% url 'customer_detail' project.customer.name %}">{{project.customer.name}}</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'customer_detail' project.customer.id %}">{{project.customer.name}}</a></li>
                                         <li class="breadcrumb-item"><a href="{% url 'project_detail' project.id %}">[專案]{{project.title}}</a></li>
                                         <li class="breadcrumb-item"><a href="{% url 'add_daily_report' project.id %}">新增紀錄</a></li>
                                     </ul>

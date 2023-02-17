@@ -182,7 +182,7 @@ LOGGING = {
             'level': config('DJANGO_LOG_LEVEL', default='INFO'),
             'propagate': False,
         },
-        '': {
+        'apps': {
             'handlers': ['console', 'file'],
             'level': config('DJANGO_LOG_LEVEL', default='INFO'),
             'propagate': False,
@@ -195,9 +195,17 @@ LOGGING = {
     },
     'handlers': {
         'file': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': './log.log',
+            'filename': './logs/log.log',
+            'formatter': 'simple',
+            'backupCount': 1,  # keep at most 10 log files
+            'maxBytes': 5242880,  # 5*1024*1024 bytes (5MB)
+        },
+        'user_action': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': './logs/user_action.log',
             'formatter': 'simple',
             'backupCount': 1,  # keep at most 10 log files
             'maxBytes': 5242880,  # 5*1024*1024 bytes (5MB)

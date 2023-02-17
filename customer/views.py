@@ -18,6 +18,7 @@ def list_customers(request):
     page = get_page(request)
 
     customers = Customer.objects.all().order_by('-update_time')
+
     query_set_len = len(customers)
     paginator = Paginator(customers, data_num)
     customers = paginator.get_page(page)
@@ -48,12 +49,13 @@ def pre_add_customer(request):
     context = {'segment': 'customer'}
     if request.method == "POST":
         form = PreAddCustomerForm(data=request.POST)
-        cel = form.data.get('cel').replace(" ", "")
-        customer = get_model_or_none(Customer, {'cel': cel})
-        if not customer:
-            return HttpResponseRedirect(reverse('add_customer'))
-        elif customer:
-            return HttpResponseRedirect(reverse('customer_detail', kwargs={'cust_id': customer.id}))
+        if form.is_valid():
+            cel = form.data.get('cel').replace(" ", "")
+            customer = get_model_or_none(Customer, {'cel': cel})
+            if not customer:
+                return HttpResponseRedirect(reverse('add_customer'))
+            elif customer:
+                return HttpResponseRedirect(reverse('customer_detail', kwargs={'cust_id': customer.id}))
 
     context.update({'form': PreAddCustomerForm()})
     return render(request, 'pre_add_customer.html', context)

@@ -23,7 +23,7 @@
                                     <ul class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
                                         <li class="breadcrumb-item"><a href="{% url 'list_customers' %}">客戶清單</a></li>
-                                        <li class="breadcrumb-item"><a href="{% url 'customer_detail' customer.name %}">[客戶]{{customer.name}}</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'customer_detail' customer.id %}">[客戶]{{customer.name}}</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -57,11 +57,11 @@
 
                                                 <div class="row col-sm-2 mb-1 text-right">
                                                     {% if not is_favorite %}
-                                                    <form method="POST" action="{% url 'add_favorite_customer' customer.name%}">{%csrf_token%}
+                                                    <form method="POST" action="{% url 'add_favorite_customer' customer.id%}">{%csrf_token%}
                                                         <input type = 'submit' class="btn btn-warning" value="加入追蹤">
                                                     </form>
                                                     {% elif is_favorite %}
-                                                    <form method="POST" action="{% url 'rm_favorite_customer' customer.name%}">{%csrf_token%}
+                                                    <form method="POST" action="{% url 'rm_favorite_customer' customer.id%}">{%csrf_token%}
                                                         <input type = 'submit' class="btn btn-light" value="取消追蹤">
                                                     </form>
                                                     {% endif %}
@@ -72,7 +72,7 @@
 
                                         </div>
 
-                                        <form method="POST" action="{% url 'customer_detail' customer.name %}">{%csrf_token%}
+                                        <form method="POST" action="{% url 'customer_detail' customer.id %}">{%csrf_token%}
                                         <div class="card-block">
                                             <div class="row">
                                                 <div class="col-sm-6 mb-4">
@@ -207,7 +207,7 @@
                                                     {% endfor %}
                                                     </tbody>
                                                 </table>
-                                                <a href="{% url 'add_project' customer.name %}" class="btn btn-primary">+</a>
+                                                <a href="{% url 'add_project' customer.id %}" class="btn btn-primary">+</a>
                                             </div>
                                         </div>
                                     </div>

@@ -23,8 +23,8 @@
                                     <ul class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
                                         <li class="breadcrumb-item"><a href="{% url 'list_customers' %}">客戶清單</a></li>
-                                        <li class="breadcrumb-item"><a href="{% url 'customer_detail' customer.name %}">{{customer.name}}</a></li>
-                                        <li class="breadcrumb-item"><a href="{% url 'add_project' customer.name %}">新增專案</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'customer_detail' customer.id %}">{{customer.name}}</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'add_project' customer.id %}">新增專案</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -50,7 +50,7 @@
                                                 </small>
                                             {% endif %}
                                         </div>
-                                        <form method="POST" action="{% url 'add_project' customer.name %}">{%csrf_token%}
+                                        <form method="POST" action="{% url 'add_project' customer.id %}">{%csrf_token%}
                                         <div class="card-block">
                                             <div class="row">
                                                 <div class="col-sm-3 mb-4">
@@ -106,7 +106,7 @@
 
                                                 <div class="col-sm-12 mb-2">
                                                     <input type = 'submit' class="btn btn-primary" value="Save">
-                                                    <a href="{% url 'customer_detail'  customer.name %}" class="btn btn-light">Cancel</a>
+                                                    <a href="{% url 'customer_detail'  customer.id %}" class="btn btn-light">Cancel</a>
                                                 </div>
 
                                             </div>

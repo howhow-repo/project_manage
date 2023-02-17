@@ -15,7 +15,7 @@ def save_new_bom_or_none(request, project):
     if form.is_valid():
         new_bom = form.save(commit=False)
         new_bom.project, new_bom.creator, new_bom.editor = project, request.user, request.user
-        new_bom.create_sn()
+        new_bom.create_sn_version()
         new_bom.save()
         return new_bom
     else:
