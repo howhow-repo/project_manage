@@ -7,7 +7,7 @@ from threading import Thread
 
 from project.models import Project
 from lib import get_model_or_none
-from .lib.customer_lib import get_num_of_page, get_page, send_change_message_to_followers
+from .lib.customer_lib import get_num_of_page, get_page, send_change_message_to_followers, get_cel
 from .models import Customer, FavoriteCustomer
 from .forms import CustomerForm, PreAddCustomerForm
 
@@ -40,7 +40,9 @@ def add_customer(request):
             return HttpResponseRedirect(reverse('list_customers'))
         else:
             context['errMsg'] = 'Form is not valid'
-    context.update({'form': CustomerForm()})
+    cel = get_cel(request)
+    form = CustomerForm(initial={'cel': cel})
+    context.update({'form': form})
     return render(request, 'add_customer.html', context)
 
 
@@ -53,7 +55,7 @@ def pre_add_customer(request):
             cel = form.data.get('cel').replace(" ", "")
             customer = get_model_or_none(Customer, {'cel': cel})
             if not customer:
-                return HttpResponseRedirect(reverse('add_customer'))
+                return HttpResponseRedirect(reverse('add_customer')+f'?cel={cel}')
             elif customer:
                 return HttpResponseRedirect(reverse('customer_detail', kwargs={'cust_id': customer.id}))
 

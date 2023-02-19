@@ -28,3 +28,10 @@ def get_num_of_page(request):
     except Exception:
         return 50
 
+
+def get_cel(request):
+    try:
+        return request.GET['cel']
+    except Exception:
+        return None
+
