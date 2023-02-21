@@ -59,6 +59,21 @@ class Project(models.Model):
     def __str__(self):
         return self.title
 
+    def get_calendar_day_range(self):
+        start_date = self.dispatch_date
+        if not start_date:
+            start_date = self.start_date
+
+        if self.due_date and self.due_date > start_date:
+            due_date = self.due_date
+        else:
+            due_date = start_date + timedelta(hours=1)
+
+        start_date_str = datetime.strftime(start_date, '%Y%m%dT%H%M00')
+        due_date_str = datetime.strftime(due_date, '%Y%m%dT%H%M00')
+
+        return start_date_str, due_date_str
+
     def google_calendar_event(self, request):
         """
         http://www.google.com/calendar/event?
@@ -74,12 +89,8 @@ class Project(models.Model):
         link = 'http://www.google.com/calendar/event?action=TEMPLATE'
         link += f"&text=[{self.customer.name}]{self.title}-{self.type}"
 
-        start_date_str = datetime.strftime(self.start_date, '%Y%m%dT%H%M00')
-        if self.due_date and self.due_date > self.start_date:
-            due_date_str = datetime.strftime(self.due_date, '%Y%m%dT%H%M00')
-        else:
-            due_date_str = datetime.strftime(self.start_date + timedelta(hours=1), '%Y%m%dT%H%M00')
-        link += f"&start_date={start_date_str}/{due_date_str}"
+        start_date_str, due_date_str = self.get_calendar_day_range()
+        link += f"&dates={start_date_str}/{due_date_str}"
 
         add_daily_report_link = self.create_add_report_link(request)
         note_str = f"[{self.customer.name}]\n" \
