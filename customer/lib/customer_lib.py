@@ -22,6 +22,25 @@ def get_page(request):
         return 1
 
 
+def get_keyword(request):
+    try:
+        return request.GET['keyword']
+    except Exception:
+        return None
+
+
+def get_filter(request):
+    filter_types = ['name', 'cel', 'tel', 'address', 'type', 'status']
+    try:
+        f = request.GET['filter']
+        if f in filter_types:
+            return f
+        else:
+            return None
+    except Exception:
+        return None
+
+
 def get_num_of_page(request):
     try:
         return int(request.GET['data_num'])

@@ -7,7 +7,8 @@ from threading import Thread
 
 from project.models import Project
 from lib import get_model_or_none
-from .lib.customer_lib import get_num_of_page, get_page, send_change_message_to_followers, get_cel
+from .lib.customer_lib import get_num_of_page, get_page, send_change_message_to_followers, get_cel, get_filter, \
+    get_keyword
 from .models import Customer, FavoriteCustomer
 from .forms import CustomerForm, PreAddCustomerForm
 
@@ -16,9 +17,12 @@ from .forms import CustomerForm, PreAddCustomerForm
 def list_customers(request):
     data_num = get_num_of_page(request)
     page = get_page(request)
-
-    customers = Customer.objects.all().order_by('-update_time')
-
+    cus_filter = get_filter(request)
+    keyword = get_keyword(request)
+    if cus_filter and keyword:
+        customers = Customer.objects.filter(**{f'{cus_filter}__icontains': keyword}).order_by('-update_time')
+    else:
+        customers = Customer.objects.all().order_by('-update_time')
     query_set_len = len(customers)
     paginator = Paginator(customers, data_num)
     customers = paginator.get_page(page)
