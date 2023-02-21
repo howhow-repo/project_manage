@@ -10,14 +10,14 @@ from lib import get_model_or_none
 from .lib.customer_lib import get_num_of_page, get_page, send_change_message_to_followers, get_cel, get_filter, \
     get_keyword
 from .models import Customer, FavoriteCustomer
-from .forms import CustomerForm, PreAddCustomerForm
+from .forms import CustomerForm, PreAddCustomerForm, SearchCustomerForm
 
 
 @login_required(login_url="/login/")
 def list_customers(request):
     data_num = get_num_of_page(request)
     page = get_page(request)
-    cus_filter = get_filter(request)
+    cus_filter = get_filter(request)  # ['name', 'cel', 'tel', 'address', 'type', 'status']
     keyword = get_keyword(request)
     if cus_filter and keyword:
         customers = Customer.objects.filter(**{f'{cus_filter}__icontains': keyword}).order_by('-update_time')
@@ -26,7 +26,9 @@ def list_customers(request):
     query_set_len = len(customers)
     paginator = Paginator(customers, data_num)
     customers = paginator.get_page(page)
-    context = {'customers': customers, 'data_num': data_num, 'query_set_len': query_set_len, 'segment': 'customer' }
+    context = {'customers': customers, 'data_num': data_num, 'query_set_len': query_set_len, 'segment': 'customer'}
+    if cus_filter and keyword:
+        context.update({'filter': cus_filter, 'keyword': keyword})
     return render(request, 'list_customers.html', context)
 
 
@@ -99,6 +101,11 @@ def customer_detail(request, cust_id):
 def search_customers(request):  # TODO
     context = {'segment': 'customer'}
     if request.method == 'GET':
-        pass
-
-
+        context.update({'form': SearchCustomerForm()})
+        return render(request, 'search_customers.html', context)
+    else:
+        form = SearchCustomerForm(data=request.POST)
+        if form.is_valid():
+            f = form.data['filter']
+            k = form.data['keyword']
+            return HttpResponseRedirect(reverse('list_customers') + f'?filter={f}&keyword={k}')
