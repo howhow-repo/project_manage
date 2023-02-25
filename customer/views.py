@@ -102,12 +102,13 @@ def customer_detail(request, cust_id):
 @login_required(login_url="/login/")
 def search_customers(request):
     context = {'segment': 'customer'}
-    if request.method == 'GET':
-        context.update({'form': SearchCustomerForm()})
-        return render(request, 'search_customers.html', context)
-    else:
+    if request.method == 'POST':
         form = SearchCustomerForm(data=request.POST)
         if form.is_valid():
             f = form.data['filter']
             k = form.data['keyword']
             return HttpResponseRedirect(reverse('list_customers') + f'?filter={f}&keyword={k}')
+
+    context.update({'form': SearchCustomerForm()})
+    return render(request, 'search_customers.html', context)
+    
