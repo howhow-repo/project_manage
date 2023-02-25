@@ -38,10 +38,11 @@ def add_customer(request):
     if request.method == "POST":
         form = CustomerForm(data=request.POST)
         if form.is_valid():
-            obj = form.save(commit=False)
-            obj.creator = request.user
-            obj.editor = request.user
-            obj.save()
+            customer = form.save(commit=False)
+            customer.cel = customer.cel.replace(" ", "")
+            customer.creator = request.user
+            customer.editor = request.user
+            customer.save()
             context['Msg'] = 'Success'
             return HttpResponseRedirect(reverse('list_customers'))
         else:
@@ -80,6 +81,7 @@ def customer_detail(request, cust_id):
         form = CustomerForm(data=request.POST, instance=customer)
         if form.is_valid():
             customer = form.save(commit=False)
+            customer.cel = customer.cel.replace(" ", "")
             customer.editor = request.user
             customer.save()
             Thread(target=send_change_message_to_followers, args=(request, form)).start()
@@ -98,7 +100,7 @@ def customer_detail(request, cust_id):
 
 
 @login_required(login_url="/login/")
-def search_customers(request):  # TODO
+def search_customers(request):
     context = {'segment': 'customer'}
     if request.method == 'GET':
         context.update({'form': SearchCustomerForm()})

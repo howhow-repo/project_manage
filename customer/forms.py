@@ -2,9 +2,6 @@ from django import forms
 from .models import CustomerType, Customer, FavoriteCustomer
 
 
-# from .models import Project, CaseStatus, Bom, BomItem
-
-
 class CustomerTypeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
