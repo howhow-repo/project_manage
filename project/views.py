@@ -48,8 +48,8 @@ def add_project(request, customer_id):
             Thread(target=send_add_project_msg_to_followers, args=(request, new_project)).start()
             if new_project.owner:
                 Thread(target=send_owner_notify, args=(request, new_project)).start()
-            # everything ok
-            return HttpResponseRedirect(reverse('customer_detail', kwargs={'cust_id': customer_id}))
+
+            return HttpResponseRedirect(reverse('project_detail', kwargs={'project_id': new_project.id}))
         else:
             context['errMsg'] = 'Form is not valid'
 
@@ -59,6 +59,7 @@ def add_project(request, customer_id):
 
     form.fields['customer'].initial = customer
     form.fields['address'].initial = customer.address
+    form.fields['start_date'].initial = timezone.now()
     form.fields['dispatch_date'].initial = timezone.now()
     context.update({'form': form, 'customer': customer})
     return render(request, 'add_project.html', context)

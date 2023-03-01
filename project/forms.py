@@ -2,6 +2,10 @@ from django import forms
 from .models import DailyReport, DailyReportPhoto, ProjectStatus, Project, FavoriteProject
 
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+
 class ProjectStatusForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -26,6 +30,11 @@ class ProjectForm(forms.ModelForm):
         model = Project
         fields = (
             'title', 'type', 'customer', 'address', 'status', 'note', 'owner', 'creator', 'due_date', 'start_date', 'dispatch_date')
+        widgets = {
+            'dispatch_date': DateInput(),
+            'start_date': DateInput(),
+            'due_date': DateInput(),
+        }
 
 
 class DailyReportForm(forms.ModelForm):

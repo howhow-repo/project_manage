@@ -50,9 +50,9 @@ class Project(models.Model):
     owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name='project_owner',
                               default=None, null=True, blank=True)
     editor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='project_editor')
-    start_date = models.DateTimeField(default=timezone.now)
-    due_date = models.DateTimeField(default=None, null=True, blank=True)
-    dispatch_date = models.DateTimeField(default=None, null=True, blank=True)
+    start_date = models.DateField(default=timezone.now)
+    due_date = models.DateField(default=None, null=True, blank=True)
+    dispatch_date = models.DateField(default=None, null=True, blank=True)
     create_time = models.DateTimeField(auto_now_add=True)
     update_time = models.DateTimeField(auto_now=True)
 
