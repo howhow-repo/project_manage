@@ -11,6 +11,8 @@ def save_new_project_or_none(request, customer):
     if form.is_valid():
         new_project = form.save(commit=False)
         new_project.customer, new_project.creator, new_project.editor = customer, request.user, request.user
+        if not new_project.start_date:
+            new_project.start_date = timezone.now()
         new_project.save()
 
         customer.editor, customer.update_time = request.user, timezone.now()
