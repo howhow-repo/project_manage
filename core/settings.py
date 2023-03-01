@@ -63,7 +63,7 @@ INSTALLED_APPS = [
     'project',
     'notify',
     'quotation',
-
+    'option_settings',
     'sslserver',
     'drf_yasg',
 ]
