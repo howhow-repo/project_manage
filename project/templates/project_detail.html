@@ -42,15 +42,16 @@
                                                 <div class="col-sm-6 mb-1">
                                                     <h5 >專案細項</h5>
                                                     <a href="{{calendar_template_link}}" target="_blank">
-                                                        <img class="rounded" style="width:30px;"
+                                                        <img class="rounded" style="width:25px;"
                                                                     src="{{ ASSETS_ROOT }}/images/widget/g_calendar.png"> 加入日曆
                                                     </a>
                                                 </div>
 
-                                                <div class="col-sm-4 mb-1">
+                                                <div class="col-sm-3 mb-1">
                                                 </div>
 
-                                                <div class="row col-sm-2 mb-1 text-right">
+                                                <div class="row col-sm-3 mb-1 text-right">
+                                                    <button id="copy-btn" class='btn' onclick="CopyInfo()"><i class="feather icon-clipboard"></i>複製資訊</button>
                                                     {% if not is_favorite %}
                                                     <form method="POST" action="{% url 'add_favorite_project' project.id%}">{%csrf_token%}
                                                         <input type = 'submit' class="btn btn-warning" value="加入追蹤">
@@ -218,4 +219,29 @@
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+    <script type="text/javascript">
+        var customer_info_text = "[{{project.customer.name}}]{{project.title}}-{{project.type}} \n \
+手機: {{project.customer.cel}} \n \
+電話: {{project.customer.tel}} \n \{% if project.address %}
+地址: {{project.address}}"; {% else %}
+地址: {{project.customer.address}}";
+        {% endif %}
+
+        var copyBtn = document.getElementById('copy-btn');
+        function CopyInfo() {
+            var textarea = document.createElement('textarea');
+            textarea.value = customer_info_text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            temp = copyBtn.innerHTML
+            copyBtn.innerHTML = '已複製';
+            setTimeout(function() {
+                copyBtn.innerHTML = temp;
+            }, 3000);
+        }
+
+    </script>
+{% endblock javascripts %}

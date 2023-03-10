@@ -39,7 +39,7 @@
                                         <div class="card-header">
                                             <div class="row">
                                                 <div class="col-sm-6 mb-1">
-                                                    <h5>客戶資訊</h5>
+                                                    <h3>客戶資訊</h3>
                                                         {% if errMsg != None %}
                                                             <small class="form-text text-danger">
                                                                 {{errMsg}}
@@ -52,10 +52,11 @@
                                                         {% endif %}
                                                 </div>
 
-                                                <div class="col-sm-4 mb-1">
+                                                <div class="col-sm-3 mb-1">
                                                 </div>
 
-                                                <div class="row col-sm-2 mb-1 text-right">
+                                                <div class="row col-sm-3 mb-1 text-right">
+                                                    <button id="copy-btn" class='btn' onclick="CopyInfo()"><i class="feather icon-clipboard"> 複製資訊</i></button>
                                                     {% if not is_favorite %}
                                                     <form method="POST" action="{% url 'add_favorite_customer' customer.id%}">{%csrf_token%}
                                                         <input type = 'submit' class="btn btn-warning" value="加入追蹤">
@@ -65,6 +66,7 @@
                                                         <input type = 'submit' class="btn btn-light" value="取消追蹤">
                                                     </form>
                                                     {% endif %}
+
 
                                                 </div>
 
@@ -234,5 +236,20 @@
                 window.location = $(this).data("href");
             });
         });
+        var customer_info_text = "{{customer.name}} \n 手機: {{customer.cel}} \n 電話: {{customer.tel}} \n 地址: {{customer.address}}"
+        var copyBtn = document.getElementById('copy-btn');
+        function CopyInfo() {
+            var textarea = document.createElement('textarea');
+            textarea.value = customer_info_text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            temp = copyBtn.innerHTML
+            copyBtn.innerHTML = '已複製';
+            setTimeout(function() {
+                copyBtn.innerHTML = temp;
+            }, 3000);
+        }
     </script>
 {% endblock javascripts %}
