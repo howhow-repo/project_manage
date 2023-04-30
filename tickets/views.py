@@ -1,6 +1,5 @@
 # -*- encoding: utf-8 -*-
-from django.middleware.csrf import get_token
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponseForbidden
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone

@@ -22,7 +22,7 @@
         </ul>
         <ul class="navbar-nav ml-auto">
             <li>
-                <a href="#" id="nav-add-ticket-btn" class="nav-item"><i class="feather icon-plus"></i>新增便簽</a>
+                <h6 id="nav-add-ticket-btn" class="nav-item" onclick="add_ticket()"><i class="feather icon-plus"></i>新增便簽</h6>
             </li>
             <li>
                 <a href="{% url 'pre_add_customer' %}" class="nav-item"><i class="feather icon-plus"></i>電話新增</a>
@@ -63,26 +63,32 @@
 </header>
 <!-- [ Header ] end -->
 <script>
-    document.getElementById('nav-add-ticket-btn').addEventListener('click', function() {
+    const nav_currentHost = window.location.origin;
+
+    function copyToClipboard(content) {
+        var copyArea = document.createElement('textarea');
+        copyArea.value = content;
+        document.body.appendChild(copyArea);
+        copyArea.select();
+        copyArea.setSelectionRange(0, 99999); /* For mobile devices */
+        document.execCommand('copy');
+        document.body.removeChild(copyArea);
+    }
+
+    function add_ticket() {
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '{% url "tickets-new_ticket" %}');
-        xhr.setRequestHeader("Content-type", "application/json")
+        xhr.setRequestHeader("Content-type", "application/json");
         xhr.setRequestHeader("Accept", "*/*");
         xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
         xhr.onreadystatechange = function() {
             if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                 var response = JSON.parse(this.responseText);
-                var textArea = document.createElement('textarea');
-                textArea.value = currentHost + ' <> ' + response.id;
-                textArea.value = currentHost + '/tickets/' + response.id+ '/customer_update/';
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                alert(currentHost + '/tickets/' + response.id+ '/customer_update/');
-                location=location
+                var link = nav_currentHost + '/tickets/' + response.id + '/customer_update/';
+                copyToClipboard(link);
+                alert(link);
             }
         };
         xhr.send();
-    });
+    }
 </script>
