@@ -1,0 +1,197 @@
+{% extends "layouts/new_base.html" %}
+
+{% block title %} Tickets {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <!-- [ breadcrumb ] start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'tickets-list' %}">便簽清單</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'tickets-employee_update' ticket.id %}">{{ticket.customer_name}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <div class="row">
+                                                <div class="col-sm-6 mb-1">
+                                                    <h3>便簽資訊</h3>
+                                                        <a href="{% url 'tickets-customer_update' ticket.id %}" class="btn btn-light">客戶頁面</a>
+                                                        {% if errMsg != None %}
+                                                            <small class="form-text text-danger">
+                                                                {{errMsg}}
+                                                            </small>
+                                                        {% endif %}
+                                                        {% if Msg != None %}
+                                                            <small class="form-text text-success">
+                                                                {{Msg}}
+                                                            </small>
+                                                        {% endif %}
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <form method="POST" action="{% url 'tickets-employee_update' ticket.id %}">{%csrf_token%}
+                                        <div class="card-block">
+                                            <div class="row">
+                                                <div class="col-sm-4 mb-4">
+                                                    <label>名稱</label>
+                                                    <h1>{{ ticket.customer_name }}</h1>
+                                                </div>
+
+                                                <div class="col-sm-8 mb-4">
+                                                    <div class="row col-sm-12">
+                                                        <div class="col-sm-4 mb-4">
+                                                            <label>建立者</label>
+                                                            <h6>{{ ticket.create_user }}</h6>
+                                                        </div>
+                                                        <div class="col-sm-4 mb-4">
+                                                            <label>最後更新時間</label>
+                                                            <h6>{{ ticket.modify_datetime|date:'Y-m-d H:i' }}</h6>
+                                                        </div>
+                                                        <div class="col-sm-4 mb-4">
+                                                            <label>狀態</label>
+                                                            <h4>{{ form.status }}</h4>
+                                                            <span class="text-error">{{ form.status.errors }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-3 mb-4">
+                                                    <label>手機</label>
+                                                    <h4>{{ticket.customer_cel}}</h4>
+                                                </div>
+
+                                                <div class="col-sm-6 mb-4">
+                                                    <label>地址</label>
+                                                    {{ticket.customer_address}}
+                                                </div>
+
+                                                <div class="col-sm-12 mb-2 row">
+                                                    {% for n in photo_paths %}
+                                                    <div class="col-sm-2 mb-4">
+                                                        <div class="col-right">
+                                                            <a href="{% url 'get_ticket_photo' ticket.id n %}">
+                                                                <img style="width:180px; height:120px"
+                                                                    src="{% url 'get_ticket_photo' ticket.id n %}"
+                                                                >
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    {% endfor %}
+
+                                                </div>
+
+                                                <div class="col-sm-12 mb-2">
+                                                    <label>客戶留言</label>
+                                                        <textarea readonly
+                                                          cols="40" rows="5"
+                                                          class="form-control"
+                                                          name="customer_text"
+                                                        >{{ticket.customer_text}}</textarea>
+                                                </div>
+
+                                                <div class="col-sm-12 mb-2 row">
+                                                {% if 1 in photos %}
+                                                <div class="col-sm-3 mb-4">
+
+                                                    <a href="{% url 'get_ticket_photo' ticket.id 1 %}">
+                                                        <img style="width:180px; height:120px"
+                                                            src="{% url 'get_ticket_photo' ticket.id 1 %}"
+                                                        >
+                                                    </a>
+                                                </div>
+                                                {% endif %}
+
+                                                {% if 2 in photos %}
+                                                <div class="col-sm-3 mb-4">
+                                                    <a href="{% url 'get_ticket_photo' ticket.id 2 %}">
+                                                        <img style="width:180px; height:120px"
+                                                            src="{% url 'get_ticket_photo' ticket.id 2 %}"
+                                                        >
+                                                    </a>
+                                                </div>
+                                                {% endif %}
+                                                {% if 3 in photos %}
+                                                <div class="col-sm-3 mb-4">
+                                                    <a href="{% url 'get_ticket_photo' ticket.id 3 %}">
+                                                        <img style="width:180px; height:120px"
+                                                            src="{% url 'get_ticket_photo' ticket.id 3 %}"
+                                                        >
+                                                    </a>
+                                                </div>
+                                                {% endif %}
+                                                {% if 4 in photos %}
+                                                <div class="col-sm-3 mb-4">
+                                                    <a href="{% url 'get_ticket_photo' ticket.id 4 %}">
+                                                        <img style="width:180px; height:120px"
+                                                            src="{% url 'get_ticket_photo' ticket.id 4 %}"
+                                                        >
+                                                    </a>
+                                                </div>
+                                                {% endif %}
+                                            </div>
+
+                                                <div class="col-sm-12 mb-2"><br></div>
+
+                                                <div class="col-sm-12 mb-2">
+                                                    <label>筆記</label>
+                                                    {{form.comment}}
+                                                    <span class="text-error">{{ form.comment.errors }}</span>
+                                                </div>
+
+                                                <hr>
+
+                                                <div class="col-sm-12 mb-2">
+                                                    <input type = 'submit' class="btn btn-primary" value="Save">
+                                                    <a href="{% url 'tickets-list' %}" class="btn btn-light">Cancel</a>
+                                                    <a href="{% url 'tickets-confirm_delete' ticket.id %}" class="btn btn-danger">Delete</a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+{% endblock javascripts %}

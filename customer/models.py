@@ -1,6 +1,11 @@
+import os
 import uuid
+from datetime import timedelta
 
+from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import timezone
 
 from employee.models import User
 
@@ -39,6 +44,14 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(
+            self, force_insert=False, force_update=False, using=None, update_fields=None, editor: User = None
+    ):
+        self.editor = editor
+        self.tel = self.tel.replace(" ", "")
+        self.cel = self.cel.replace(" ", "")
+        super(Customer, self).save()
 
 
 class FavoriteCustomer(models.Model):

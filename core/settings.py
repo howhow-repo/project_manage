@@ -61,11 +61,13 @@ INSTALLED_APPS = [
     'material',
     'customer',
     'project',
+    'tickets',
     'notify',
     'quotation',
     'option_settings',
     'sslserver',
     'drf_yasg',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -77,6 +79,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.middleware.RequestMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -189,6 +192,11 @@ LOGGING = {
         },
         'api': {
             'handlers': ['console', 'file'],
+            'level': config('DJANGO_LOG_LEVEL', default='INFO'),
+            'propagate': False,
+        },
+        'action': {
+            'handlers': ['console', 'user_action'],
             'level': config('DJANGO_LOG_LEVEL', default='INFO'),
             'propagate': False,
         },

@@ -1,0 +1,164 @@
+{% extends "layouts/clean_base.html" %}
+
+{% block title %} Tickets {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <!-- [ breadcrumb ] start -->
+                <div class="page-header">
+                    <div class="page-block">
+                        <div class="row align-items-center">
+                            <div class="col-md-12">
+                                <div class="page-header-title">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- [ breadcrumb ] end -->
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-sm-6 mb-1">
+                                                <h3>留言資訊</h3>
+                                                    <small class="form-text">
+                                                        請於 {{ticket.page_expired_datetime|date:'Y-m-d H:i'}} 前填寫完畢
+                                                    </small>
+                                                    {% if errMsg != None %}
+                                                        <small class="form-text text-danger">
+                                                            {{errMsg}}
+                                                        </small>
+                                                    {% endif %}
+                                                    {% if Msg != None %}
+                                                        <small class="form-text text-success">
+                                                            {{Msg}}
+                                                        </small>
+                                                    {% endif %}
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <form method="POST" action="{% url 'tickets-customer_update' ticket.id %}" enctype="multipart/form-data">{%csrf_token%}
+                                    <div class="card-block">
+                                        <div class="row">
+                                            <div class="col-sm-3 mb-4">
+                                                <label>名稱</label>
+                                                <h1>{{ form.customer_name }}</h1>
+                                            </div>
+
+                                            <div class="col-sm-3 mb-4">
+                                                <label>手機</label>
+                                                <h4>{{form.customer_cel}}</h4>
+                                                <span class="text-error">{{ form.cel.errors }}</span>
+                                            </div>
+
+                                            <div class="col-sm-6 mb-4">
+                                                <label>地址</label>
+                                                {{form.customer_address}}
+                                                <span class="text-error">{{ form.customer_address.errors }}</span>
+                                            </div>
+
+                                            <div class="col-sm-12 mb-2"><br></div>
+
+                                            <div class="col-sm-12 mb-2">
+                                                <label>客戶留言</label>
+                                                    {{form.customer_text}}
+                                                <span class="text-error">{{ form.customer_text.errors }}</span>
+                                            </div>
+
+                                            <hr>
+                                            <div class="col-sm-12 mb-2 row">
+                                                {{photo_form.ticket.as_hidden}}
+                                                <div class="col-sm-3 mb-4">
+                                                    {% if 1 in photos %}
+                                                    <a href="{% url 'get_ticket_photo' ticket.id 1 %}">
+                                                        <img style="width:180px; height:120px"
+                                                            src="{% url 'get_ticket_photo' ticket.id 1 %}"
+                                                        >
+                                                    </a>
+                                                    {% endif %}
+                                                    {{ photo_form.photo1 }}
+                                                    <span class="text-error">{{ photo_form.photo1.errors }}</span>
+                                                </div>
+                                                <div class="col-sm-3 mb-4">
+                                                    {% if 2 in photos %}
+                                                    <a href="{% url 'get_ticket_photo' ticket.id 2 %}">
+                                                        <img style="width:180px; height:120px"
+                                                            src="{% url 'get_ticket_photo' ticket.id 2 %}"
+                                                        >
+                                                    </a>
+                                                    {% endif %}
+                                                    {{ photo_form.photo2 }}
+                                                    <span class="text-error">{{ photo_form.photo2.errors }}</span>
+                                                </div>
+                                                <div class="col-sm-3 mb-4">
+                                                    {% if 3 in photos %}
+                                                    <a href="{% url 'get_ticket_photo' ticket.id 3 %}">
+                                                        <img style="width:180px; height:120px"
+                                                            src="{% url 'get_ticket_photo' ticket.id 3 %}"
+                                                        >
+                                                    </a>
+                                                    {% endif %}
+                                                    {{ photo_form.photo3 }}
+                                                    <span class="text-error">{{ photo_form.photo3.errors }}</span>
+                                                </div>
+                                                <div class="col-sm-3 mb-4">
+                                                    {% if 4 in photos %}
+                                                    <a href="{% url 'get_ticket_photo' ticket.id 4 %}">
+                                                        <img style="width:180px; height:120px"
+                                                            src="{% url 'get_ticket_photo' ticket.id 4 %}"
+                                                        >
+                                                    </a>
+                                                    {% endif %}
+                                                    {{ photo_form.photo4 }}
+                                                    <span class="text-error">{{ photo_form.photo4.errors }}</span>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-sm-12 mb-2">
+                                                <input type = 'submit' class="btn btn-primary" value="Save">
+                                                <a href="{% url 'tickets-customer_update' ticket.id %}" class="btn btn-light">Cancel</a>
+                                            </div>
+
+                                            <div class="col-sm-12 mb-2">
+                                            {% if Msg != None %}
+                                                <small class="form-text text-success">
+                                                    {{Msg}}
+                                                </small>
+                                            {% endif %}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+{% endblock javascripts %}

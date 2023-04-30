@@ -1,0 +1,24 @@
+{% extends "layouts/clean_base.html" %}
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script type="text/javascript">
+    $( document ).ready(function() {
+        const currentHost = window.location.origin;
+        var textArea = document.createElement('textarea');
+        textArea.value = '{{link}}';
+        console.log(textArea.value)
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+
+<!--        history.back()-->
+    });
+
+
+</script>
+{% endblock javascripts %}

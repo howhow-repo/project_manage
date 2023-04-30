@@ -1,13 +1,25 @@
 from django import forms
 from .models import CustomerType, Customer, FavoriteCustomer
 
+FILTER_CHOICES = (
+    ("name", "名稱"),
+    ("cel", "手機"),
+    ("tel", "電話"),
+    ("address", "地址"),
+)
+
+
+# ['name', 'cel', 'tel', 'address', 'type', 'status']
 
 class CustomerTypeForm(forms.ModelForm):
+    required_fields = ['name']
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for f in self.fields:
-            self.fields[f].widget.attrs.update({'class': 'form-control'})
-        self.fields['description'].required = False
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+            if field not in self.required_fields:
+                self.fields[field].required = False
 
     class Meta:
         model = CustomerType
@@ -15,12 +27,14 @@ class CustomerTypeForm(forms.ModelForm):
 
 
 class CustomerForm(forms.ModelForm):
+    required_fields = ['name']
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for f in self.fields:
-            self.fields[f].widget.attrs.update({'class': 'form-control'})
-            if f != 'name':
-                self.fields[f].required = False
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+            if field not in self.required_fields:
+                self.fields[field].required = False
 
     class Meta:
         model = Customer
@@ -39,14 +53,15 @@ class PreAddCustomerForm(forms.ModelForm):
 
 
 class FavoriteCustomerForm(forms.ModelForm):
+    required_fields = []
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         for field in self.Meta.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
-        self.fields['user'].required = False
-        self.fields['customer'].required = False
+            if field not in self.required_fields:
+                self.fields[field].required = False
 
     class Meta:
         model = FavoriteCustomer
@@ -57,25 +72,6 @@ class FavoriteCustomerForm(forms.ModelForm):
         self.fields['customer'].initial = customer_id
 
 
-FILTER_CHOICES = (
-    ("name", "名稱"),
-    ("cel", "手機"),
-    ("tel", "電話"),
-    ("address", "地址"),
-)
-
-
-# ['name', 'cel', 'tel', 'address', 'type', 'status']
 class SearchCustomerForm(forms.Form):
     filter = forms.ChoiceField(choices=FILTER_CHOICES)
     keyword = forms.CharField()
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        for field in self.Meta.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control'})
-
-    class Meta:
-        model = FavoriteCustomer
-        fields = ['filter', 'keyword']

@@ -57,6 +57,19 @@
                 </li>
 
                 <li class="nav-item pcoded-menu-caption">
+                    <label>待辦便簽</label>
+                </li>
+
+                <li data-username="tickets"
+                    class="nav-item pcoded-hasmenu" >
+                    <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-user"></i></span><span
+                            class="pcoded-mtext">待辦便簽</span></a>
+                    <ul class="pcoded-submenu">
+                        <li class=""><a href="{% url 'tickets-list' %}">全部</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item pcoded-menu-caption">
                     <label>專案</label>
                 </li>
                 <li data-username="project case"

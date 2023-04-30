@@ -19,6 +19,7 @@ def list_customers(request):
     page = get_page(request)
     cus_filter = get_filter(request)  # ['name', 'cel', 'tel', 'address', 'type', 'status']
     keyword = get_keyword(request)
+
     if cus_filter and keyword:
         customers = Customer.objects.filter(**{f'{cus_filter}__icontains': keyword}).order_by('-update_time')
     else:
@@ -39,10 +40,8 @@ def add_customer(request):
         form = CustomerForm(data=request.POST)
         if form.is_valid():
             customer = form.save(commit=False)
-            customer.cel = customer.cel.replace(" ", "")
             customer.creator = request.user
-            customer.editor = request.user
-            customer.save()
+            customer.save(editor=request.user)
             context['Msg'] = 'Success'
             return HttpResponseRedirect(reverse('list_customers'))
         else:
@@ -81,9 +80,7 @@ def customer_detail(request, cust_id):
         form = CustomerForm(data=request.POST, instance=customer)
         if form.is_valid():
             customer = form.save(commit=False)
-            customer.cel = customer.cel.replace(" ", "")
-            customer.editor = request.user
-            customer.save()
+            customer.save(editor=request.user)
             Thread(target=send_change_message_to_followers, args=(request, form)).start()
             context['Msg'] = 'Success'
         else:
@@ -111,4 +108,3 @@ def search_customers(request):
 
     context.update({'form': SearchCustomerForm()})
     return render(request, 'search_customers.html', context)
-    

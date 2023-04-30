@@ -25,7 +25,7 @@ initial_function()
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),  # Django admin route
+    # path('admin/', admin.site.urls),  # Django admin route
     path("", include("apps.authentication.urls")),  # Auth routes - login / register
     path("", include("index.urls")),
     re_path(r'^\.well-known/', include('letsencrypt.urls')),
@@ -39,6 +39,7 @@ urlpatterns = [
     path("quotation/", include("quotation.urls")),
     path("option_settings/", include("option_settings.urls")),
     path("notify/", include("notify.urls")),
+    path("tickets/", include("tickets.urls")),
     # ADD NEW Routes HERE
 
     # Leave `Home.Urls` as last the last line
