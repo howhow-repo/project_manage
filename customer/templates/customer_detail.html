@@ -237,26 +237,17 @@
             });
         });
 
-        function copyToClipboard(content) {
-            var copyArea = document.createElement('textarea');
-            copyArea.value = content;
-            document.body.appendChild(copyArea);
-            copyArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(copyArea);
-        }
-
         var customer_info_text = "{{customer.name}} \n 手機: {{customer.cel}} \n 電話: {{customer.tel}} \n 地址: {{customer.address}}"
         var copyBtn = document.getElementById('copy-btn');
 
         function CopyInfo() {
             copyToClipboard(customer_info_text)
-            temp = copyBtn.innerHTML
+            alert(customer_info_text);
+            org_str = copyBtn.innerHTML
             copyBtn.innerHTML = '已複製';
             setTimeout(function() {
-                copyBtn.innerHTML = temp;
+                copyBtn.innerHTML = org_str;
             }, 3000);
-            alert(customer_info_text);
         }
     </script>
 {% endblock javascripts %}

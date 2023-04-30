@@ -2,3 +2,47 @@
 <script src="{{ ASSETS_ROOT }}/plugins/bootstrap/js/bootstrap.min.js"></script>
 <script src="{{ ASSETS_ROOT }}/js/pcoded.min.js"></script>
 <script src="{{ ASSETS_ROOT }}/js/dark-mode.js"></script>
+
+<script>
+    const nav_currentHost = window.location.origin;
+
+
+    function copyToClipboard(content) {
+        var copyArea = document.createElement('textarea');
+        copyArea.textContent = String(content);
+        document.body.appendChild(copyArea);
+        copyArea.select();
+        copyArea.setSelectionRange(0,99999);// For mobile devices
+        try {
+            document.execCommand('copy');
+        } catch (err) {
+            alert('Unable to copy to clipboard', err);
+        }
+        document.body.removeChild(copyArea);
+    }
+
+
+    function add_ticket() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '{% url "tickets-new_ticket" %}');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.setRequestHeader("Accept", "*/*");
+        xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+        xhr.onreadystatechange = function() {
+            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                var response = JSON.parse(this.responseText);
+                var link = nav_currentHost + '/tickets/' + response.id + '/customer_update/';
+                copyToClipboard(link);
+                alert(link);
+            }
+        };
+        xhr.send();
+
+        var ticketBtn = document.getElementById('nav-add-ticket-btn');
+        org_str = ticketBtn.innerHTML
+        ticketBtn.innerHTML = '已複製';
+        setTimeout(function() {
+            ticketBtn.innerHTML = org_str;
+        }, 3000);
+    }
+</script>
