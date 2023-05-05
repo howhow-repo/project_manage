@@ -59,11 +59,15 @@
                                                         <tr class = "clickable-row"
                                                             data-filter-name="{{ticket.customer_name}}"
                                                             data-filter-addr="{{ticket.customer_cel}}"
-
                                                             data-href="{% url 'tickets-employee_update' ticket.id %}"
                                                             data-toggle="tooltip">
 
-                                                            <th scope="row">{{ forloop.counter }}</th>
+                                                            <th scope="row">
+                                                                <button class = 'btn btn-light'
+                                                                        onclick="copy_ticket_link('{{ticket.id}}'); event.stopPropagation();">
+                                                                    複製連結
+                                                                </button>
+                                                            </th>
                                                             <td>{{ ticket.customer_name }}</td>
                                                             <td>{{ ticket.customer_cel }}</td>
                                                             <td>{{ ticket.customer_address }}</td>
@@ -98,10 +102,10 @@
     const currentHost = window.location.origin;
 
     jQuery(document).ready(function($) {
-            $(".clickable-row").click(function() {
-                window.location = $(this).data("href");
-            });
+        $(".clickable-row").click(function() {
+            window.location = $(this).data("href");
         });
+    });
 
     document.getElementById('add-ticket-btn').addEventListener('click', function() {
         var xhr = new XMLHttpRequest();
@@ -112,17 +116,18 @@
         xhr.onreadystatechange = function() {
             if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                 var response = JSON.parse(this.responseText);
-                var textArea = document.createElement('textarea');
-                textArea.value = currentHost + '/tickets/' + response.id+ '/customer_update/';
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
                 alert(currentHost + '/tickets/' + response.id+ '/customer_update/');
                 location=location
             }
         };
         xhr.send();
     });
+
+    function copy_ticket_link(uid) {
+        var link = nav_currentHost + '/tickets/' + uid + '/customer_update/';
+        copyToClipboard(link)
+        alert(link)
+    }
+
 </script>
 {% endblock javascripts %}
